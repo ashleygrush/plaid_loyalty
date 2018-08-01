@@ -9,13 +9,13 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class PlaidConfiguration {
 
-    @Value("${PLAID_CLIENT_ID ? : *** }")
+    @Value("${PLAID_CLIENT_ID ? :5b51290f4ca9fb0011c5bffe}")
     private String plaidClientId;
 
-    @Value("${PLAID_SECRET ?: *** }")
+    @Value("${PLAID_SECRET ?:3b6e5c84bf8feb3dda6cfdd2f9ff72}")
     private String plaidSecret;
 
-    @Value("${PLAID_PUBLIC_KEY ?: *** }")
+    @Value("${PLAID_PUBLIC_KEY ?:3b6e5c84bf8feb3dda6cfdd2f9ff72}")
     private String plaidPublicKey;
 
     @Value("#{systemProperties['PLAID_ENV'] ?: 'sandbox'}")

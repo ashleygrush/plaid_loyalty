@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 /**
  * Simple service to store user data. Only for demonstration purposes.
  */
+
 @Service
 public class PlaidAuthService {
 

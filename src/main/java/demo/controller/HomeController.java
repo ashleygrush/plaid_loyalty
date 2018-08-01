@@ -74,8 +74,8 @@ public class HomeController {
         String accessToken;
 
         plaidClient = PlaidClient.newBuilder()
-                .clientIdAndSecret("***", "***")
-                .publicKey("***") // optional. only needed to call endpoints that require a public key
+                .clientIdAndSecret("5b51290f4ca9fb0011c5bffe", "846f197e0e89aac5d4e8dcf484c484")
+                .publicKey("3b6e5c84bf8feb3dda6cfdd2f9ff72") // optional. only needed to call endpoints that require a public key
                 .sandboxBaseUrl() // or equivalent, depending on which environment you're calling into
                 .build();
 

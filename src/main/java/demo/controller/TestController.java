@@ -73,6 +73,33 @@ public class TestController {
         }
     }
 
+    @GetMapping(value="/accounts")
+    public @ResponseBody ResponseEntity getAccount() throws Exception {
+        getAccessToken();
+        
+        if (authService.getAccessToken() == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(getErrorResponseData("Not authorized"));
+        }
+
+        Response<AuthGetResponse> response = this.plaidClient.service()
+                .authGet(new AuthGetRequest(this.authService.getAccessToken())).execute();
+
+        if (response.isSuccessful()) {
+            Map<String, Object> data = new HashMap<>();
+            data.put("error", false);
+            data.put("accounts", response.body().getAccounts());
+            data.put("numbers", response.body().getNumbers());
+
+            return ResponseEntity.ok(data);
+        } else {
+            System.out.println(response.errorBody().string());
+            Map<String, Object> data = new HashMap<>();
+            data.put("error", "Unable to pull accounts from the Plaid API.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(data);
+        }
+    }
+
     @RequestMapping("/transactions")
     public ResponseEntity getTransactions() throws Exception {
         getAccessToken();

@@ -1,19 +1,10 @@
 package demo.controller;
 
+import com.plaid.client.request.*;
+import com.plaid.client.request.common.Product;
+import com.plaid.client.response.*;
 import demo.service.PlaidAuthService;
 import com.plaid.client.PlaidClient;
-import com.plaid.client.request.AuthGetRequest;
-import com.plaid.client.request.InstitutionsGetByIdRequest;
-import com.plaid.client.request.ItemGetRequest;
-import com.plaid.client.request.ItemPublicTokenExchangeRequest;
-import com.plaid.client.request.TransactionsGetRequest;
-import com.plaid.client.response.AuthGetResponse;
-import com.plaid.client.response.ErrorResponse;
-import com.plaid.client.response.InstitutionsGetByIdResponse;
-import com.plaid.client.response.ItemGetResponse;
-import com.plaid.client.response.ItemPublicTokenExchangeResponse;
-import com.plaid.client.response.ItemStatus;
-import com.plaid.client.response.TransactionsGetResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
@@ -24,10 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import retrofit2.Response;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
@@ -60,14 +48,9 @@ public class HomeController {
         return "index";
     }
 
-
-
-
-
     /**
      * Exchange link public token for access token.
      */
-
     @PostMapping(value="/get_access_token", consumes=MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public @ResponseBody ResponseEntity getAccessToken(@RequestParam("public_token") String publicToken) throws Exception {
 
@@ -79,10 +62,16 @@ public class HomeController {
                 .sandboxBaseUrl() // or equivalent, depending on which environment you're calling into
                 .build();
 
+        Response<SandboxPublicTokenCreateResponse> createResponse = plaidClient.service()
+                .sandboxPublicTokenCreate(new SandboxPublicTokenCreateRequest("ins_109511", Arrays.asList(Product.AUTH)))
+                .execute();
+
+
         // Synchronously exchange a Link public_token for an API access_token
         // Required request parameters are always Request object constructor arguments
         Response<ItemPublicTokenExchangeResponse> response = plaidClient.service()
-                .itemPublicTokenExchange(new ItemPublicTokenExchangeRequest(publicToken)).execute();
+                .itemPublicTokenExchange(new ItemPublicTokenExchangeRequest(createResponse.body().getPublicToken()))
+                .execute();
 
         if (response.isSuccessful()) {
             accessToken = response.body().getAccessToken();

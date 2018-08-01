@@ -46,15 +46,18 @@
     </div>
 </div>
 
+
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js"></script>
 <script src="https://cdn.plaid.com/link/v2/stable/link-initialize.js"></script>
 <scrip>
 
 </scrip>
 <script th:inline="javascript">
+
   (function($) {
-    var PLAID_ENV = [[${PLAID_ENV}]];
-    var PLAID_PUBLIC_KEY = [[${PLAID_PUBLIC_KEY}]];
+    var PLAID_ENV = [[${"sandbox"}]];
+    var PLAID_PUBLIC_KEY = [[${"3b6e5c84bf8feb3dda6cfdd2f9ff72"}]];
 
     var handler = Plaid.create({
       env: PLAID_ENV,

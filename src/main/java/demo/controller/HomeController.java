@@ -1,6 +1,6 @@
-package demos.controller;
+package demo.controller;
 
-import demos.service.PlaidAuthService;
+import demo.service.PlaidAuthService;
 import com.plaid.client.PlaidClient;
 import com.plaid.client.request.AuthGetRequest;
 import com.plaid.client.request.InstitutionsGetByIdRequest;
@@ -21,9 +21,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import retrofit2.Response;
 
 import java.util.Calendar;
@@ -50,20 +48,27 @@ public class HomeController {
     }
 
 
+
+
     /**
      * Home page.
      */
-    @RequestMapping(value="/", method=GET)
+    @GetMapping(value="/")
     public String index(Model model) {
         model.addAttribute("PLAID_PUBLIC_KEY", env.getProperty("PLAID_PUBLIC_KEY"));
         model.addAttribute("PLAID_ENV", env.getProperty("PLAID_ENV"));
         return "index";
     }
 
+
+
+
+
     /**
      * Exchange link public token for access token.
      */
-    @RequestMapping(value="/get_access_token", method=POST, consumes=MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+
+    @PostMapping(value="/get_access_token", consumes=MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public @ResponseBody ResponseEntity getAccessToken(@RequestParam("public_token") String publicToken) throws Exception {
         Response<ItemPublicTokenExchangeResponse> response = this.plaidClient.service()
                 .itemPublicTokenExchange(new ItemPublicTokenExchangeRequest(publicToken))
@@ -82,11 +87,16 @@ public class HomeController {
         }
     }
 
+
+
+
+
     /**
      * Retrieve high-level account information and account and routing numbers
      * for each account associated with the Item.
      */
-    @RequestMapping(value="/accounts", method=GET, produces=MediaType.APPLICATION_JSON_VALUE)
+
+    @GetMapping(value="/accounts", produces=MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody ResponseEntity getAccount() throws Exception {
         if (authService.getAccessToken() == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
@@ -110,11 +120,16 @@ public class HomeController {
         }
     }
 
+
+
+
+
+
     /**
      * Pull the Item - this includes information about available products,
      * billed products, webhook information, and more.
      */
-    @RequestMapping(value="/item", method=POST, produces=MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value="/item", produces=MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody ResponseEntity getItem() throws Exception {
         if (authService.getAccessToken() == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
@@ -148,10 +163,13 @@ public class HomeController {
         }
     }
 
+
+
+
     /**
      * Pull transactions for the Item for the last 30 days.
      */
-    @RequestMapping(value="/transactions", method=POST, produces=MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value="/transactions", produces=MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody ResponseEntity getTransactions() throws Exception {
         if (authService.getAccessToken() == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)

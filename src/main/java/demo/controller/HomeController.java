@@ -36,7 +36,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 public class HomeController {
 
     private final Environment env;
-    private final PlaidClient plaidClient;
+    private PlaidClient plaidClient;
     private final PlaidAuthService authService;
 
 
@@ -70,19 +70,33 @@ public class HomeController {
 
     @PostMapping(value="/get_access_token", consumes=MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public @ResponseBody ResponseEntity getAccessToken(@RequestParam("public_token") String publicToken) throws Exception {
-        Response<ItemPublicTokenExchangeResponse> response = this.plaidClient.service()
-                .itemPublicTokenExchange(new ItemPublicTokenExchangeRequest(publicToken))
-                .execute();
+
+        String accessToken;
+
+        plaidClient = PlaidClient.newBuilder()
+                .clientIdAndSecret("***", "***")
+                .publicKey("***") // optional. only needed to call endpoints that require a public key
+                .sandboxBaseUrl() // or equivalent, depending on which environment you're calling into
+                .build();
+
+        // Synchronously exchange a Link public_token for an API access_token
+        // Required request parameters are always Request object constructor arguments
+        Response<ItemPublicTokenExchangeResponse> response = plaidClient.service()
+                .itemPublicTokenExchange(new ItemPublicTokenExchangeRequest(publicToken)).execute();
 
         if (response.isSuccessful()) {
+            accessToken = response.body().getAccessToken();
+            System.out.println(accessToken);
             this.authService.setAccessToken(response.body().getAccessToken());
             this.authService.setItemId(response.body().getItemId());
+
 
             Map<String, Object> data = new HashMap<>();
             data.put("error", false);
 
             return ResponseEntity.ok(data);
         } else {
+            System.out.println(response.errorBody().string());
             return ResponseEntity.status(500).body(getErrorResponseData(response.errorBody().string()));
         }
     }
@@ -114,6 +128,7 @@ public class HomeController {
 
             return ResponseEntity.ok(data);
         } else {
+            System.out.println(response.errorBody().string());
             Map<String, Object> data = new HashMap<>();
             data.put("error", "Unable to pull accounts from the Plaid API.");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(data);
@@ -141,6 +156,7 @@ public class HomeController {
                 .execute();
 
         if (!itemResponse.isSuccessful()) {
+            System.out.println(itemResponse.errorBody().string());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(getErrorResponseData("Unable to pull item information from the Plaid API."));
         } else {
@@ -189,7 +205,7 @@ public class HomeController {
         if (response.isSuccessful()) {
             return ResponseEntity.ok(response.body());
         } else {
-
+            System.out.println(response.errorBody().string());
             ErrorResponse error = this.plaidClient.parseError(response);
             Map<String, Object> data = new HashMap<>();
             data.put("error", error);

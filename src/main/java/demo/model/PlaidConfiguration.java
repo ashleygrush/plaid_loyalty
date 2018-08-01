@@ -1,4 +1,4 @@
-package com.demo;
+package demos.model;
 
 import com.plaid.client.PlaidClient;
 import org.springframework.beans.factory.annotation.Value;

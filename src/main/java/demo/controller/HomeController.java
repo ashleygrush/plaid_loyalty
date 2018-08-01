@@ -1,5 +1,6 @@
-package com.demo;
+package demos.controller;
 
+import demos.service.PlaidAuthService;
 import com.plaid.client.PlaidClient;
 import com.plaid.client.request.AuthGetRequest;
 import com.plaid.client.request.InstitutionsGetByIdRequest;

@@ -1,14 +1,9 @@
 package demo.controller;
 
 import com.plaid.client.PlaidClient;
-import com.plaid.client.request.ItemPublicTokenExchangeRequest;
-import com.plaid.client.request.SandboxPublicTokenCreateRequest;
-import com.plaid.client.request.TransactionsGetRequest;
+import com.plaid.client.request.*;
 import com.plaid.client.request.common.Product;
-import com.plaid.client.response.ErrorResponse;
-import com.plaid.client.response.ItemPublicTokenExchangeResponse;
-import com.plaid.client.response.SandboxPublicTokenCreateResponse;
-import com.plaid.client.response.TransactionsGetResponse;
+import com.plaid.client.response.*;
 import demo.service.PlaidAuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -41,7 +36,44 @@ public class TestController {
         this.authService = authService;
     }
 
-    @RequestMapping("/do/it")
+    @RequestMapping("/item")
+    public @ResponseBody ResponseEntity getItem() throws Exception {
+        getAccessToken();
+
+        if (authService.getAccessToken() == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(getErrorResponseData("Not authorized"));
+        }
+
+        Response<ItemGetResponse> itemResponse = this.plaidClient.service()
+                .itemGet(new ItemGetRequest(this.authService.getAccessToken()))
+                .execute();
+
+        if (!itemResponse.isSuccessful()) {
+            System.out.println(itemResponse.errorBody().string());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(getErrorResponseData("Unable to pull item information from the Plaid API."));
+        } else {
+            ItemStatus item = itemResponse.body().getItem();
+
+            Response<InstitutionsGetByIdResponse> institutionsResponse = this.plaidClient.service()
+                    .institutionsGetById(new InstitutionsGetByIdRequest(item.getInstitutionId()))
+                    .execute();
+
+            if (!institutionsResponse.isSuccessful()) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body(getErrorResponseData("Unable to pull institution information from the Plaid API."));
+            } else {
+                Map<String, Object> data = new HashMap<>();
+                data.put("error", false);
+                data.put("item", item);
+                data.put("institution", institutionsResponse.body().getInstitution());
+                return ResponseEntity.ok(data);
+            }
+        }
+    }
+
+    @RequestMapping("/transactions")
     public ResponseEntity getTransactions() throws Exception {
         getAccessToken();
 
@@ -60,6 +92,8 @@ public class TestController {
                         .withCount(250)
                         .withOffset(0))
                 .execute();
+
+
         if (response.isSuccessful()) {
             return ResponseEntity.ok(response.body());
         } else {

@@ -33,6 +33,7 @@ public class PlaidAPIServiceInternal {
     public PlaidAPIServiceInternal(Environment env, PlaidClient plaidClient,PlaidAuthService authService) {
         this.env = env;
         this.authService = authService;
+        this.plaidClient = plaidClient;
 
 
         // this probably needs regular refreshing

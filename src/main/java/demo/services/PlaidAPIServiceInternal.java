@@ -29,7 +29,6 @@ public class PlaidAPIServiceInternal {
     @Autowired
     public PlaidAPIServiceInternal(Environment env, PlaidAuthService authService) {
         this.env = env;
-        this.plaidClient = plaidClient;
         this.authService = authService;
 
         plaidClient = PlaidClient.newBuilder()

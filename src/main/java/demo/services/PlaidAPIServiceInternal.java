@@ -6,6 +6,7 @@ import com.plaid.client.response.*;
 import demo.service.PlaidAuthService;
 import com.plaid.client.PlaidClient;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Service;
 import retrofit2.Response;
 
+import javax.swing.text.StyledEditorKit;
 import java.io.IOException;
 import java.util.*;
 
@@ -30,16 +32,11 @@ public class PlaidAPIServiceInternal {
     private final PlaidAuthService authService;
 
     @Autowired
-    public PlaidAPIServiceInternal(Environment env, PlaidAuthService authService) {
+    public PlaidAPIServiceInternal(Environment env, PlaidClient plaidClient,PlaidAuthService authService) {
         this.env = env;
         this.plaidClient = plaidClient;
         this.authService = authService;
 
-        plaidClient = PlaidClient.newBuilder()
-                .clientIdAndSecret("5b51290f4ca9fb0011c5bffe", "846f197e0e89aac5d4e8dcf484c484")
-                .publicKey("3b6e5c84bf8feb3dda6cfdd2f9ff72") // optional. only needed to call endpoints that require a public key
-                .sandboxBaseUrl() // or equivalent, depending on which environment you're calling into
-                .build();
 
         // this probably needs regular refreshing
         try {
@@ -50,14 +47,9 @@ public class PlaidAPIServiceInternal {
         }
     }
 
+
     public ResponseEntity getAccessToken() throws IOException {
         String accessToken;
-
-        plaidClient = PlaidClient.newBuilder()
-                .clientIdAndSecret("5b51290f4ca9fb0011c5bffe", "846f197e0e89aac5d4e8dcf484c484")
-                .publicKey("3b6e5c84bf8feb3dda6cfdd2f9ff72") // optional. only needed to call endpoints that require a public key
-                .sandboxBaseUrl() // or equivalent, depending on which environment you're calling into
-                .build();
 
         Response<SandboxPublicTokenCreateResponse> createResponse = plaidClient.service()
                 .sandboxPublicTokenCreate(new SandboxPublicTokenCreateRequest("ins_109511", Arrays.asList(Product.AUTH)))
@@ -102,14 +94,14 @@ public class PlaidAPIServiceInternal {
                     .body(getErrorResponseData("Not authorized"));
         }
 
-        Response<AuthGetResponse> response = this.plaidClient.service()
-                .authGet(new AuthGetRequest(this.authService.getAccessToken())).execute();
+        Response<AccountsGetResponse> response = this.plaidClient.service()
+                .accountsGet(new AccountsGetRequest(this.authService.getAccessToken())).execute();
 
         if (response.isSuccessful()) {
             Map<String, Object> data = new HashMap<>();
             data.put("error", false);
             data.put("accounts", response.body().getAccounts());
-            data.put("numbers", response.body().getNumbers());
+            data.put("numbers", response.body().getItem());
 
             return ResponseEntity.ok(data);
         } else {
@@ -119,6 +111,8 @@ public class PlaidAPIServiceInternal {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(data);
         }
     }
+
+
 
     public ResponseEntity getItem() throws Exception {
         if (authService.getAccessToken() == null) {
@@ -182,6 +176,25 @@ public class PlaidAPIServiceInternal {
         }
     }
 
+    public ResponseEntity getTransactionsLoop() throws Exception{
+        ResponseEntity response = null;
+        boolean success = false;
+        int count = 0;
+        do {
+            System.out.println("transaction attempt: " + count);
+            try {
+                response = getTransactions();
+                success = true;
+            } catch (Exception e){
+                System.out.println(e.getMessage());
+                success = false;
+            }
+            count++;
+            Thread.sleep(1000);
+        }while ( !success && count < 5);
+
+        return response;
+    }
     public ResponseEntity getTransactions() throws Exception {
         if (authService.getAccessToken() == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
@@ -194,22 +207,16 @@ public class PlaidAPIServiceInternal {
         Date startDate = cal.getTime();
         Date endDate = new Date();
 
-        ArrayList<String> list = new ArrayList<>();
-        list.add("gEJG9ajonlhN9N7qggeQtEVMoRp8EbSgXQrkW");
-        list.add("olLGEmpvqdHk3kg5MMrnCJbqdZEGJrtR3nrwg");
-        list.add("E8rpeBMJmlTGPG1gpp53tVy4B5NvVwiXLPVdP");
-        list.add("Wa47Ny63jqS6L6Vz335ytDBJANZzDdFlG7vaK");
-        list.add("8NRdKjBgMyHrXr1VaadbtldgJwB5lefwyVzEG");
 
         Response<TransactionsGetResponse> response = this.plaidClient.service()
                 .transactionsGet(new TransactionsGetRequest(this.authService.getAccessToken(), startDate, endDate)
                         .withCount(250)
-                        .withAccountIds(list)
                         .withOffset(0))
                 .execute();
         if (response.isSuccessful()) {
             return ResponseEntity.ok(response.body());
         } else {
+
             System.out.println(response.errorBody().string());
             ErrorResponse error = this.plaidClient.parseError(response);
             Map<String, Object> data = new HashMap<>();
@@ -217,6 +224,7 @@ public class PlaidAPIServiceInternal {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(data);
         }
     }
+
 
     public Environment getEnv() {
         return env;

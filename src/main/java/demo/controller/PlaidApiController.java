@@ -7,6 +7,7 @@ import demo.service.PlaidAuthService;
 import com.plaid.client.PlaidClient;
 import demo.services.PlaidAPIServiceInternal;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -37,9 +38,10 @@ public class PlaidApiController {
         return plaidAPIService.getAccounts();
     }
 
+
     @GetMapping(value="/transactions", produces=MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody ResponseEntity getTransactions() throws Exception {
-        return  plaidAPIService.getTransactions();
+        return plaidAPIService.getTransactionsLoop();
     }
 
     @PostMapping(value="/get_access_token", consumes=MediaType.APPLICATION_FORM_URLENCODED_VALUE)

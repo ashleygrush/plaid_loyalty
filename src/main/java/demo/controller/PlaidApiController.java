@@ -1,20 +1,10 @@
 package demo.controller;
 
-import com.plaid.client.request.*;
-import com.plaid.client.request.common.Product;
-import com.plaid.client.response.*;
-import demo.service.PlaidAuthService;
-import com.plaid.client.PlaidClient;
 import demo.services.PlaidAPIServiceInternal;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import retrofit2.Response;
-
-import java.util.*;
 
 /**
  * Created by ryandesmond on 8/1/18.

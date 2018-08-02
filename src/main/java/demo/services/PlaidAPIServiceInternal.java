@@ -3,14 +3,12 @@ package demo.services;
 import com.plaid.client.request.*;
 import com.plaid.client.request.common.Product;
 import com.plaid.client.response.*;
-import demo.service.PlaidAuthService;
 import com.plaid.client.PlaidClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Service;
 import retrofit2.Response;
@@ -34,7 +32,6 @@ public class PlaidAPIServiceInternal {
     @Autowired
     public PlaidAPIServiceInternal(Environment env, PlaidClient plaidClient,PlaidAuthService authService) {
         this.env = env;
-        this.plaidClient = plaidClient;
         this.authService = authService;
 
 

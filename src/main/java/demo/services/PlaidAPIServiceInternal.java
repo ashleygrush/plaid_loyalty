@@ -1,59 +1,53 @@
-package demo.controller;
+package demo.services;
 
+import com.plaid.client.PlaidClient;
 import com.plaid.client.request.*;
 import com.plaid.client.request.common.Product;
 import com.plaid.client.response.*;
 import demo.service.PlaidAuthService;
-import com.plaid.client.PlaidClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.stereotype.Service;
 import retrofit2.Response;
 
+import java.io.IOException;
 import java.util.*;
 
-import static org.springframework.web.bind.annotation.RequestMethod.*;
+/**
+ * Created by ryandesmond on 8/2/18.
+ */
 
-
-@Controller
-public class HomeController {
+@Service
+public class PlaidAPIServiceInternal {
 
     private final Environment env;
     private PlaidClient plaidClient;
     private final PlaidAuthService authService;
 
-
     @Autowired
-    public HomeController(Environment env, PlaidClient plaidClient, PlaidAuthService authService) {
+    public PlaidAPIServiceInternal(Environment env, PlaidAuthService authService) {
         this.env = env;
         this.plaidClient = plaidClient;
         this.authService = authService;
+
+        plaidClient = PlaidClient.newBuilder()
+                .clientIdAndSecret("5b51290f4ca9fb0011c5bffe", "846f197e0e89aac5d4e8dcf484c484")
+                .publicKey("3b6e5c84bf8feb3dda6cfdd2f9ff72") // optional. only needed to call endpoints that require a public key
+                .sandboxBaseUrl() // or equivalent, depending on which environment you're calling into
+                .build();
+
+        // this probably needs regular refreshing
+        try {
+            getAccessToken();
+        } catch (IOException e) {
+            System.out.println("GET ACCESS TOKEN FAILED - API");
+            e.printStackTrace();
+        }
     }
 
-
-
-
-    /**
-     * Home page.
-     */
-    @GetMapping(value="/")
-    public String index(Model model) {
-        model.addAttribute("PLAID_PUBLIC_KEY", env.getProperty("PLAID_PUBLIC_KEY"));
-        model.addAttribute("PLAID_ENV", env.getProperty("PLAID_ENV"));
-        return "index";
-    }
-
-    /**
-     * Exchange link public token for access token.
-     */
-    @PostMapping(value="/get_access_token", consumes=MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-    public @ResponseBody ResponseEntity getAccessToken(@RequestParam("public_token") String publicToken) throws Exception {
-
+    public ResponseEntity getAccessToken() throws IOException {
         String accessToken;
 
         plaidClient = PlaidClient.newBuilder()
@@ -90,17 +84,14 @@ public class HomeController {
         }
     }
 
+    private Map<String, Object> getErrorResponseData(String message) {
+        Map<String, Object> data = new HashMap<>();
+        data.put("error", false);
+        data.put("message", message);
+        return data;
+    }
 
-
-
-
-    /**
-     * Retrieve high-level account information and account and routing numbers
-     * for each account associated with the Item.
-     */
-
-    @GetMapping(value="/accounts", produces=MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody ResponseEntity getAccount() throws Exception {
+    public ResponseEntity getAccounts() throws Exception {
         if (authService.getAccessToken() == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(getErrorResponseData("Not authorized"));
@@ -124,17 +115,7 @@ public class HomeController {
         }
     }
 
-
-
-
-
-
-    /**
-     * Pull the Item - this includes information about available products,
-     * billed products, webhook information, and more.
-     */
-    @PostMapping(value="/item", produces=MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody ResponseEntity getItem() throws Exception {
+    public ResponseEntity getItem() throws Exception {
         if (authService.getAccessToken() == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(getErrorResponseData("Not authorized"));
@@ -168,14 +149,7 @@ public class HomeController {
         }
     }
 
-
-
-
-    /**
-     * Pull transactions for the Item for the last 30 days.
-     */
-    @PostMapping(value="/transactions", produces=MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody ResponseEntity getTransactions() throws Exception {
+    public ResponseEntity getTransactions() throws Exception {
         if (authService.getAccessToken() == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(getErrorResponseData("Not authorized"));
@@ -202,10 +176,19 @@ public class HomeController {
         }
     }
 
-    private Map<String, Object> getErrorResponseData(String message) {
-        Map<String, Object> data = new HashMap<>();
-        data.put("error", false);
-        data.put("message", message);
-        return data;
+    public Environment getEnv() {
+        return env;
+    }
+
+    public PlaidClient getPlaidClient() {
+        return plaidClient;
+    }
+
+    public void setPlaidClient(PlaidClient plaidClient) {
+        this.plaidClient = plaidClient;
+    }
+
+    public PlaidAuthService getAuthService() {
+        return authService;
     }
 }

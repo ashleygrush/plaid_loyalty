@@ -3,10 +3,16 @@ package demo.model.database;
 // links to database; contains business name, password and email.
 public class Merchants {
 
-    int id;
-    String name;
-    String password;
-    String email;
+    private int id;
+    private String name;
+    private String password;
+    private String email;
+
+    public Merchants(int id, String name, String email) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+    }
 
     public int getId() {
         return id;

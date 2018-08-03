@@ -3,10 +3,10 @@ package demo.model.database;
 // links to database; holds user name, password and email.
 public class Users {
 
-    int id;
-    String name;
-    String password;
-    String email;
+    private int id;
+    private String name;
+    private String password;
+    private String email;
 
     public int getId() {
         return id;

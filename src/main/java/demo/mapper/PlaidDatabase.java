@@ -2,14 +2,18 @@ package demo.mapper;
 
 import demo.model.database.Merchants;
 import demo.model.database.Users;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
 
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
+
+import java.util.List;
+
+// maps to PlaidDatabase
 @Mapper
 public interface PlaidDatabase {
 
     // list of all Merchants
-    String LIST_ALL_MERCHANTS = "Select * from plaid.merchants";
+    String LIST_ALL_MERCHANTS = "Select id, name, email from plaid.merchants";
 
     // list of all customers
     String LIST_ALL_USERS = "Select * from plaid.users";
@@ -19,10 +23,11 @@ public interface PlaidDatabase {
 
 
     // returns list of all Merchants from Merchants table
-    @Insert(LIST_ALL_MERCHANTS)
-    String listAllMerchants(Merchants merchants);
+    @Select(LIST_ALL_MERCHANTS)
+    List<Merchants> listAllMerchants();
 
-    @Insert(LIST_ALL_USERS)
+
+    @Select(LIST_ALL_USERS)
     String listAllUsers(Users users);
 
 

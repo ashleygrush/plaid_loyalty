@@ -4,11 +4,11 @@ package demo.model.database;
 // links to database; links Users, Merchants and deals by ID. "lookup table"
 public class Loyalty {
 
-    int id;
-    int merchant_id;
-    int user_id;
-    int deal_id;
-    boolean active = false;
+    private int id;
+    private int merchant_id;
+    private int user_id;
+    private int deal_id;
+    private boolean active = false;
 
     public int getId() {
         return id;

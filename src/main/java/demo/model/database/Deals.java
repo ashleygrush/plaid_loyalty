@@ -4,9 +4,9 @@ package demo.model.database;
 // links to database: links deals to merchant ID.
 public class Deals {
 
-    int id;
-    int merchant_id;
-    String deal_description;
+    private int id;
+    private int merchant_id;
+    private String deal_description;
 
     public int getId() {
         return id;

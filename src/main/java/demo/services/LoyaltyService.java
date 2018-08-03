@@ -1,8 +1,12 @@
 package demo.services;
 
 import demo.mapper.PlaidDatabase;
+import demo.model.database.DBSearch;
+import demo.model.database.Merchants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class LoyaltyService {
@@ -10,9 +14,15 @@ public class LoyaltyService {
     @Autowired
     PlaidDatabase plaidDatabase;
 
-    // GET - all Users
 
     // GET - all Merchants
+    public List <Merchants> findAllMerchants() {
+        // import merchants
+   return plaidDatabase.listAllMerchants();
+   }
+
+
+    // GET - all Users
 
     // GET - Users/Merchants by ID
 

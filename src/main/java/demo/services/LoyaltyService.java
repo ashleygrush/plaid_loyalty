@@ -1,8 +1,8 @@
 package demo.services;
 
 import demo.mapper.PlaidDatabase;
-import demo.model.database.DBSearch;
 import demo.model.database.Merchants;
+import demo.model.database.Users;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,13 +18,21 @@ public class LoyaltyService {
     // GET - all Merchants
     public List <Merchants> findAllMerchants() {
         // import merchants
-   return plaidDatabase.listAllMerchants();
+        return plaidDatabase.listAllMerchants();
    }
 
-
-    // GET - all Users
+   // GET - all Users
+    public List<Users> findAllUsers() {
+        // import users
+        return plaidDatabase.listAllUsers();
+    }
 
     // GET - Users/Merchants by ID
+    public Users findUserByID(int id) {
+
+        return plaidDatabase.findUserByID(id);
+    }
+
 
     // GET - points/Loyalty status: customers (all)
 

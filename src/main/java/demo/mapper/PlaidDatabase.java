@@ -16,9 +16,13 @@ public interface PlaidDatabase {
     String LIST_ALL_MERCHANTS = "Select id, name, email from plaid.merchants";
 
     // list of all customers
-    String LIST_ALL_USERS = "Select * from plaid.users";
+    String LIST_ALL_USERS = "Select id, name, email * from plaid.users";
+
+    // find user by ID
+    String FIND_USER_BY_ID = "Select * from plaid.users where id = {#id}";
 
     // fill hashmap with merchant ID
+
 
 
 
@@ -28,8 +32,9 @@ public interface PlaidDatabase {
 
 
     @Select(LIST_ALL_USERS)
-    String listAllUsers(Users users);
+    List<Users> listAllUsers();
 
-
+    @Select(FIND_USER_BY_ID)
+    Users findUserByID(int id);
 
 }

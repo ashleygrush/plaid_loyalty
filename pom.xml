@@ -56,6 +56,15 @@
             <artifactId>plaid-java</artifactId>
             <version>3.0.4</version>
         </dependency>
+
+        <!-- TOMCAT 8 - Connects to Server -->
+        <!-- comment this out to run locally again -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
     </dependencies>
 
     <build>

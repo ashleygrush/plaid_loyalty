@@ -10,17 +10,17 @@ import org.springframework.web.client.RestTemplate;
 
 
 @SpringBootApplication
-public class PlaidApplication extends SpringBootServletInitializer {
+public class PlaidApplication { // extends SpringBootServletInitializer {
 
     public static void main(String... args) {
         SpringApplication.run(PlaidApplication.class);
     }
 
     // runs TomCat8 - server
-    @Override
-    protected SpringApplicationBuilder configure (SpringApplicationBuilder application){
-        return application.sources(PlaidApplication.class);
-    }
+//    @Override
+//    protected SpringApplicationBuilder configure (SpringApplicationBuilder application){
+//        return application.sources(PlaidApplication.class);
+//    }
 
 }
 

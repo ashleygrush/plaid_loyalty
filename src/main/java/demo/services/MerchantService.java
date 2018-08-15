@@ -1,6 +1,6 @@
 package demo.services;
 
-import demo.mapper.PlaidDatabase;
+import demo.mapper.MerchantMapper;
 import demo.model.database.Merchants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,11 +11,11 @@ import java.util.List;
 public class MerchantService {
     
     @Autowired
-    PlaidDatabase plaidDatabase;
+    MerchantMapper mapper;
 
     // GET - all Merchants
     public List<Merchants> findAllMerchants() {
         // import merchants
-        return plaidDatabase.listAllMerchants();
+        return mapper.listAllMerchants();
     }
 }

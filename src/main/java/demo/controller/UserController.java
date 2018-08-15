@@ -23,8 +23,8 @@ public class UserController {
     }
 
     // calls DB for Users by ID number
-    @GetMapping("/users/{id}")
-    public DBSearch findByID(@RequestParam("id") int id) {
+    @RequestMapping("/users/{id}")
+    public DBSearch findByID(@PathVariable("id") int id) {
         // searches for database link by ID
         return userService.findUserByID(id);
     }

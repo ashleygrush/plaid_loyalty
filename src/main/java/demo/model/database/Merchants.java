@@ -8,11 +8,6 @@ public class Merchants {
     private String password;
     private String email;
 
-    public Merchants(int id, String name, String email) {
-        this.id = id;
-        this.name = name;
-        this.email = email;
-    }
 
     public int getId() {
         return id;

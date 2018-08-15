@@ -1,6 +1,5 @@
 package demo.services;
-
-import demo.mapper.PlaidDatabase;
+import demo.mapper.UserMapper;
 import demo.model.database.DBSearch;
 import demo.model.database.Users;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,12 +11,12 @@ import java.util.List;
 public class UserService {
 
     @Autowired
-    PlaidDatabase plaidDatabase;
+    UserMapper mapper;
 
     // GET - all Users
     public List<Users> findAllUsers() {
         // import users
-        return plaidDatabase.listAllUsers();
+        return mapper.listAllUsers();
     }
 
 
@@ -28,7 +27,7 @@ public class UserService {
 
         searchID.setId(id);
 
-        searchID.setUsers(plaidDatabase.findUserByID(id));
+        searchID.setUsers(mapper.findUserByID(id));
 
         return searchID;
     }
@@ -43,7 +42,7 @@ public class UserService {
         newUser.setPassword(data.getPassword());
         newUser.setEmail(data.getEmail());
 
-        plaidDatabase.createUser(newUser);
+        mapper.createUser(newUser);
 
         return newUser;
     }
@@ -57,9 +56,24 @@ public class UserService {
         if (removeID.getId() == id) ;
         {
             // remove ID from DB
-            removeID.setId(plaidDatabase.deleteUserByID(id));
+            removeID.setId(mapper.deleteUserByID(id));
         }
         // if no results; return DB ID (remove ID)
         return removeID;
+    }
+
+    // PUT - update existing user by ID
+    public Users updateUserByID(int id, Users data) {
+
+        Users updateUser = new Users();
+
+        updateUser.setName(data.getName());
+        updateUser.setPassword(data.getPassword());
+        updateUser.setEmail(data.getEmail());
+        updateUser.setId(id);
+
+        mapper.updateUserByID(updateUser);
+
+        return updateUser;
     }
 }

@@ -29,7 +29,7 @@ public class UserController {
         return userService.findUserByID(id);
     }
 
-    //creates new user
+    // creates new user
     @PostMapping("/users")
     public Users createUser(@RequestBody Users user) {
 
@@ -42,4 +42,14 @@ public class UserController {
 
         return userService.deleteUserByID(id);
     }
+
+    // update existing user by ID
+    @PutMapping("/users/{id}")
+    public Users updateUserByID(@PathVariable("id") int id,
+                                @RequestBody Users users) {
+
+        return userService.updateUserByID(id, users);
+
+    }
+
 }

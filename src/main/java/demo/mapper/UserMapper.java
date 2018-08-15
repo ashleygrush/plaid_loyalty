@@ -1,6 +1,5 @@
 package demo.mapper;
 
-import demo.model.database.Merchants;
 import demo.model.database.Users;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
@@ -9,12 +8,9 @@ import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
-// maps to PlaidDatabase
+// maps to Plaid database - Users
 @Mapper
-public interface PlaidDatabase {
-
-    // list of all Merchants
-    String LIST_ALL_MERCHANTS = "Select id, name, email from plaid.merchants";
+public interface UserMapper {
 
     // list of all customers
     String LIST_ALL_USERS = "Select id, name, email from plaid.users";
@@ -30,10 +26,12 @@ public interface PlaidDatabase {
     // delete's existing user from database
     String DELETE_USER = "Delete from plaid.users where id = #{id}";
 
-
-    // returns list of all Merchants from Merchants table
-    @Select(LIST_ALL_MERCHANTS)
-    List<Merchants> listAllMerchants();
+    // update existing user by ID
+    String UPDATE_USER_BY_ID = "UPDATE plaid.users "+
+            "SET name = #{name}, " +
+            "password = #{password}, " +
+            "email = #{email} " +
+            "WHERE id = #{id}";
 
     // returns list of all Users from Users table
     @Select(LIST_ALL_USERS)
@@ -50,4 +48,8 @@ public interface PlaidDatabase {
     // delete existing user
     @Delete(DELETE_USER)
     int deleteUserByID(int id);
+
+    // update existing user by ID
+    @Insert(UPDATE_USER_BY_ID)
+    int updateUserByID(Users users);
 }

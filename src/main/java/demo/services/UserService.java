@@ -21,7 +21,7 @@ public class UserService {
     }
 
 
-    // GET - Users by ID
+    // GET - find user by ID
     public DBSearch findUserByID(int id) {
 
         DBSearch searchID = new DBSearch();
@@ -48,7 +48,18 @@ public class UserService {
         return newUser;
     }
 
+    // DELETE - delete existing user by ID
+    public DBSearch deleteUserByID(int id) {
 
+        DBSearch removeID = new DBSearch();
 
-
+        // compare DB ID (removeID) to searched "id" (id)
+        if (removeID.getId() == id) ;
+        {
+            // remove ID from DB
+            removeID.setId(plaidDatabase.deleteUserByID(id));
+        }
+        // if no results; return DB ID (remove ID)
+        return removeID;
+    }
 }

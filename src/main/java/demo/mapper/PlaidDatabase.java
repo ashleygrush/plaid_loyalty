@@ -2,6 +2,7 @@ package demo.mapper;
 
 import demo.model.database.Merchants;
 import demo.model.database.Users;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -26,6 +27,8 @@ public interface PlaidDatabase {
             "(name, password, email) " +
             "VALUES (#{name}, #{password}, #{email})";
 
+    // delete's existing user from database
+    String DELETE_USER = "Delete from plaid.users where id = #{id}";
 
 
     // returns list of all Merchants from Merchants table
@@ -43,4 +46,8 @@ public interface PlaidDatabase {
     // creates new user
     @Insert(CREATE_USER)
     int createUser(Users user);
+
+    // delete existing user
+    @Delete(DELETE_USER)
+    int deleteUserByID(int id);
 }

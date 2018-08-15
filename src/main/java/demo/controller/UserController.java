@@ -36,4 +36,10 @@ public class UserController {
         return userService.createUser(user);
     }
 
+    //delete existing user by ID
+    @DeleteMapping("/users/{id}")
+    public DBSearch deleteByID(@PathVariable("id") int id) {
+
+        return userService.deleteUserByID(id);
+    }
 }

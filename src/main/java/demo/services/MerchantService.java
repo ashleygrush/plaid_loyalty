@@ -10,13 +10,12 @@ import java.util.List;
 
 @Service
 public class MerchantService {
-    
+
     @Autowired
     MerchantMapper mapper;
 
     // GET - all Merchants
     public List<Merchants> findAllMerchants() {
-        // import merchants
         return mapper.listAllMerchants();
     }
 
@@ -56,13 +55,10 @@ public class MerchantService {
 
         DBSearch removeID = new DBSearch();
 
-        // compare DB ID (removeID) to searched "id" (id)
         if (removeID.getId() == id) ;
         {
-            // remove ID from DB
             removeID.setId(mapper.deleteMerchantByID(id));
         }
-        // if no results; return DB ID (remove ID)
         return removeID;
     }
 

@@ -34,6 +34,7 @@ public interface MerchantMapper {
             "email = #{email} " +
             "WHERE id = #{id}";
 
+
     // returns list of all Merchants from Merchants table
     @Select(LIST_ALL_MERCHANTS)
     List<Merchants> listAllMerchants();

@@ -15,7 +15,6 @@ public class UserService {
 
     // GET - all Users
     public List<Users> findAllUsers() {
-        // import users
         return mapper.listAllUsers();
     }
 
@@ -55,13 +54,10 @@ public class UserService {
 
         DBSearch removeID = new DBSearch();
 
-        // compare DB ID (removeID) to searched "id" (id)
         if (removeID.getId() == id) ;
         {
-            // remove ID from DB
             removeID.setId(mapper.deleteUserByID(id));
         }
-        // if no results; return DB ID (remove ID)
         return removeID;
     }
 

@@ -18,28 +18,24 @@ public class UserController {
     // calls DB for all users
     @GetMapping("/users")
     public List<Users> getAllUsers() {
-        // searches for database link in services
         return userService.findAllUsers();
     }
 
     // calls DB for Users by ID number
     @RequestMapping("/users/{id}")
     public DBSearch findByID(@PathVariable("id") int id) {
-        // searches for database link by ID
         return userService.findUserByID(id);
     }
 
     // creates new user
     @PostMapping("/users")
     public Users createUser(@RequestBody Users user) {
-
         return userService.createUser(user);
     }
 
     //delete existing user by ID
     @DeleteMapping("/users/{id}")
     public DBSearch deleteByID(@PathVariable("id") int id) {
-
         return userService.deleteUserByID(id);
     }
 
@@ -47,7 +43,6 @@ public class UserController {
     @PutMapping("/users/{id}")
     public Users updateUserByID(@PathVariable("id") int id,
                                 @RequestBody Users users) {
-
         return userService.updateUserByID(id, users);
     }
 

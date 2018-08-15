@@ -33,6 +33,7 @@ public interface UserMapper {
             "email = #{email} " +
             "WHERE id = #{id}";
 
+
     // returns list of all Users from Users table
     @Select(LIST_ALL_USERS)
     List<Users> listAllUsers();

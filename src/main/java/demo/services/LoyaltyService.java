@@ -11,28 +11,43 @@ import java.util.List;
 @Service
 public class LoyaltyService {
 
-    @Autowired
-    PlaidDatabase plaidDatabase;
-
-
-    // GET - all Merchants
-    public List <Merchants> findAllMerchants() {
-        // import merchants
-        return plaidDatabase.listAllMerchants();
-   }
-
-   // GET - all Users
-    public List<Users> findAllUsers() {
-        // import users
-        return plaidDatabase.listAllUsers();
-    }
-
-    // GET - Users/Merchants by ID
-    public Users findUserByID(int id) {
-
-        return plaidDatabase.findUserByID(id);
-    }
-
+//    @Autowired
+//    PlaidDatabase plaidDatabase;
+//
+//
+//    // GET - all Merchants
+//    public List <Merchants> findAllMerchants() {
+//        // import merchants
+//        return plaidDatabase.listAllMerchants();
+//   }
+//
+//   // GET - all Users
+//    public List<Users> findAllUsers() {
+//        // import users
+//        return plaidDatabase.listAllUsers();
+//    }
+//
+//
+//    // GET - Users by ID
+//    public Users findUserByID(int id) {
+//
+//        return plaidDatabase.findUserByID(id);
+//    }
+//
+//
+//    // POST - create new user
+//    public Users createUser(Users data) {
+//
+//        Users newUser = new Users();
+//
+//        newUser.setName(data.getName());
+//        newUser.setPassword(data.getPassword());
+//        newUser.setEmail(data.getEmail());
+//
+//        plaidDatabase.createUser(newUser);
+//
+//        return newUser;
+//    }
 
     // GET - points/Loyalty status: customers (all)
 

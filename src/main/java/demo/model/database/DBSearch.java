@@ -1,10 +1,20 @@
 package demo.model.database;
 
 public class DBSearch {
+
+    int id;
     Users users;
     Merchants merchants;
     Loyalty loyalty;
     Deals deals;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public Users getUsers() {
         return users;

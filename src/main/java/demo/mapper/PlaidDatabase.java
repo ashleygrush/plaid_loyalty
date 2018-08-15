@@ -3,6 +3,7 @@ package demo.mapper;
 import demo.model.database.Merchants;
 import demo.model.database.Users;
 
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
@@ -16,13 +17,15 @@ public interface PlaidDatabase {
     String LIST_ALL_MERCHANTS = "Select id, name, email from plaid.merchants";
 
     // list of all customers
-    String LIST_ALL_USERS = "Select id, name, email * from plaid.users";
+    String LIST_ALL_USERS = "Select id, name, email from plaid.users";
 
     // find user by ID
-    String FIND_USER_BY_ID = "Select * from plaid.users where id = {#id}";
+    String FIND_USER_BY_ID = "Select * from plaid.users where id like {#id}";
 
-    // fill hashmap with merchant ID
-
+    // creates new User (name, email, password)
+    String CREATE_USER = "Insert into plaid.users " +
+            "(name, password, email) " +
+            "VALUES (#{name}, #{password}, #{email})";
 
 
 
@@ -30,11 +33,12 @@ public interface PlaidDatabase {
     @Select(LIST_ALL_MERCHANTS)
     List<Merchants> listAllMerchants();
 
-
     @Select(LIST_ALL_USERS)
     List<Users> listAllUsers();
 
     @Select(FIND_USER_BY_ID)
     Users findUserByID(int id);
 
+    @Insert(CREATE_USER)
+    int createUser(Users user);
 }

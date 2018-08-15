@@ -36,13 +36,17 @@ public class MerchantService {
     // POST - create new merchant
     public Merchants createMerchant(Merchants data) {
 
-         Merchants newMerch = new Merchants();
+        Merchants newMerch = new Merchants();
 
         newMerch.setName(data.getName());
         newMerch.setPassword(data.getPassword());
         newMerch.setEmail(data.getEmail());
 
-        mapper.createMerchant(newMerch);
+        try {
+            mapper.createMerchant(newMerch);
+        } catch (Exception e) {
+            System.out.println("Merchant already exists. Please log in : " + data.getEmail());
+        }
 
         return newMerch;
     }

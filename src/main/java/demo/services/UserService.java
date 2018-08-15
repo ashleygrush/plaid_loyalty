@@ -42,8 +42,11 @@ public class UserService {
         newUser.setPassword(data.getPassword());
         newUser.setEmail(data.getEmail());
 
-        mapper.createUser(newUser);
-
+        try {
+            mapper.createUser(newUser);
+        } catch (Exception e) {
+            System.out.println("User already exists. Please log in : " + data.getEmail());
+        }
         return newUser;
     }
 

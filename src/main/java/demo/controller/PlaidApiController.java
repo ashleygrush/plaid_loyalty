@@ -6,10 +6,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-/**
- * Created by ryandesmond on 8/1/18.
- */
-
 @RestController
 @RequestMapping("/test")
 public class PlaidApiController {
@@ -34,7 +30,8 @@ public class PlaidApiController {
     }
 
     @PostMapping(value="/get_access_token", consumes=MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-    public @ResponseBody ResponseEntity getAccessToken(@RequestParam("public_token") String publicToken) throws Exception {
+    public @ResponseBody ResponseEntity getAccessToken(
+            @RequestParam("public_token") String publicToken) throws Exception {
 
         return plaidAPIService.getAccessToken();
     }

@@ -18,9 +18,10 @@ import java.io.IOException;
 import java.util.*;
 
 
-/**
- * Created by ryandesmond on 8/2/18.
- */
+
+//THIS IS FOR THE PLAID CALL- TESTING PURPOSES ONLY. NOT REQUIRED FOR THE APPLICATION TO RUN
+
+
 
 @Service
 public class PlaidAPIServiceInternal {
@@ -184,6 +185,7 @@ public class PlaidAPIServiceInternal {
                 response = getTransactions();
                 success = true;
             } catch (Exception e){
+//                System.out.println("Attempt1");
                 System.out.println(e.getMessage());
                 success = false;
             }
@@ -216,6 +218,7 @@ public class PlaidAPIServiceInternal {
         } else {
 
             System.out.println(response.errorBody().string());
+//            System.out.println("ignore");
             ErrorResponse error = this.plaidClient.parseError(response);
             Map<String, Object> data = new HashMap<>();
             data.put("error", error);

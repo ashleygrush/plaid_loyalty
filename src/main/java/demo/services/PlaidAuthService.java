@@ -2,10 +2,7 @@ package demo.services;
 
 import org.springframework.stereotype.Service;
 
-
-/**
- * Simple service to store user data. Only for demonstration purposes.
- */
+//should this be moved to the model package?
 
 @Service
 public class PlaidAuthService {

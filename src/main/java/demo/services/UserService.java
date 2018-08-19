@@ -50,47 +50,12 @@ public class UserService {
         this.authService = authService;
         this.plaidClient = plaidClient;
 
-
-        // each access tocken lasts 30 mins. the "getAccessToken" methods recieves a unique time when called
-        try {
-            getAccessToken();
-        } catch (IOException e) {
-            System.out.println("GET ACCESS TOKEN FAILED - API");
-            e.printStackTrace();
-        }
     }
 
 ////    String bankId = requiredData.getBankId();
 //
 
-    public ResponseEntity getAccessToken() throws IOException {
 
-        //create public tocken
-        Response<SandboxPublicTokenCreateResponse> createResponse = plaidClient.service()
-                .sandboxPublicTokenCreate(new SandboxPublicTokenCreateRequest("ins_109511", Arrays.asList(Product.AUTH)))
-                .execute();
-
-        // Synchronously exchange a Link public_token for an API access_token
-        // Required request parameters are always Request object constructor arguments
-        Response<ItemPublicTokenExchangeResponse> response = plaidClient.service()
-                .itemPublicTokenExchange(new ItemPublicTokenExchangeRequest(createResponse.body().getPublicToken()))
-                .execute();
-        //if the reponse is successful, print access token and set the access token and id in the authService method
-        if (response.isSuccessful()) {
-            String accessToken = response.body().getAccessToken();
-            System.out.println(accessToken);
-            this.authService.setAccessToken(response.body().getAccessToken());
-            this.authService.setItemId(response.body().getItemId());
-
-            Map<String, Object> data = new HashMap<>();
-            data.put("error", false);
-            return ResponseEntity.ok(data);
-            //if the response fails then return an error message
-        } else {
-            System.out.println(response.errorBody().string());
-            return ResponseEntity.status(500).body(getErrorResponseData(response.errorBody().string()));
-        }
-    }
     private Map<String, Object> getErrorResponseData(String message) {
         Map<String, Object> data = new HashMap<>();
         data.put("error", false);
@@ -108,8 +73,22 @@ public class UserService {
         ArrayList<String> arrayListMerchants = new ArrayList<>();
         for (Users user : userList) {
             try {
-                TransactionsGetResponse transactionList =
-                        (TransactionsGetResponse) plaidAPIServiceInternal.getTransactionsLoop().getBody();
+                // NOT IMPLEMENTED YET:
+                // you are trying to request transactions on behalf of the user
+                // normally, when you are doing something "on behalf of the user", you use the credentials from the
+                // session - since the request was initiated by the user, you have these
+                // however, this request is NOT initiated by the user in question
+                // that means, you need to store users' access tokens (and probably item_id's) in the database
+                // i.e. add it to the field as model/Users
+
+                // that also means you won't be able to read transactions for a user that has never logged into Plaid Link,
+                // since they won't have an access token recorded
+
+                PlaidAuthService.PlaidAccessInfo plaidAccessInfo = null;
+//                plaidAccessInfo = new PlaidAuthService.PlaidAccessInfo(user.getAccessToken(), user.getItemId())
+
+                TransactionsGetResponse transactionList = (TransactionsGetResponse) plaidAPIServiceInternal
+                        .getTransactionsLoop(plaidAccessInfo).getBody();
 
                 for (TransactionsGetResponse.Transaction t : transactionList.getTransactions()) {
                     if (t != null) {

@@ -34,26 +34,11 @@ public class PlaidAPIServiceInternal {
         this.authService = authService;
         this.plaidClient = plaidClient;
 
-
-//        // this probably needs regular refreshing
-        // NOPE IT DOES NOT - "By default, an access_token never expires", from Plaid docs
-
-//        try {
-//            getAccessInfo(publicToken);
-//        } catch (IOException e) {
-//            System.out.println("GET ACCESS TOKEN FAILED - API");
-//            e.printStackTrace();
-//        }
     }
-
 
     public PlaidAuthService.PlaidAccessInfo getAccessInfo(String publicToken) throws IOException {
         String accessToken;
 
-        // For sandbox - create a test public token
-//        Response<SandboxPublicTokenCreateResponse> createResponse = plaidClient.service()
-//                .sandboxPublicTokenCreate(new SandboxPublicTokenCreateRequest("ins_109511", Arrays.asList(Product.AUTH)))
-//                .execute();
 
         System.out.println("Obtaining access token from public token: " + publicToken);
 

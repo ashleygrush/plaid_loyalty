@@ -6,6 +6,7 @@ public class Users {
     private String name;
     private String password;
     private String email;
+    private String accessToken;
 
     public int getId() {
         return id;
@@ -37,5 +38,13 @@ public class Users {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getAccessToken() {
+        return accessToken;
+    }
+
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
     }
 }

@@ -30,7 +30,7 @@ public class PlaidApiController {
         return plaidAPIService.getAccounts(plaidAuthService.getAccessToken(session));
     }
 
-    @PostMapping(value="/transactions", produces=MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value="/transactions", produces=MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody ResponseEntity getTransactions(HttpSession session) throws Exception {
         return plaidAPIService.getTransactionsLoop(plaidAuthService.getAccessToken(session));
     }

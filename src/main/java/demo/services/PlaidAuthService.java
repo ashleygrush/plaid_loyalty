@@ -1,5 +1,8 @@
 package demo.services;
 
+import demo.mapper.UserMapper;
+import demo.model.Users;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
@@ -8,6 +11,9 @@ import javax.servlet.http.HttpSession;
 
 @Service
 public class PlaidAuthService {
+
+    @Autowired
+    UserMapper userMapper;
 
     public PlaidAccessInfo getAccessToken(HttpSession session) {
         System.out.println("Loading accessToken from session: " + session.getAttribute("accessToken"));
@@ -18,6 +24,12 @@ public class PlaidAuthService {
 
     public void setAccessToken(HttpSession session, PlaidAccessInfo accessInfo) {
         System.out.println("Storing accessToken in session: " + accessInfo.accessToken);
+        Users userobj = new Users();
+        userobj.setAccessToken(accessInfo.accessToken);
+        userobj.setId(2);
+
+        userMapper.insertAccesstoken(userobj);
+
         session.setAttribute("accessToken", accessInfo.accessToken);
         session.setAttribute("itemId", accessInfo.itemId);
     }

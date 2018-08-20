@@ -12,9 +12,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class PlaidConfiguration {
 
-    // STORING YOUR PRIVATE KEYS IN AN OPEN GITHUB REPOSITORY IS VERY DANGEROUS
-    // bad guys have automated scripts to search for these
-
     // client id, secret and public key are generated when register in plaid. this data is used to generate an access tocken
     @Value("${PLAID_CLIENT_ID ? :5b51290f4ca9fb0011c5bffe}")
     private String plaidClientId;

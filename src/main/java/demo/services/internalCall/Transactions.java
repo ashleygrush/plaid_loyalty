@@ -31,7 +31,7 @@
 //        PlaidAuthService authService = requiredData.getAuthService();
 //
 //
-//    public ResponseEntity getAccessToken() throws IOException {
+//    public ResponseEntity getAccessInfo() throws IOException {
 //        String accessToken;
 //
 //        Response<SandboxPublicTokenCreateResponse> createResponse = plaidClient.service()
@@ -46,9 +46,9 @@
 //                .execute();
 //
 //        if (response.isSuccessful()) {
-//            accessToken = response.body().getAccessToken();
+//            accessToken = response.body().getAccessInfo();
 //            System.out.println(accessToken);
-//            this.authService.setAccessToken(response.body().getAccessToken());
+//            this.authService.setAccessToken(response.body().getAccessInfo());
 //            this.authService.setItemId(response.body().getItemId());
 //
 //

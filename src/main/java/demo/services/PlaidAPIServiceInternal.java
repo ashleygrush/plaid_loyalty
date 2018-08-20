@@ -1,11 +1,9 @@
 package demo.services;
 
 import com.plaid.client.request.*;
-import com.plaid.client.request.common.Product;
 import com.plaid.client.response.*;
 import com.plaid.client.PlaidClient;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Service;
 import retrofit2.Response;
 
-import javax.swing.text.StyledEditorKit;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.*;
 
@@ -37,64 +35,62 @@ public class PlaidAPIServiceInternal {
         this.plaidClient = plaidClient;
 
 
-        // this probably needs regular refreshing
-        try {
-            getAccessToken();
-        } catch (IOException e) {
-            System.out.println("GET ACCESS TOKEN FAILED - API");
-            e.printStackTrace();
-        }
+//        // this probably needs regular refreshing
+        // NOPE IT DOES NOT - "By default, an access_token never expires", from Plaid docs
+
+//        try {
+//            getAccessInfo(publicToken);
+//        } catch (IOException e) {
+//            System.out.println("GET ACCESS TOKEN FAILED - API");
+//            e.printStackTrace();
+//        }
     }
 
 
-    public ResponseEntity getAccessToken() throws IOException {
+    public PlaidAuthService.PlaidAccessInfo getAccessInfo(String publicToken) throws IOException {
         String accessToken;
 
-        Response<SandboxPublicTokenCreateResponse> createResponse = plaidClient.service()
-                .sandboxPublicTokenCreate(new SandboxPublicTokenCreateRequest("ins_109511", Arrays.asList(Product.AUTH)))
-                .execute();
+        // For sandbox - create a test public token
+//        Response<SandboxPublicTokenCreateResponse> createResponse = plaidClient.service()
+//                .sandboxPublicTokenCreate(new SandboxPublicTokenCreateRequest("ins_109511", Arrays.asList(Product.AUTH)))
+//                .execute();
 
+        System.out.println("Obtaining access token from public token: " + publicToken);
 
         // Synchronously exchange a Link public_token for an API access_token
         // Required request parameters are always Request object constructor arguments
         Response<ItemPublicTokenExchangeResponse> response = plaidClient.service()
-                .itemPublicTokenExchange(new ItemPublicTokenExchangeRequest(createResponse.body().getPublicToken()))
+                .itemPublicTokenExchange(new ItemPublicTokenExchangeRequest(publicToken))
                 .execute();
 
         if (response.isSuccessful()) {
             accessToken = response.body().getAccessToken();
             System.out.println(accessToken);
-            this.authService.setAccessToken(response.body().getAccessToken());
-            this.authService.setItemId(response.body().getItemId());
+            return new PlaidAuthService.PlaidAccessInfo(response.body().getAccessToken(), response.body().getItemId());
 
-
-            Map<String, Object> data = new HashMap<>();
-            data.put("error", false);
-
-            return ResponseEntity.ok(data);
         } else {
             System.out.println(response.errorBody().string());
-            return ResponseEntity.status(500).body(getErrorResponseData(response.errorBody().string()));
+            // It's easier to throw an error in your internal code and let the web framework convert it into a
+            // HTTP response.
+            throw new RuntimeException(response.errorBody().string());
         }
     }
 
-
-
     private Map<String, Object> getErrorResponseData(String message) {
         Map<String, Object> data = new HashMap<>();
-        data.put("error", false);
+        data.put("error", false); // Why is this false?
         data.put("message", message);
         return data;
     }
 
-    public ResponseEntity getAccounts() throws Exception {
-        if (authService.getAccessToken() == null) {
+    public ResponseEntity getAccounts(PlaidAuthService.PlaidAccessInfo accessInfo) throws Exception {
+        if (accessInfo.accessToken == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(getErrorResponseData("Not authorized"));
         }
 
         Response<AccountsGetResponse> response = this.plaidClient.service()
-                .accountsGet(new AccountsGetRequest(this.authService.getAccessToken())).execute();
+                .accountsGet(new AccountsGetRequest(accessInfo.accessToken)).execute();
 
         if (response.isSuccessful()) {
             Map<String, Object> data = new HashMap<>();
@@ -113,15 +109,15 @@ public class PlaidAPIServiceInternal {
 
 
 
-    public ResponseEntity getItem() throws Exception {
-        if (authService.getAccessToken() == null) {
+    public ResponseEntity getItem(PlaidAuthService.PlaidAccessInfo accessInfo) throws Exception {
+        if (accessInfo.accessToken == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(getErrorResponseData("Not authorized"));
         }
 
         //calls the ItemGetRequest which takes in an access token and returns a response of same type
         Response<ItemGetResponse> itemResponse = this.plaidClient.service()
-                .itemGet(new ItemGetRequest(this.authService.getAccessToken()))
+                .itemGet(new ItemGetRequest(accessInfo.accessToken))
                 .execute();
 
         //if the reponse doesnt work then print out an error message
@@ -149,16 +145,14 @@ public class PlaidAPIServiceInternal {
 
     @GetMapping(value = "/accounts")
     public @ResponseBody
-    ResponseEntity getAccount() throws Exception {
-        getAccessToken();
-
-        if (authService.getAccessToken() == null) {
+    ResponseEntity getAccount(PlaidAuthService.PlaidAccessInfo accessInfo) throws Exception {
+        if (accessInfo.accessToken == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(getErrorResponseData("Not authorized"));
         }
 
         Response<AccountsGetResponse> response = this.plaidClient.service()
-                .accountsGet(new AccountsGetRequest(this.authService.getAccessToken())).execute();
+                .accountsGet(new AccountsGetRequest(accessInfo.accessToken)).execute();
 
         if (response.isSuccessful()) {
             Map<String, Object> data = new HashMap<>();
@@ -175,14 +169,14 @@ public class PlaidAPIServiceInternal {
         }
     }
 
-    public ResponseEntity getTransactionsLoop() throws Exception{
+    public ResponseEntity getTransactionsLoop(PlaidAuthService.PlaidAccessInfo accessInfo) throws Exception{
         ResponseEntity response = null;
         boolean success = false;
         int count = 0;
         do {
             System.out.println("transaction attempt: " + count);
             try {
-                response = getTransactions();
+                response = getTransactions(accessInfo);
                 success = true;
             } catch (Exception e){
 //                System.out.println("Attempt1");
@@ -195,8 +189,8 @@ public class PlaidAPIServiceInternal {
 
         return response;
     }
-    public ResponseEntity getTransactions() throws Exception {
-        if (authService.getAccessToken() == null) {
+    public ResponseEntity getTransactions(PlaidAuthService.PlaidAccessInfo accessInfo) throws Exception {
+        if (accessInfo.accessToken == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(getErrorResponseData("Not authorized"));
         }
@@ -209,7 +203,7 @@ public class PlaidAPIServiceInternal {
 
 
         Response<TransactionsGetResponse> response = this.plaidClient.service()
-                .transactionsGet(new TransactionsGetRequest(this.authService.getAccessToken(), startDate, endDate)
+                .transactionsGet(new TransactionsGetRequest(accessInfo.accessToken, startDate, endDate)
                         .withCount(250)
                         .withOffset(0))
                 .execute();

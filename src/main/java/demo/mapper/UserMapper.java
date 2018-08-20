@@ -15,7 +15,7 @@ public interface UserMapper {
     // list of all customers
     String LIST_ALL_USERS = "Select id, name, email from plaid.users";
 
-    String INSERT_ACCESSTOKEN = "UPDATE `plaid`.users set accesstoken = #{accesstoken} where id = #{id}";
+    String INSERT_ACCESSTOKEN = "UPDATE plaid.users set accesstoken = #{accesstoken} where id = #{id}";
 
     // returns list of all Users from Users table
     @Select(LIST_ALL_USERS)

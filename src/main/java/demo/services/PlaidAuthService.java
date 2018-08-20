@@ -22,16 +22,17 @@ public class PlaidAuthService {
                 (String) session.getAttribute("itemId"));
     }
 
+
+
     public void setAccessToken(HttpSession session, PlaidAccessInfo accessInfo) {
         System.out.println("Storing accessToken in session: " + accessInfo.accessToken);
         Users userobj = new Users();
-        userobj.setAccessToken(accessInfo.accessToken);
+        userobj.setAccesstoken(accessInfo.accessToken);
         userobj.setId(2);
-
         userMapper.insertAccesstoken(userobj);
-
-        session.setAttribute("accessToken", accessInfo.accessToken);
-        session.setAttribute("itemId", accessInfo.itemId);
+//
+//        session.setAttribute("accessToken", accessInfo.accessToken);
+//        session.setAttribute("itemId", accessInfo.itemId);
     }
 
     public static class PlaidAccessInfo {

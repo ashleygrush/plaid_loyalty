@@ -28,9 +28,9 @@ public class PlaidAuthService {
         System.out.println("Storing accessToken in session: " + accessInfo.accessToken);
         Users userobj = new Users();
         userobj.setAccesstoken(accessInfo.accessToken);
-        userobj.setId(2);
+        userobj.setId(7);
         userMapper.insertAccesstoken(userobj);
-//
+
 //        session.setAttribute("accessToken", accessInfo.accessToken);
 //        session.setAttribute("itemId", accessInfo.itemId);
     }

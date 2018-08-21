@@ -35,30 +35,6 @@ public class PlaidConfiguration {
                 .publicKey(plaidPublicKey) // optional. only needed to call endpoints that require a public key
                 .sandboxBaseUrl() // or equivalent, depending on which environment you're calling into
                 .build();
-
         return plaidClient;
     }
-
-
-
-
-
-
-
-
-//
-//
-//    @Autowired
-//    RequiredData requiredData;
-//
-//    @Bean
-//    public PlaidClient plaidClient() {
-//        PlaidClient plaidClient = PlaidClient.newBuilder()
-//                .clientIdAndSecret(requiredData.getPlaidClientId(), requiredData.getPlaidSecret())
-//                .publicKey(requiredData.getPLAID_PUBLIC_KEY()) // optional. only needed to call endpoints that require a public key
-//                .sandboxBaseUrl() // or equivalent, depending on which environment you're calling into
-//                .build();
-//
-//        return plaidClient;
-//    }
 }

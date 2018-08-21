@@ -34,9 +34,9 @@ public class PlaidApiController {
         return plaidCallService.getAccounts(id);
     }
 
-    @GetMapping(value="/transactions", produces=MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody ResponseEntity getTransactions(HttpSession session) throws Exception {
-        return plaidCallService.getTransactionsLoop(plaidAuthService.getAccessToken(session));
+    @GetMapping(value="/transactions/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
+    public @ResponseBody ResponseEntity getTransactions(@PathVariable ("id") int id) throws Exception {
+        return plaidCallService.getTransactionsLoop(id);
     }
 
 

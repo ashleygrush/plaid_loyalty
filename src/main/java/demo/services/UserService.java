@@ -1,6 +1,7 @@
 package demo.services;
 
 import com.plaid.client.PlaidClient;
+import demo.mapper.AccessTokenMapper;
 import demo.mapper.MerchantMapper;
 import demo.model.Merchants;
 import org.springframework.core.env.Environment;
@@ -9,6 +10,7 @@ import demo.mapper.UserMapper;
 import demo.model.Users;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import retrofit2.Response;
 
 import java.util.*;
 
@@ -26,6 +28,9 @@ public class UserService {
 
     @Autowired
     PlaidCallService plaidCallService;
+
+    @Autowired
+    AccessTokenMapper accessTokenMapper;
 
 
     private final Environment env;
@@ -54,14 +59,16 @@ public class UserService {
         ArrayList<String> arrayListMerchants = new ArrayList<>();
         for (Users user : userList) {
             try {
-                PlaidAuthService.PlaidAccessInfo plaidAccessInfo = null;
+//                PlaidAuthService.PlaidAccessInfo plaidAccessInfo = null;
 //                plaidAccessInfo = new PlaidAuthService.PlaidAccessInfo(user.getAccessToken(), user.getItemId())
+                int userID = user.getId();
+                TransactionsGetResponse transactionList = (TransactionsGetResponse) plaidCallService.
+                        getTransactionsLoop(userID).getBody();
 
-                TransactionsGetResponse transactionList = (TransactionsGetResponse) plaidCallService
-                        .getTransactionsLoop(plaidAccessInfo).getBody();
 
                 for (TransactionsGetResponse.Transaction t : transactionList.getTransactions()) {
                     if (t != null) {
+
                         arrayListMerchants = new ArrayList<>();
                         arrayListMerchants.add(t.getName());
                         arrayListMerchants.get(0);
@@ -81,7 +88,6 @@ public class UserService {
                     merchants.setId(databaseId);
                     merchantMapper.updateMerchantByID(merchants);
                 }
-
             }
         }
         return "Success";

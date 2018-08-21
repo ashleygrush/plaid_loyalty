@@ -88,14 +88,14 @@ AccessTokenMapper accessTokenMapper;
     }
 
 
-    public ResponseEntity getTransactionsLoop(PlaidAuthService.PlaidAccessInfo accessInfo) throws Exception{
+    public ResponseEntity getTransactionsLoop(int id) throws Exception{
         ResponseEntity response = null;
         boolean success = false;
         int count = 0;
         do {
             System.out.println("transaction attempt: " + count);
             try {
-                response = getTransactions(accessInfo);
+                response = getTransactions(id);
                 success = true;
             } catch (Exception e){
 //                System.out.println("Attempt1");
@@ -111,11 +111,11 @@ AccessTokenMapper accessTokenMapper;
 
 
 
-    public ResponseEntity getTransactions(PlaidAuthService.PlaidAccessInfo accessInfo) throws Exception {
-        if (accessInfo.accessToken == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(accessToken.getErrorResponseData("Not authorized"));
-        }
+    public ResponseEntity getTransactions(int id) throws Exception {
+//        if (accessInfo.accessToken == null) {
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+//                    .body(accessToken.getErrorResponseData("Not authorized"));
+//        }
 
         //setting the timescale
         Calendar cal = Calendar.getInstance();
@@ -124,7 +124,7 @@ AccessTokenMapper accessTokenMapper;
         Date endDate = new Date();
 
         Response<TransactionsGetResponse> response = this.accessToken.getPlaidClient().service()
-                .transactionsGet(new TransactionsGetRequest(accessInfo.accessToken, startDate, endDate)
+                .transactionsGet(new TransactionsGetRequest(accessTokenMapper.getGetByAccesstoken(id), startDate, endDate)
                         .withCount(250)
                         .withOffset(0))
                 .execute();

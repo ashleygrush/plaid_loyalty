@@ -19,6 +19,5 @@ import org.springframework.web.bind.annotation.*;
         public String getAllUsers() {
             // searches for database link in services
             return userService.identifyUserMerchantTransactions();
-
     }
 }

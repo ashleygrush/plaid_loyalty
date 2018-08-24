@@ -1,7 +1,7 @@
 package demo.mapper;
 
 import demo.model.MerchantsForHashMap;
-import demo.model.Users;
+import demo.model.database.Users;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import java.util.ArrayList;

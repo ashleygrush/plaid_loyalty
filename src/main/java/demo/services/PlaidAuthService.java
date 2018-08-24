@@ -1,7 +1,7 @@
 package demo.services;
 
 import demo.mapper.UserMapper;
-import demo.model.Users;
+import demo.model.database.Users;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

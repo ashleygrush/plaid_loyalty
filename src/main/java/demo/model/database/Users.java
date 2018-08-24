@@ -1,13 +1,21 @@
-package demo.model;
+package demo.model.database;
 
-
-public class Merchants {
+// links to database; holds user name, password and email.
+public class Users {
 
     private int id;
     private String name;
     private String password;
     private String email;
+    private String accesstoken;
 
+    public String getAccesstoken() {
+        return accesstoken;
+    }
+
+    public void setAccesstoken(String accesstoken) {
+        this.accesstoken = accesstoken;
+    }
 
     public int getId() {
         return id;

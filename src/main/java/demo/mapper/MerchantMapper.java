@@ -1,8 +1,8 @@
 package demo.mapper;
 
-import demo.model.Merchants;
 import demo.model.MerchantsForHashMap;
-import demo.model.Users;
+import demo.model.database.Merchants;
+import demo.model.database.Users;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
@@ -14,7 +14,7 @@ import java.util.List;
 // maps to Plaid Database - Merchant table
 public interface MerchantMapper {
 
-    // list of all MerchantsForHashMap
+    // list of all Merchants
     String LIST_ALL_MERCHANTS = "Select id, name, email from plaid.merchants";
 
     // find user by ID
@@ -29,7 +29,7 @@ public interface MerchantMapper {
     String DELETE_MERCHANT = "Delete from plaid.merchants where id = #{id}";
 
     // update existing user by ID
-    String UPDATE_MERCHANT_BY_ID = "UPDATE plaid.merchants "+
+    String UPDATE_MERCHANT_BY_ID = "UPDATE plaid.merchants " +
             "SET name = #{name}, " +
             "password = #{password}, " +
             "email = #{email} " +
@@ -38,7 +38,11 @@ public interface MerchantMapper {
 
     // returns list of all MerchantsForHashMap from MerchantsForHashMap table
     @Select(LIST_ALL_MERCHANTS)
-    List<MerchantsForHashMap> listAllMerchants();
+    List<MerchantsForHashMap> listAllMerchantsForHM();
+
+    // returns list of all Merchants from Merchants table
+    @Select(LIST_ALL_MERCHANTS)
+    List<Merchants> listAllMerchants();
 
     // finds user by ID number
     @Select(FIND_MERCHANT_BY_ID)
@@ -46,7 +50,7 @@ public interface MerchantMapper {
 
     // creates new user
     @Insert(CREATE_MERCHANT)
-    int createMerchant(MerchantsForHashMap merchants);
+    int createMerchant(Merchants merchants);
 
     // delete existing user
     @Delete(DELETE_MERCHANT)

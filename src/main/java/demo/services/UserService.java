@@ -4,16 +4,15 @@ import com.plaid.client.PlaidClient;
 import demo.mapper.AccessTokenMapper;
 import demo.mapper.MerchantMapper;
 import demo.mapper.UpdateUserPointsMapper;
-import demo.model.Merchants;
 import org.springframework.core.env.Environment;
 import com.plaid.client.response.TransactionsGetResponse;
 import demo.mapper.UserMapper;
-import demo.model.Users;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import retrofit2.Response;
-
 import java.util.*;
+import demo.model.database.DBSearch;
+import demo.model.database.Users;
+import java.util.List;
 
 @Service
 public class UserService {
@@ -58,7 +57,7 @@ public class UserService {
 
 
     // GET all Users- call plaid API, iterate against hashmap, update database if required
-    public String identifyUserMerchantTransactions() {
+    public String analyseAllUserTransaction() {
         List<Users> userList = mapper.listAllUsers();
         ArrayList<String> arrayListMerchants = new ArrayList<>();
         for (Users user : userList) {
@@ -102,5 +101,74 @@ public class UserService {
         }
         return "Success";
     }
-}
 
+
+
+
+
+    //USER CRUD
+
+
+    // GET - all Users
+    public List<Users> findAllUsers() {
+        return mapper.listAllUsers();
+    }
+
+
+    // GET - find user by ID
+    public DBSearch findUserByID(int id) {
+
+        DBSearch searchID = new DBSearch();
+
+        searchID.setId(id);
+
+        searchID.setUsers(mapper.findUserByID(id));
+
+        return searchID;
+    }
+
+
+    // POST - create new user
+    public Users createUser(Users data) {
+
+        Users newUser = new Users();
+
+        newUser.setName(data.getName());
+        newUser.setPassword(data.getPassword());
+        newUser.setEmail(data.getEmail());
+
+        try {
+            mapper.createUser(newUser);
+        } catch (Exception e) {
+            System.out.println("User already exists. Please log in : " + data.getEmail());
+        }
+        return newUser;
+    }
+
+    // DELETE - delete existing user by ID
+    public DBSearch deleteUserByID(int id) {
+
+        DBSearch removeID = new DBSearch();
+
+        if (removeID.getId() == id) ;
+        {
+            removeID.setId(mapper.deleteUserByID(id));
+        }
+        return removeID;
+    }
+
+    // PUT - update existing user by ID
+    public Users updateUserByID(int id, Users data) {
+
+        Users updateUser = new Users();
+
+        updateUser.setName(data.getName());
+        updateUser.setPassword(data.getPassword());
+        updateUser.setEmail(data.getEmail());
+        updateUser.setId(id);
+
+        mapper.updateUserByID(updateUser);
+
+        return updateUser;
+    }
+}

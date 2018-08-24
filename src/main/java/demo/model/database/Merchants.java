@@ -1,12 +1,13 @@
-package demo.model;
+package demo.model.database;
 
-public class Users {
+// links to database; contains business name, password and email.
+public class Merchants {
 
     private int id;
     private String name;
     private String password;
     private String email;
-    private String accesstoken;
+
 
     public int getId() {
         return id;
@@ -38,13 +39,5 @@ public class Users {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getAccesstoken() {
-        return accesstoken;
-    }
-
-    public void setAccesstoken(String accesstoken) {
-        this.accesstoken = accesstoken;
     }
 }

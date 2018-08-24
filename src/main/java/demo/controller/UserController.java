@@ -5,24 +5,24 @@ import demo.model.database.Users;
 import demo.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 //calls the User service method to update the db
 
-    @RestController
-    @RequestMapping("/loyalty")
-    public class UserController {
+@RestController
+@RequestMapping("/loyalty")
+public class UserController {
 
-        @Autowired
-        UserService userService;
+    @Autowired
+    UserService userService;
 
-        // calls DB for all users
-        @GetMapping("/update/users")
-        public String updateAllUsers() {
-            // searches for database link in services
-            return userService.analyseAllUserTransaction();
+    // calls DB for all users
+    @GetMapping("/update/users")
+    public String updateAllUsers() {
+        // searches for database link in services
+        return userService.analyseAllUserTransaction();
     }
-
 
     // calls DB for all users
     @GetMapping("/users")
@@ -54,4 +54,5 @@ import java.util.List;
                                 @RequestBody Users users) {
         return userService.updateUserByID(id, users);
     }
-    }
+
+}

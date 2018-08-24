@@ -112,14 +112,10 @@ AccessTokenMapper accessTokenMapper;
 
 
     public ResponseEntity getTransactions(int id) throws Exception {
-//        if (accessInfo.accessToken == null) {
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-//                    .body(accessToken.getErrorResponseData("Not authorized"));
-//        }
 
         //setting the timescale
         Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DATE, -30);
+        cal.add(Calendar.HOUR, -1);
         Date startDate = cal.getTime();
         Date endDate = new Date();
 

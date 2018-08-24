@@ -3,6 +3,7 @@ package demo.services;
 import com.plaid.client.PlaidClient;
 import demo.mapper.AccessTokenMapper;
 import demo.mapper.MerchantMapper;
+import demo.mapper.UpdateUserPointsMapper;
 import demo.model.Merchants;
 import org.springframework.core.env.Environment;
 import com.plaid.client.response.TransactionsGetResponse;
@@ -31,6 +32,9 @@ public class UserService {
 
     @Autowired
     AccessTokenMapper accessTokenMapper;
+
+    @Autowired
+    UpdateUserPointsMapper updateUserPointsMapper;
 
 
     private final Environment env;
@@ -82,11 +86,17 @@ public class UserService {
             //now need to itterate through the resulting array list for merchants within the hashmap
             for (String transactionElement : arrayListMerchants) {
                 HashMap<String, Integer> merchantsHM = merchantService.merchantsList();
+
                 if(merchantsHM.containsKey(transactionElement) == true){
-                    int databaseId = merchantsHM.get(transactionElement);
-                    Merchants merchants = new Merchants();
-                    merchants.setId(databaseId);
-                    merchantMapper.updateMerchantByID(merchants);
+                    //update db for user loyalty for a specific merchant
+
+                    //get the database id for the merchant
+                    int merchantDatabaseId = merchantsHM.get(transactionElement);
+
+//                    update the loyalty db for an additional point (on the basis the timestamp is not the same
+                    int userID = user.getId();
+                    //call the update loyalty point program ethod in mapper for DB passing the merchant and the user
+                    updateUserPointsMapper.UpdateUserPointsByMerchant(merchantDatabaseId, userID);
                 }
             }
         }

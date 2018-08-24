@@ -13,7 +13,9 @@ import org.springframework.web.filter.CorsFilter;
 @SpringBootApplication
 @EnableFeignClients
 
-public class PlaidApplication { // extends SpringBootServletInitializer {
+
+
+public class PlaidApplication {
 
     public static void main(String... args) {
         SpringApplication.run(PlaidApplication.class);
@@ -40,7 +42,6 @@ public class PlaidApplication { // extends SpringBootServletInitializer {
         return builder.build();
     }
 }
-
     // runs TomCat8 - server
 //    @Override
 //    protected SpringApplicationBuilder configure (SpringApplicationBuilder application){

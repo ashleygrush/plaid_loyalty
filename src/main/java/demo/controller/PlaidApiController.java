@@ -1,6 +1,5 @@
 package demo.controller;
 
-import com.google.common.collect.ImmutableMap;
 import demo.services.AccessToken;
 import demo.services.PlaidAuthService;
 import demo.services.PlaidCallService;
@@ -8,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.google.common.collect.ImmutableMap;
 import javax.servlet.http.HttpSession;
 import java.util.Map;
 

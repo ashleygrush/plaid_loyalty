@@ -29,31 +29,31 @@ public class MerchantController {
     }
 
     // calls DB for all Merchants
-    @GetMapping("/merchants")
+    @GetMapping("/all")
     public List<Merchants> getMerchants() {
         return merchantService.findAllMerchants();
     }
 
     // calls DB for merchant by ID number
-    @RequestMapping("/merchants/{id}")
+    @RequestMapping("/{id}")
     public DBSearch findByID(@PathVariable("id") int id) {
         return merchantService.findMerchantByID(id);
     }
 
     // creates new merchant
-    @PostMapping("/merchants")
+    @PostMapping()
     public Merchants createMerchant(@RequestBody Merchants merchants) {
         return merchantService.createMerchant(merchants);
     }
 
     //delete existing merchant by ID
-    @DeleteMapping("/merchants/{id}")
+    @DeleteMapping("/{id}")
     public DBSearch deleteByID(@PathVariable("id") int id) {
         return merchantService.deleteMerchantByID(id);
     }
 
     // update existing merchant by ID
-    @PutMapping("/merchants/{id}")
+    @PutMapping("{id}")
     public Merchants updateMerchantByID(@PathVariable("id") int id,
                                 @RequestBody Merchants merchants) {
         return merchantService.updateMerchantByID(id, merchants);

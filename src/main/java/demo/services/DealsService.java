@@ -64,11 +64,12 @@ public class DealsService {
     }
 
     // PUT - update existing user by ID
-    public Deals updateDealByID(int id, Deals data) {
+    public Deals updateDealByID(int merchant_id, int id, Deals data) {
 
         Deals updateDeal = new Deals();
 
-        updateDeal.setMerchant_id(data.getMerchant_id());
+        updateDeal.setId(id);
+        updateDeal.setMerchant_id(merchant_id);
         updateDeal.setDeal_description(data.getDeal_description());
         updateDeal.setDeal_points(data.getDeal_points());
         updateDeal.setDeal_instructions(data.getDeal_instructions());
@@ -76,6 +77,11 @@ public class DealsService {
         mapper.updateDealByID(updateDeal);
 
         return updateDeal;
+    }
+
+    // GET - all Deals
+    public List<Deals> findAllDealsByMerchant(int merchant_id) {
+        return mapper.listAllDealsByMerchant(merchant_id);
     }
 
 

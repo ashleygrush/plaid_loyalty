@@ -10,41 +10,48 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/merchants/")
+@RequestMapping("/deals")
 public class DealsController {
 
     @Autowired
     DealsService service;
 
     // calls DB for all deals
-    @GetMapping("/deals/all")
-    public List<Deals> getAllDeals() {
+    @GetMapping("/all")
+    public List<Deals> getAllDeals(){
         return service.findAllDeals();
     }
 
     // calls DB for deals by ID number
-    @RequestMapping("/deals/{id}")
+    @RequestMapping("/{id}")
     public DBSearch findByID(@PathVariable("id") int id) {
         return service.findDealByID(id);
     }
 
     // creates new deal
-    @PostMapping("/deals")
+    @PostMapping
     public Deals createDeal(@RequestBody Deals deals) {
         return service.createDeal(deals);
     }
 
     //delete deal by ID
-    @DeleteMapping("/deals/{id}")
+    @DeleteMapping("/{id}")
     public DBSearch deleteByID(@PathVariable("id") int id) {
         return service.deleteDealByID(id);
     }
 
     // update existing deal by ID
-    @PutMapping("/deals/{id}")
-    public Deals updateDealByID(@PathVariable("id") int id,
+    @PutMapping("/merchant_id={merchant_id}/id={id}")
+    public Deals updateDealByID(@PathVariable("merchant_id") int merchant_id,
+                                @PathVariable("id") int id,
                                 @RequestBody Deals deals) {
-        return service.updateDealByID(id, deals);
+        return service.updateDealByID(merchant_id, id, deals);
+    }
+
+    // use merchant ID to find deals
+    @GetMapping("/merchant_id={merchant_id}")
+    public List<Deals> getAllDealsByMerchant(@PathVariable("merchant_id") int merchant_id) {
+        return service.findAllDealsByMerchant(merchant_id);
     }
 
 }

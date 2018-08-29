@@ -8,7 +8,8 @@ public class Loyalty {
     private int merchant_id;
     private int user_id;
     private int deal_id;
-    private boolean active = false;
+    private boolean redeemed = false;
+    private int points;
 
     public int getId() {
         return id;
@@ -42,11 +43,19 @@ public class Loyalty {
         this.deal_id = deal_id;
     }
 
-    public boolean isActive() {
-        return active;
+    public boolean isReedemed() {
+        return redeemed;
     }
 
-    public void setActive(boolean active) {
-        this.active = active;
+    public void setReedemed(boolean reedemed) {
+        this.redeemed = reedemed;
+    }
+
+    public int getPoints() {
+        return points;
+    }
+
+    public void setPoints(int points) {
+        this.points = points;
     }
 }

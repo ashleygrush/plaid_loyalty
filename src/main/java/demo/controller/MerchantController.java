@@ -12,11 +12,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 
-
 @RestController
 @RequestMapping ("/merchants")
-
-
 public class MerchantController {
 
     @Autowired
@@ -25,7 +22,6 @@ public class MerchantController {
     @RequestMapping ("/testHashMap")
     public HashMap<String, Integer> testHashMap(){
         return merchantService.merchantsList();
-
     }
 
     // calls DB for all Merchants

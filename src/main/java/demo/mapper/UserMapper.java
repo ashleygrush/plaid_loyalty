@@ -41,7 +41,7 @@ public interface UserMapper {
     List<Users> listAllUsers();
 
     @Update(INSERT_ACCESSTOKEN)
-    public int insertAccesstoken (Users user);
+    int insertAccesstoken (Users user);
 
     // finds user by ID number
     @Select(FIND_USER_BY_ID)

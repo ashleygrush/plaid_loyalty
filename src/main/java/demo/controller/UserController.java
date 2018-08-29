@@ -9,10 +9,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 //calls the User service method to update the db
-
-    @RestController
-    @RequestMapping("/users")
-    public class UserController {
+@RestController
+@RequestMapping("/users")
+public class UserController {
 
     @Autowired
     UserService userService;

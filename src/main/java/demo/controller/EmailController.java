@@ -20,7 +20,7 @@ public class EmailController {
 
         // Replace recipient@example.com with a "To" address. If your account
         // is still in the sandbox, this address must be verified.
-        static final String TO = "recipient@example.com";
+        static final String TO = "recipient@email.com";
 
         // The configuration set to use for this email. If you do not want to use a
         // configuration set, comment the following variable and the

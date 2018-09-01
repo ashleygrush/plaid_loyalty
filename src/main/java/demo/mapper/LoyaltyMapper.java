@@ -29,7 +29,7 @@ public interface LoyaltyMapper {
 
     // switch redeem to active/true
     String ACTIVATE_REDEEMED = "Update plaid.loyalty " +
-            "SET redeemed = #{true}" +
+            "SET redeemed = #{true} " +
             "WHERE id = #{id}";
 
     // deactivate redeem - switch to false

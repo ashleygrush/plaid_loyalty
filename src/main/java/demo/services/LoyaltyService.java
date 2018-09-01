@@ -38,17 +38,18 @@ public class LoyaltyService {
     // GET - all user transactions
     // for each transaction; search hash map (merchant ID)
     // PUT - if merchant ID is found - update if needed
-    public String seachHashMapForMerchantID(int merchant_id, int user_id) {
+    public String searchHashMapForMerchantID(int merchant_id, int user_id) {
 
-        // import hash map
-        HashMap<Integer, Integer> map = new HashMap();
-        counter = 0;
+//        // import hash map
+//        HashMap<Integer, Integer> map = new HashMap();
+//        counter = 0;
 
-        // search for key in hash map
-        if (map.containsKey(merchant_id)) {
-
-            // if merchant is found, search for new transactions
-            if (map.get(2) != null) {
+//        // search for key in hash map
+//        if (map.containsKey(merchant_id)) {
+//
+//            // if merchant is found, search for new transactions
+//            if (map.get(2) != null) {
+        if (merchant_id != 0) {
                 // counter tracks number of transactions hit > added to update points
                 counter++;
                 System.out.println("Number of transactions hit : " + counter);
@@ -58,13 +59,13 @@ public class LoyaltyService {
             // if no new transactions...
             else {
                 // counter to check for valid transactions
-                System.out.println(counter);
+                System.out.println("Transactions found : " + counter);
                 return "No new transactions found.";
             }
         }
-        // if no merchants found...
-        return "No participating merchants found.";
-    }
+//        // if no merchants found...
+//        return "No participating merchants found.";
+//    }
 
 
 
@@ -74,8 +75,11 @@ public class LoyaltyService {
         //create number generator (1 - 10)
         Random random = new Random();
 
-        // if new transactions exist; generate new number
-        if (counter >= 0){
+//      once hash map is connected - set transactions counter
+//      > if new transactions exist; generate new number
+//        if (counter <= 0){
+
+            if (id > 0) {
             int updatePoints = random.nextInt((10) + counter);
             mapper.updatePoints(id, updatePoints);
 
@@ -102,8 +106,9 @@ public class LoyaltyService {
         // otherwise, send estimated points email. "You're 1 point away from a free drink!"
         else {
             LoyaltyService.sendPointsCountEmail();
+            return "Please check your inbox for an update on your points!";
         }
-        return "No rewards available for redemption; please check your inbox for an update!" ;
+//        return "No rewards available for redemption; please check your inbox for an update!";
     }
 
     // PUT - if deal used; switch from active to inactive

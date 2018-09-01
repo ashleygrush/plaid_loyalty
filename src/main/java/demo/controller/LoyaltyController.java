@@ -27,5 +27,10 @@ public class LoyaltyController {
         return service.findByUserID(user_id);
     }
 
+    @RequestMapping("/redemption_activity/id={id}")
+    public String RedemptionActivity(@PathVariable("id") int id) {
+        return service.checkRedeemed(id);
+    }
+
 
 }

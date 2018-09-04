@@ -17,14 +17,21 @@ public interface LoyaltyMapper {
     // find user by ID
     String FIND_POINTS_BY_USER_ID = "Select * from plaid.loyalty where user_id = #{user_id}";
 
-    // find all deal ID's by Merchant ID
-    String FIND_ALL_DEALS_BY_MERCHANT_ID = "Select id from plaid.loyalty where merchant_id = #{merchant_id}";
-
     //update points in DB per transaction
     String UPDATE_POINTS_BY_ID = "Update plaid.loyalty SET points = #{points} WHERE id = #{id}";
 
     // list points count
     String POINTS_COUNT = "Select points from plaid.loyalty WHERE id = #{id}";
+
+    // switch redeem to active/true
+    String ACTIVATE_REWARD = "Update plaid.loyalty " +
+            "SET active = #{true} " +
+            "WHERE id = #{id}";
+
+    // deactivate redeem - switch to false
+    String DEACTIVATE_REWARD  = "Update plaid.loyalty " +
+            "SET activate = #{false}" +
+            "WHERE id = #{id}";
 
     // switch redeem to active/true
     String ACTIVATE_REDEEMED = "Update plaid.loyalty " +
@@ -36,7 +43,7 @@ public interface LoyaltyMapper {
             "SET redeemed = #{false}" +
             "WHERE id = #{id}";
 
-    String CHECK_TRANSACTIONS = "Select active_transaction from plaid.loyalty WHERE id = #{id}";
+    String GET_TRANSACTIONS_BY_ID = "Select redeemed from plaid.loyalty WHERE id = #{id}";
 
 
     // returns list of all Merchants from Merchants table
@@ -47,10 +54,6 @@ public interface LoyaltyMapper {
     @Select(FIND_POINTS_BY_USER_ID)
     Loyalty findPointsByUserID(int user_id);
 
-    // returns all deals by Merchant ID
-    @Select(FIND_ALL_DEALS_BY_MERCHANT_ID)
-    int findAllDealsByMerchantID(int merchant_id);
-
     //update points by ID number
     @Update(UPDATE_POINTS_BY_ID)
     int updatePoints(Loyalty loyalty);
@@ -58,12 +61,18 @@ public interface LoyaltyMapper {
     @Select(POINTS_COUNT)
     int loyaltyCount(int id);
 
+    @Update(ACTIVATE_REWARD)
+    boolean activateReward(int id);
+
+    @Update(DEACTIVATE_REWARD)
+    boolean deactivateAward(int id);
+
     @Update(ACTIVATE_REDEEMED)
-    int activateRedeemed(int id);
+    boolean activateRedeemed(int id);
 
     @Update(DEACTIVATE_REDEEMED)
-    int deactivateRedeemed(int id);
+    boolean deactivateRedeemed(int id);
 
-    @Select(CHECK_TRANSACTIONS)
-    boolean checkTransactions(int id);
+    @Select(GET_TRANSACTIONS_BY_ID)
+    boolean getTransactionsByID(int id);
 }

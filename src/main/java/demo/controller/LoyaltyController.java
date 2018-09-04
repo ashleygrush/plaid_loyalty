@@ -16,6 +16,7 @@ public class LoyaltyController {
     LoyaltyService service;
 
     // calls DB for all loyalty points
+    // look into why it's not refreshing data? activating in DB< but not refreshing to main page
     @GetMapping("/all")
     public List<Loyalty> getAllPoints() {
         return service.findAllPoints();
@@ -28,10 +29,10 @@ public class LoyaltyController {
         return service.findByUserID(user_id);
     }
 
-    // needs exception for null ID number
-    @RequestMapping("/redemption_activity/id={id}")
+    // needs exception for null ID number - Checks for active rewards
+    @RequestMapping("/check_active_rewards/id={id}")
     public String RedemptionActivity(@PathVariable("id") int id) {
-        return service.checkRedeemed(id);
+        return service.checkActive(id);
     }
 
 
@@ -41,8 +42,8 @@ public class LoyaltyController {
     }
 
     // NOT WORKING - IN PROGRESS
-    @RequestMapping("/check_active/id={id}")
-    public String checkActive(@PathVariable("id") int id) {
-        return service.checkActive(id);
+    @RequestMapping("/check_redeemed_rewards/id={id}")
+    public String checkRedeemed(@PathVariable("id") int id) {
+        return service.checkRedeemed(id);
     }
 }

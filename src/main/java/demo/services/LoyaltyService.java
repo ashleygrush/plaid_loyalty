@@ -66,11 +66,11 @@ public class LoyaltyService {
 
     // NEEDS Exception Handling FOR NULL ID NUMBER!!
     // PUT - if 10 is hit, redeem points (switch to active) > email user notification
-    public String checkRedeemed(int id) {
+    public String checkActive(int id) {
 
         // if points are maxed out, activate and send email.
         if (mapper.loyaltyCount(id) >= 10) {
-            mapper.activateRedeemed(id);
+            mapper.activateReward(id);
             LoyaltyService.sendInstructionsEmail();
             return "Please check your inbox for instructions on how to redeem your reward!";
         }
@@ -84,12 +84,12 @@ public class LoyaltyService {
 
     // IN PROGRESS
     // PUT - if deal used; switch from active to inactive
-    public String checkActive(int id) {
+    public String checkRedeemed(int id) {
 
-        // if active is on: resend instructions
-        boolean activeReward = mapper.checkTransactions(id);
-        if (activeReward == true) {
-            mapper.deactivateRedeemed(id);
+        // if transaction is found, deactivate reward (activate redeemed)
+        if (true == true) {
+            mapper.deactivateAward(id);
+            mapper.activateRedeemed(id);
             LoyaltyService.sendPointsCountEmail();
             return "Reward has been collected and your points have been reset.";
         } else {

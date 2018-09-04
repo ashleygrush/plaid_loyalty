@@ -1,4 +1,4 @@
-package demo.controller;
+package demo.services;
 
 import java.io.IOException;
 
@@ -10,17 +10,19 @@ import com.amazonaws.services.simpleemail.model.Content;
 import com.amazonaws.services.simpleemail.model.Destination;
 import com.amazonaws.services.simpleemail.model.Message;
 import com.amazonaws.services.simpleemail.model.SendEmailRequest;
+import org.springframework.stereotype.Service;
 
-public class EmailController {
+@Service
+public class EmailService {
 
 
         // Replace sender@example.com with your "From" address.
         // This address must be verified with Amazon SES.
-        static final String FROM = "sender@email.com";
+        static String FROM = "dgc18@live.co.uk";
 
         // Replace recipient@example.com with a "To" address. If your account
         // is still in the sandbox, this address must be verified.
-        static final String TO = "recipient@email.com";
+        static String TO = "dgc18@live.co.uk";
 
         // The configuration set to use for this email. If you do not want to use a
         // configuration set, comment the following variable and the
@@ -30,10 +32,10 @@ public class EmailController {
 //        static final String CONFIGSET = "ConfigSet";
 
         // The subject line for the email.
-        static final String SUBJECT = "Loyalty Bonus";
+        static String SUBJECT = "Loyalty Bonus";
 
         // The HTML body for the email.
-        static final String HTMLBODY = "<h1> Congratulations! You earned your free cup of coffee! </h1>"
+        static String HTMLBODY = "<h1> Congratulations! You earned your free cup of coffee! </h1>"
 
                 // Add the link to the customer loyalty point
                 + "<p>This email is a notification to tell you that you have "
@@ -43,9 +45,23 @@ public class EmailController {
 
 
         // The email body for recipients with non-HTML email clients.
-        static final String TEXTBODY = "You have reached your points to get a free coffee! ";
+        static String TEXTBODY = "You have reached your points to get a free coffee! ";
 
-        public static void main(String[] args) throws IOException {
+        // this is the method we want to call
+        public static void sendMail(String to, String from, String subject, String body){
+            TO = to;
+            FROM = from;
+            SUBJECT = subject;
+            TEXTBODY = body;
+            send();
+        }
+
+        // this is defaut override, will send and receive to Duncan by default
+        public static void sendMail(){
+                send();
+        }
+
+        public static void send() {
 
             try {
                 AmazonSimpleEmailService client =

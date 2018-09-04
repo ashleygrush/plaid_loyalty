@@ -5,8 +5,6 @@ import demo.model.database.DBSearch;
 import demo.model.database.Loyalty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -16,7 +14,7 @@ public class LoyaltyService {
     @Autowired
     LoyaltyMapper mapper;
 
-    int counter;
+    int counter = 1;
 
     // GET - points/Loyalty status: customers (all)
     public List<Loyalty> findAllPoints() {
@@ -35,39 +33,6 @@ public class LoyaltyService {
         return searchID;
     }
 
-    // GET - all user transactions
-    // for each transaction; search hash map (merchant ID)
-    // PUT - if merchant ID is found - update if needed
-    public String searchHashMapForMerchantID(int merchant_id, int user_id) {
-
-//        // import hash map
-//        HashMap<Integer, Integer> map = new HashMap();
-//        counter = 0;
-
-//        // search for key in hash map
-//        if (map.containsKey(merchant_id)) {
-//
-//            // if merchant is found, search for new transactions
-//            if (map.get(2) != null) {
-        if (merchant_id != 0) {
-                // counter tracks number of transactions hit > added to update points
-                counter++;
-                System.out.println("Number of transactions hit : " + counter);
-                updatePoints(mapper.findAllDealsByMerchantID(merchant_id));
-                return "Found participating merchant; updating points.";
-            }
-            // if no new transactions...
-            else {
-                // counter to check for valid transactions
-                System.out.println("Transactions found : " + counter);
-                return "No new transactions found.";
-            }
-        }
-//        // if no merchants found...
-//        return "No participating merchants found.";
-//    }
-
-
 
     // check customer ID Loyalty points % for new point value (how many stars)
     public String updatePoints(int id){
@@ -75,24 +40,31 @@ public class LoyaltyService {
         //create number generator (1 - 10)
         Random random = new Random();
 
+        // import loyalty class
+        Loyalty updatePoints = new Loyalty();
+
 //      once hash map is connected - set transactions counter
 //      > if new transactions exist; generate new number
 //        if (counter <= 0){
 
-            if (id > 0) {
-            int updatePoints = random.nextInt((10) + counter);
-            mapper.updatePoints(id, updatePoints);
+            if (counter > 0) {
+            int points = random.nextInt((10) + 1); // add counter here!
+
+            updatePoints.setPoints(points);
+            updatePoints.setId(id);
+
+            mapper.updatePoints(updatePoints);
 
             // check if points have hit cap...
             checkRedeemed(id);
             return "points successfully updated.";
         }
-
         // otherwise, return ID.
         return "No new transactions found.";
     }
 
 
+    // NEEDS Exception Handling FOR NULL ID NUMBER!!
     // PUT - if 10 is hit, redeem points (switch to active) > email user notification
     public String checkRedeemed(int id) {
 
@@ -108,10 +80,23 @@ public class LoyaltyService {
             LoyaltyService.sendPointsCountEmail();
             return "Please check your inbox for an update on your points!";
         }
-//        return "No rewards available for redemption; please check your inbox for an update!";
     }
 
+    // IN PROGRESS
     // PUT - if deal used; switch from active to inactive
+    public String checkActive(int id) {
+
+        // if active is on: resend instructions
+        boolean activeReward = mapper.checkTransactions(id);
+        if (activeReward == true) {
+            mapper.deactivateRedeemed(id);
+            LoyaltyService.sendPointsCountEmail();
+            return "Reward has been collected and your points have been reset.";
+        } else {
+            LoyaltyService.sendInstructionsEmail();
+            return "Reward is active and not yet collected.";
+        }
+    }
 
 
     // sends email that reward is active and instructions to redeem
@@ -121,6 +106,7 @@ public class LoyaltyService {
     // sends email with current points count
     private static void sendPointsCountEmail() {
     }
+
 
     // DELETE - if user no longer exists, delete points.
 

@@ -1,7 +1,6 @@
 package demo.mapper;
 
 import demo.model.database.Loyalty;
-import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
@@ -37,6 +36,7 @@ public interface LoyaltyMapper {
             "SET redeemed = #{false}" +
             "WHERE id = #{id}";
 
+    String CHECK_TRANSACTIONS = "Select active_transaction from plaid.loyalty WHERE id = #{id}";
 
 
     // returns list of all Merchants from Merchants table
@@ -53,7 +53,7 @@ public interface LoyaltyMapper {
 
     //update points by ID number
     @Update(UPDATE_POINTS_BY_ID)
-    int updatePoints(int points, int id);
+    int updatePoints(Loyalty loyalty);
 
     @Select(POINTS_COUNT)
     int loyaltyCount(int id);
@@ -63,4 +63,7 @@ public interface LoyaltyMapper {
 
     @Update(DEACTIVATE_REDEEMED)
     int deactivateRedeemed(int id);
+
+    @Select(CHECK_TRANSACTIONS)
+    boolean checkTransactions(int id);
 }

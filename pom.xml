@@ -91,6 +91,28 @@
             <version>1.3.0</version>
         </dependency>
 
+        <!-- Redis / Jedis -->
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <version>2.7.0</version>
+        </dependency>
+
+        <!-- AWS SDK CORE-->
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk-core</artifactId>
+            <version>1.11.359</version>
+        </dependency>
+
+        <!-- AWS SDK SES -->
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk-ses</artifactId>
+            <version>1.11.359</version>
+        </dependency>
+
+
         <!-- SpringBoot Thymeleaf 2.0 -->
         <!--<dependency>-->
             <!--<groupId>org.springframework.boot</groupId>-->
@@ -103,23 +125,6 @@
             <!--<artifactId>spring-boot-starter-thymeleaf</artifactId>-->
             <!--<version>1.4.0.RELEASE</version>-->
         <!--</dependency>-->
-
-        <!-- Redis / Jedis -->
-        <dependency>
-            <groupId>redis.clients</groupId>
-            <artifactId>jedis</artifactId>
-            <version>2.7.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.amazonaws</groupId>
-            <artifactId>aws-java-sdk-core</artifactId>
-            <version>1.11.359</version>
-        </dependency>
-        <dependency>
-            <groupId>com.amazonaws</groupId>
-            <artifactId>aws-java-sdk-ses</artifactId>
-            <version>1.11.359</version>
-        </dependency>
 
         <!-- Spring Session -->
         <!--<dependency>-->

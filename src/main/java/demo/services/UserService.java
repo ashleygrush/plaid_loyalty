@@ -10,7 +10,7 @@ import demo.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.*;
-import demo.model.database.DBSearch;
+
 import demo.model.database.Users;
 import java.util.List;
 
@@ -95,7 +95,7 @@ public class UserService {
                     // update the loyalty db for an additional point (on the basis the timestamp is not the same
                     int userID = user.getId();
 
-                    //call the update loyalty point program ethod in mapper for DB passing the merchant and the user
+                    //call the update loyalty point program method in mapper for DB passing the merchant and the user
                     updateUserPointsMapper.UpdateUserPointsByMerchant(merchantDatabaseId, userID);
                 }
             }
@@ -106,7 +106,6 @@ public class UserService {
 
     //USER CRUD
 
-
     // GET - all Users
     public List<Users> findAllUsers() {
         return mapper.listAllUsers();
@@ -114,15 +113,8 @@ public class UserService {
 
 
     // GET - find user by ID
-    public DBSearch findUserByID(int id) {
-
-        DBSearch searchID = new DBSearch();
-
-        searchID.setId(id);
-
-        searchID.setUsers(mapper.findUserByID(id));
-
-        return searchID;
+    public List<Users> findUserByID(int id) {
+        return mapper.findUserByID(id);
     }
 
 
@@ -144,15 +136,9 @@ public class UserService {
     }
 
     // DELETE - delete existing user by ID
-    public DBSearch deleteUserByID(int id) {
-
-        DBSearch removeID = new DBSearch();
-
-        if (removeID.getId() == id) ;
-        {
-            removeID.setId(mapper.deleteUserByID(id));
-        }
-        return removeID;
+    public String deleteUserByID(int id) {
+        mapper.deleteUserByID(id);
+        return "User successfully removed with ID : " + id + ".";
     }
 
     // PUT - update existing user by ID

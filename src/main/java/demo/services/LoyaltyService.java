@@ -30,13 +30,13 @@ public class LoyaltyService {
         // if points are maxed out, activate and send email.
         if (mapper.loyaltyCount(id) >= 10) {
             mapper.activateReward(id);
-            LoyaltyService.sendInstructionsEmail();
+            sendInstructionsEmail(id);
             return "Please check your inbox for instructions on how to redeem your reward!";
         }
 
         // otherwise, send estimated points email. "You're 1 point away from a free drink!"
         else {
-            LoyaltyService.sendPointsCountEmail();
+            sendPointsCountEmail(id);
             return "Please check your inbox for an update on your points!";
         }
     }
@@ -49,23 +49,38 @@ public class LoyaltyService {
         if (true == true) {
             mapper.deactivateAward(id);
             mapper.activateRedeemed(id);
-            LoyaltyService.sendPointsCountEmail();
+            sendPointsCountEmail(id);
             return "Reward has been collected and your points have been reset.";
         } else {
-            LoyaltyService.sendInstructionsEmail();
-            return "Reward is active and not yet collected.";
+            sendInstructionsEmail(id);
+            return "Reward is active and not yet collected. Redemption Email resent.";
         }
     }
 
 
     // sends email that reward is active and instructions to redeem
-    private static void sendInstructionsEmail() {
+    private void sendInstructionsEmail(int id){
+        EmailService.sendMail(
+                userEmailAddress(id),
+                "grush.ashley@gmail.com",
+                "Redeem your Loyalty Reward!",
+                "Take this to your QR code to your local coffee shop for a free drink!");
     }
 
     // sends email with current points count
-    private static void sendPointsCountEmail() {
+    private void sendPointsCountEmail(int id) {
+        EmailService.sendMail(
+                userEmailAddress(id),
+                "grush.ashley@gmail.com",
+                "Here's your current reward count!",
+                "You're almost there! Just a few more points to go!");
     }
 
+    // Finds email by User ID > Loyalty ID
+    private String userEmailAddress(int id){
+        int user_id = mapper.userIdByLoyaltyID(id);
+        return mapper.userEmailByID(user_id);
+    }
 
 
 // MERGE WITH HASH MAP IF NEEDED - THEN DELETE

@@ -20,6 +20,9 @@ public interface LoyaltyMapper {
     // list points count
     String POINTS_COUNT = "Select points from plaid.loyalty WHERE id = #{id}";
 
+    // Get user ID by Loyalty ID
+    String GET_USER_ID_BY_LOYALTY_ID = "Select user_id from plaid.loyalty WHERE id = #{id}";
+
     // switch redeem to active/true
     String ACTIVATE_REWARD = "Update plaid.loyalty " +
             "SET active = #{true} " +
@@ -40,9 +43,8 @@ public interface LoyaltyMapper {
             "SET redeemed = #{false}" +
             "WHERE id = #{id}";
 
-    String GET_TRANSACTIONS_BY_ID = "Select redeemed from plaid.loyalty WHERE id = #{id}";
-
-
+    // find email by user ID.
+    String USER_EMAIL_BY_ID = "Select email from plaid.users WHERE id = #{id}";
 
     // returns list of all Merchants from Merchants table
     @Select(LIST_ALL_POINTS)
@@ -50,10 +52,17 @@ public interface LoyaltyMapper {
 
     // returns user by ID number
     @Select(FIND_POINTS_BY_USER_ID)
-    List<Loyalty> findPointsByUserID(int user_id);
+    List<Loyalty> findPointsByUserID(int id);
 
     @Select(POINTS_COUNT)
     int loyaltyCount(int id);
+
+    @Select(GET_USER_ID_BY_LOYALTY_ID)
+    int userIdByLoyaltyID(int id);
+
+    // USED IN LOYALTY SERVICE FOR EMAIL PURPOSES
+    @Select(USER_EMAIL_BY_ID)
+    String userEmailByID(int id);
 
     @Update(ACTIVATE_REWARD)
     boolean activateReward(int id);
@@ -67,11 +76,17 @@ public interface LoyaltyMapper {
     @Update(DEACTIVATE_REDEEMED)
     boolean deactivateRedeemed(int id);
 
-    @Select(GET_TRANSACTIONS_BY_ID)
-    boolean getTransactionsByID(int id);
+
 
 
 // REMOVE IF NO LONGER NEEDED
+
+//    // NO LONGER NEEDED???
+//    String GET_TRANSACTIONS_BY_ID = "Select redeemed from plaid.loyalty WHERE id = #{id}";
+
+//    @Select(GET_TRANSACTIONS_BY_ID)
+//    boolean getTransactionsByID(int id);
+
 
 //    //update points in DB per transaction
 //    String UPDATE_POINTS_BY_ID = "Update plaid.loyalty SET points = #{points} WHERE id = #{id}";

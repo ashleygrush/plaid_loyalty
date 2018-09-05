@@ -7,10 +7,8 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.HashMap;
 import demo.mapper.MerchantMapper;
-import demo.model.database.DBSearch;
 import demo.model.database.Merchants;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
@@ -45,15 +43,8 @@ public class MerchantService {
     }
 
     // GET - find merchant by ID
-    public DBSearch findMerchantByID(int id) {
-
-        DBSearch searchID = new DBSearch();
-
-        searchID.setId(id);
-
-        searchID.setUsers(mapper.findMerchantByID(id));
-
-        return searchID;
+    public List<Merchants> findMerchantByID(int id) {
+        return mapper.findMerchantByID(id);
     }
 
 
@@ -76,15 +67,10 @@ public class MerchantService {
     }
 
     // DELETE - delete existing merchant by ID
-    public DBSearch deleteMerchantByID(int id) {
+    public String deleteMerchantByID(int id) {
+        mapper.deleteMerchantByID(id);
 
-        DBSearch removeID = new DBSearch();
-
-        if (removeID.getId() == id) ;
-        {
-            removeID.setId(mapper.deleteMerchantByID(id));
-        }
-        return removeID;
+        return "Merchant successfully removed with ID : " + id + ".";
     }
 
     // PUT - update existing merchant by ID

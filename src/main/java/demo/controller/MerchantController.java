@@ -4,19 +4,13 @@ import demo.services.MerchantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import demo.model.database.DBSearch;
 import demo.model.database.Merchants;
-import demo.services.MerchantService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 
-
 @RestController
 @RequestMapping ("/merchants")
-
-
 public class MerchantController {
 
     @Autowired
@@ -25,7 +19,6 @@ public class MerchantController {
     @RequestMapping ("/testHashMap")
     public HashMap<String, Integer> testHashMap(){
         return merchantService.merchantsList();
-
     }
 
     // calls DB for all Merchants
@@ -36,7 +29,7 @@ public class MerchantController {
 
     // calls DB for merchant by ID number
     @RequestMapping("/{id}")
-    public DBSearch findByID(@PathVariable("id") int id) {
+    public List<Merchants> findByID(@PathVariable("id") int id) {
         return merchantService.findMerchantByID(id);
     }
 
@@ -48,7 +41,7 @@ public class MerchantController {
 
     //delete existing merchant by ID
     @DeleteMapping("/{id}")
-    public DBSearch deleteByID(@PathVariable("id") int id) {
+    public String deleteByID(@PathVariable("id") int id) {
         return merchantService.deleteMerchantByID(id);
     }
 

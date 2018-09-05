@@ -1,7 +1,6 @@
 package demo.services;
 
 import demo.mapper.DealsMapper;
-import demo.model.database.DBSearch;
 import demo.model.database.Deals;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,15 +20,8 @@ public class DealsService {
 
 
     // GET - find deal by ID
-    public DBSearch findDealByID(int id) {
-
-        DBSearch searchID = new DBSearch();
-
-        searchID.setId(id);
-
-        searchID.setDeals(mapper.findDealByID(id));
-
-        return searchID;
+    public List<Deals> findDealByID(int id) {
+        return mapper.findDealByID(id);
     }
 
 
@@ -51,19 +43,13 @@ public class DealsService {
         return newDeal;
     }
 
-    // DELETE - delete existing user by ID
-    public DBSearch deleteDealByID(int id) {
-
-        DBSearch removeID = new DBSearch();
-
-        if (removeID.getId() == id) ;
-        {
-            removeID.setId(mapper.deleteDealByID(id));
-        }
-        return removeID;
+    // DELETE - delete existing deal by ID
+    public String deleteDealByID(int id) {
+        mapper.deleteDealByID(id);
+        return "Deal successfully removed with ID : " + id + ".";
     }
 
-    // PUT - update existing user by ID
+    // PUT - update existing deal by ID
     public Deals updateDealByID(int merchant_id, int id, Deals data) {
 
         Deals updateDeal = new Deals();

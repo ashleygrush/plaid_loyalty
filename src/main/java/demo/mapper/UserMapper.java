@@ -18,7 +18,7 @@ public interface UserMapper {
     String INSERT_ACCESSTOKEN = "UPDATE plaid.users set accesstoken = #{accesstoken} where id = #{id}";
 
     // find user by ID
-    String FIND_USER_BY_ID = "Select * from plaid.users where id = #{id}";
+    String FIND_USER_BY_ID = "Select id, name, email from plaid.users where id = #{id}";
 
     // creates new User (name, email, password)
     String CREATE_USER = "Insert into plaid.users " +
@@ -41,11 +41,11 @@ public interface UserMapper {
     List<Users> listAllUsers();
 
     @Update(INSERT_ACCESSTOKEN)
-    public int insertAccesstoken (Users user);
+    int insertAccesstoken (Users user);
 
     // finds user by ID number
     @Select(FIND_USER_BY_ID)
-    Users findUserByID(int id);
+    List<Users> findUserByID(int id);
 
     // creates new user
     @Insert(CREATE_USER)

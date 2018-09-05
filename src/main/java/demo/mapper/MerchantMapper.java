@@ -18,7 +18,7 @@ public interface MerchantMapper {
     String LIST_ALL_MERCHANTS = "Select id, name, email from plaid.merchants";
 
     // find user by ID
-    String FIND_MERCHANT_BY_ID = "Select * from plaid.merchants where id = #{id}";
+    String FIND_MERCHANT_BY_ID = "Select id, name, email from plaid.merchants where id = #{id}";
 
     // creates new User (name, email, password)
     String CREATE_MERCHANT = "Insert into plaid.merchants " +
@@ -46,7 +46,7 @@ public interface MerchantMapper {
 
     // finds user by ID number
     @Select(FIND_MERCHANT_BY_ID)
-    Users findMerchantByID(int id);
+    List<Merchants> findMerchantByID(int id);
 
     // creates new user
     @Insert(CREATE_MERCHANT)

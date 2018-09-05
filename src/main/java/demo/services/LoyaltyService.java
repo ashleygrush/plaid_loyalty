@@ -1,12 +1,10 @@
 package demo.services;
 
 import demo.mapper.LoyaltyMapper;
-import demo.model.database.DBSearch;
 import demo.model.database.Loyalty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
-import java.util.Random;
 
 @Service
 public class LoyaltyService {
@@ -14,53 +12,14 @@ public class LoyaltyService {
     @Autowired
     LoyaltyMapper mapper;
 
-    int counter = 1;
-
-    // GET - points/Loyalty status: customers (all)
+    // GET - points (all)
     public List<Loyalty> findAllPoints() {
         return mapper.listAllPoints();
     }
 
     // GET - points by user ID.
-    public DBSearch findByUserID(int user_id) {
-
-        DBSearch searchID = new DBSearch();
-
-        searchID.setId(user_id);
-
-        searchID.setLoyalty(mapper.findPointsByUserID(user_id));
-
-        return searchID;
-    }
-
-
-    // check customer ID Loyalty points % for new point value (how many stars)
-    public String updatePoints(int id){
-
-        //create number generator (1 - 10)
-        Random random = new Random();
-
-        // import loyalty class
-        Loyalty updatePoints = new Loyalty();
-
-//      once hash map is connected - set transactions counter
-//      > if new transactions exist; generate new number
-//        if (counter <= 0){
-
-            if (counter > 0) {
-            int points = random.nextInt((10) + 1); // add counter here!
-
-            updatePoints.setPoints(points);
-            updatePoints.setId(id);
-
-            mapper.updatePoints(updatePoints);
-
-            // check if points have hit cap...
-            checkRedeemed(id);
-            return "points successfully updated.";
-        }
-        // otherwise, return ID.
-        return "No new transactions found.";
+    public List<Loyalty> findByUserID(int user_id) {
+        return mapper.findPointsByUserID(user_id);
     }
 
 
@@ -83,7 +42,7 @@ public class LoyaltyService {
     }
 
     // IN PROGRESS
-    // PUT - if deal used; switch from active to inactive
+    // PUT - if deal used; deactivate deal and confirm it's been redeemed
     public String checkRedeemed(int id) {
 
         // if transaction is found, deactivate reward (activate redeemed)
@@ -108,7 +67,36 @@ public class LoyaltyService {
     }
 
 
-    // DELETE - if user no longer exists, delete points.
+
+// MERGE WITH HASH MAP IF NEEDED - THEN DELETE
+//    // check customer ID Loyalty points % for new point value (how many stars)
+//    public String updatePoints(int id){
+//
+//        //create number generator (1 - 10)
+//        Random random = new Random();
+//
+//        // import loyalty class
+//        Loyalty updatePoints = new Loyalty();
+//
+////      once hash map is connected - set transactions counter
+////      > if new transactions exist; generate new number
+////        if (counter <= 0){
+//
+//            if (counter > 0) {
+//            int points = random.nextInt((10) + 1); // add counter here!
+//
+//            updatePoints.setPoints(points);
+//            updatePoints.setId(id);
+//
+//            mapper.updatePoints(updatePoints);
+//
+//            // check if points have hit cap...
+//            checkRedeemed(id);
+//            return "points successfully updated.";
+//        }
+//        // otherwise, return ID.
+//        return "No new transactions found.";
+//    }
 
 }
 

@@ -1,6 +1,5 @@
 package demo.controller;
 
-import demo.model.database.DBSearch;
 import demo.model.database.Loyalty;
 import demo.services.LoyaltyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +22,8 @@ public class LoyaltyController {
     }
 
     // calls DB for Users by ID number
-    // update to LIST for more than one reward system
-    @RequestMapping("/{user_id}")
-    public DBSearch findByUserID(@PathVariable("user_id") int user_id) {
+    @RequestMapping("/user_id={user_id}")
+    public List<Loyalty> findByUserID(@PathVariable("user_id") int user_id) {
         return service.findByUserID(user_id);
     }
 
@@ -35,15 +33,17 @@ public class LoyaltyController {
         return service.checkActive(id);
     }
 
-
-    @RequestMapping("/update_points/id={id}")
-    public String UpdatePoints(@PathVariable("id") int id) {
-        return service.updatePoints(id);
-    }
-
     // NOT WORKING - IN PROGRESS
     @RequestMapping("/check_redeemed_rewards/id={id}")
     public String checkRedeemed(@PathVariable("id") int id) {
         return service.checkRedeemed(id);
     }
+
+
+// SEE TRANSACTIONS UPDATE IN USER CONTROLLER/SERVICE/MAPPER - REMOVE THIS IF NO LONGER NEEDED
+//    @RequestMapping("/update_points/id={id}")
+//    public String UpdatePoints(@PathVariable("id") int id) {
+//        return service.updatePoints(id);
+//    }
+
 }

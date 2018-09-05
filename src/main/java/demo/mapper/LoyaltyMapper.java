@@ -17,9 +17,6 @@ public interface LoyaltyMapper {
     // find user by ID
     String FIND_POINTS_BY_USER_ID = "Select * from plaid.loyalty where user_id = #{user_id}";
 
-    //update points in DB per transaction
-    String UPDATE_POINTS_BY_ID = "Update plaid.loyalty SET points = #{points} WHERE id = #{id}";
-
     // list points count
     String POINTS_COUNT = "Select points from plaid.loyalty WHERE id = #{id}";
 
@@ -46,17 +43,14 @@ public interface LoyaltyMapper {
     String GET_TRANSACTIONS_BY_ID = "Select redeemed from plaid.loyalty WHERE id = #{id}";
 
 
+
     // returns list of all Merchants from Merchants table
     @Select(LIST_ALL_POINTS)
     List<Loyalty> listAllPoints();
 
     // returns user by ID number
     @Select(FIND_POINTS_BY_USER_ID)
-    Loyalty findPointsByUserID(int user_id);
-
-    //update points by ID number
-    @Update(UPDATE_POINTS_BY_ID)
-    int updatePoints(Loyalty loyalty);
+    List<Loyalty> findPointsByUserID(int user_id);
 
     @Select(POINTS_COUNT)
     int loyaltyCount(int id);
@@ -75,4 +69,13 @@ public interface LoyaltyMapper {
 
     @Select(GET_TRANSACTIONS_BY_ID)
     boolean getTransactionsByID(int id);
+
+
+// REMOVE IF NO LONGER NEEDED
+
+//    //update points in DB per transaction
+//    String UPDATE_POINTS_BY_ID = "Update plaid.loyalty SET points = #{points} WHERE id = #{id}";
+
+//    @Update(UPDATE_POINTS_BY_ID)
+//    int updatePoints(Loyalty loyalty);
 }

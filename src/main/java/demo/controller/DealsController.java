@@ -1,7 +1,6 @@
 package demo.controller;
 
 
-import demo.model.database.DBSearch;
 import demo.model.database.Deals;
 import demo.services.DealsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +23,7 @@ public class DealsController {
 
     // calls DB for deals by ID number
     @RequestMapping("/{id}")
-    public DBSearch findByID(@PathVariable("id") int id) {
+    public List<Deals> findByID(@PathVariable("id") int id) {
         return service.findDealByID(id);
     }
 
@@ -36,7 +35,7 @@ public class DealsController {
 
     //delete deal by ID
     @DeleteMapping("/{id}")
-    public DBSearch deleteByID(@PathVariable("id") int id) {
+    public String deleteByID(@PathVariable("id") int id) {
         return service.deleteDealByID(id);
     }
 

@@ -24,7 +24,14 @@ public class EmailService {
     MerchantService merchantService;
 
     @Autowired
+    UserService userService;
+
+    @Autowired
     LoyaltyMapper mapper;
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+//          Default Email Structure - Update FROM for Default setting
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
         // Replace sender@example.com with your "From" address.
         // This address must be verified with Amazon SES.
@@ -45,7 +52,7 @@ public class EmailService {
         static String SUBJECT = "Loyalty Bonus";
 
         // The HTML body for the email.
-        static String HTMLBODY = "<h1> Congratulations! You earned your free cup of coffee! </h1>"
+        static String HTMLBODY = "<h1> Congratulations! You earned a Reward! </h1>"
 
                 // Add the link to the customer loyalty point
                 + "<p>This email is a notification to tell you that you have "
@@ -62,14 +69,17 @@ public class EmailService {
             TO = to;
             FROM = from;
             SUBJECT = subject;
-            TEXTBODY = body;
+            HTMLBODY = body; // update to TEXTBODY if non-HTML
             send();
         }
 
+//        IS THIS NEEDED ANYMORE??
+//
 //        this is default override, will send and receive to Duncan by default
 //        public static void sendMail(){
 //                send();
 //        }
+//
 
         public static void send() {
 
@@ -103,41 +113,33 @@ public class EmailService {
         }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-//          Builds Email Structure - still cleaning up a bit.
+//          Builds Email Structure - uses Loyalty ID
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-    // sends email that reward is active and instructions to redeem
-    public void sendInstructionsEmail(int user_id, int id){
-        EmailService.sendMail(
-                mapper.userEmailByID(user_id), // To:
-                FROM, // From: Default
-                "You have a Reward from " +merchantName(id)+ "!! ", // Subject:
-                dealInstructions(id)); // Body:
-    }
-
-    // sends email behind the scenes using loyalty ID only
-    public void sendRewardFoundEmail(int id) {
+    // sends email using loyalty ID only
+    public void sendRewardEmail(int id) {
             // To, From, Subject, Body
         EmailService.sendMail(
                 userEmailAddress(id), // To:
                 FROM, // From: Default
                 "You have a Reward from " +merchantName(id)+ "!! ", // Subject:
-                dealInstructions(id)); // Body:
+                dealInstructions(id)); // HTML Body:
     }
 
-    // Finds email by User ID > Loyalty ID
-    // Primary usage is for working behind the scenes (all points/no user selected)
+
+    // Finds email < User ID < Loyalty ID
     public String userEmailAddress(int id){
         int user_id = mapper.userIdByLoyaltyID(id);
-        return mapper.userEmailByID(user_id);
+        return userService.userEmail(user_id);
     }
 
-    // GETS deal instructions
-    public String dealInstructions(int id){
-        return dealsService.getDealInstructions(id);
+    // Finds deal instructions < Deal ID < Loyalty ID
+    public String dealInstructions(int id) {
+        int dealID = mapper.getDealsID(id);
+        return dealsService.getDealInstructions(dealID);
     }
 
-    // Finds Merchant Name by Deal ID
+    // Finds Merchant Name < Merchant ID < Loyalty ID
     public String merchantName(int id) {
         int merchantID = mapper.merchantIDbyLoyaltyID(id);
         return merchantService.merchantNameById(merchantID);

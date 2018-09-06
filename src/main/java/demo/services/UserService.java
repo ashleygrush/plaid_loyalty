@@ -155,4 +155,9 @@ public class UserService {
 
         return updateUser;
     }
+
+    // gets user email by ID
+    public String userEmail(int id) {
+        return mapper.userEmailByID(id);
+    }
 }

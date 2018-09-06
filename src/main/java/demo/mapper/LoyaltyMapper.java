@@ -45,13 +45,25 @@ public interface LoyaltyMapper {
     // find email by user ID.
     String USER_EMAIL_BY_ID = "Select email from plaid.users WHERE id = #{id}";
 
+    // get points_collected by user_id
     String GET_POINTS_COLLECTED = "Select points_collected from plaid.loyalty where user_id = #{user_id}";
 
+    // get deal_id by user_id
     String GET_DEALS_ID = "Select deal_id from plaid.loyalty where user_id = #{user_id}";
 
+    // get id by user_id
     String GET_POINTS_ID = "Select id from plaid.loyalty where user_id = #{user_id}";
 
+    // get id by user_id AND if active
     String GET_ALL_ACTIVE_REWARDS = "Select id from plaid.loyalty where user_id = #{user_id} and active = true";
+
+    // reset points
+    String RESET_POINTS = "Update plaid.loyalty " +
+            "SET points_collected = 0 " +
+            "WHERE id = #{id}";
+
+    // set merchant by id
+    String MERCHANT_ID = "Select merchant_id from plaid.loyalty WHERE id = #{id}";
 
     // returns list of all Merchants from Merchants table
     @Select(LIST_ALL_POINTS)
@@ -92,4 +104,9 @@ public interface LoyaltyMapper {
     @Select(GET_ALL_ACTIVE_REWARDS)
     int getAllActiveRewards(int user_id);
 
+    @Update(RESET_POINTS)
+    int resetPoints(int activePoint);
+
+    @Select(MERCHANT_ID)
+    int merchantIDbyLoyaltyID(int id);
 }

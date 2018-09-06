@@ -1,20 +1,23 @@
 package demo.services;
 
 import demo.mapper.LoyaltyMapper;
-import demo.model.database.Deals;
 import demo.model.database.Loyalty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class LoyaltyService {
+public class LoyaltyService extends Exception {
 
     @Autowired
     LoyaltyMapper mapper;
 
     @Autowired
     DealsService dealsService;
+
+    @Autowired
+    EmailService email;
+
 
     // GET - points (all)
     public List<Loyalty> findAllPoints() {
@@ -40,10 +43,11 @@ public class LoyaltyService {
         // compares collected points to cap
         if (pointsCollected % pointsCap == 0) {
 
-            // if cap is reached, activate reward and send email for redemption
+            // if cap is reached, activate reward, reset points and send email for redemption
             int activePoint = mapper.getPointsID(user_id);
             mapper.activateReward(activePoint);
-            sendInstructionsEmail(activePoint);
+            mapper.resetPoints(activePoint);
+            email.sendInstructionsEmail(user_id, activePoint);
             return "You have a reward! Please check your inbox for instructions on how to redeem!";
 
         // otherwise update points status:
@@ -72,7 +76,7 @@ public class LoyaltyService {
         // find all active rewards per user ID
         int id = mapper.getAllActiveRewards(user_id);
 
-        // check if redeemed
+        // check if redeemed - PLACEHOLDER FOR TESTING
         boolean rewardUsed = true;
 
         // compare in hash map - - - - - - - - - - -
@@ -81,39 +85,13 @@ public class LoyaltyService {
         if (rewardUsed = true) {
             mapper.deactivateAward(id);
             mapper.activateRedeemed(id);
-            sendPointsCountEmail(id);
             return "Reward has been collected and your points have been reset.";
 
         // if transaction is active and not and not yet redeemed, resend email.
         } else {
-            sendInstructionsEmail(id);
+            email.sendInstructionsEmail(user_id, id);
             return "Reward is active and not yet collected. Redemption Email resent.";
         }
-    }
-
-
-    // sends email that reward is active and instructions to redeem
-    private void sendInstructionsEmail(int id){
-        EmailService.sendMail(
-                userEmailAddress(id),
-                "grush.ashley@gmail.com",
-                "Redeem your Loyalty Reward!",
-                "Take this to your QR code to your local coffee shop for a free drink!");
-    }
-
-    // sends email with current points count
-    private void sendPointsCountEmail(int id) {
-        EmailService.sendMail(
-                userEmailAddress(id),
-                "grush.ashley@gmail.com",
-                "Here's your current reward count!",
-                "You're almost there! Just a few more points to go!");
-    }
-
-    // Finds email by User ID > Loyalty ID
-    private String userEmailAddress(int id){
-        int user_id = mapper.userIdByLoyaltyID(id);
-        return mapper.userEmailByID(user_id);
     }
 
 }
@@ -148,8 +126,5 @@ public class LoyaltyService {
 //        // otherwise, return ID.
 //        return "No new transactions found.";
 //    }
-
-
-
 
 

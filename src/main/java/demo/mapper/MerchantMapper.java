@@ -35,6 +35,7 @@ public interface MerchantMapper {
             "email = #{email} " +
             "WHERE id = #{id}";
 
+    String MERCHANT_NAME_BY_ID = "Select name from plaid.merchants where id = #{id}";
 
     // returns list of all MerchantsForHashMap from MerchantsForHashMap table
     @Select(LIST_ALL_MERCHANTS)
@@ -59,5 +60,8 @@ public interface MerchantMapper {
     // update existing user by ID
     @Insert(UPDATE_MERCHANT_BY_ID)
     int updateMerchantByID(Merchants merchants);
+
+    @Select(MERCHANT_NAME_BY_ID)
+    String getMerchantNameById(int id);
 
 }

@@ -75,4 +75,7 @@ public class DealsService {
         return mapper.pointsCap(id);
     }
 
+    public String getDealInstructions(int id) {
+        return mapper.getDealInstructions(id);
+    }
 }

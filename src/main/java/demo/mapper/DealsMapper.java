@@ -36,6 +36,9 @@ public interface DealsMapper {
     // gets points cap by ID
     String GET_POINTS_CAP_BY_ID = "Select deal_points_cap from plaid.deals Where id = #{id}";
 
+    // gets deal_instructions by ID
+    String GET_DEAL_INSTRUCTIONS_BY_ID = "Select deal_instructions from plaid.deals Where id = #{id}";
+
     // returns list of all Deals
     @Select(LIST_ALL_DEALS)
     List<Deals> listAllDeals();
@@ -62,4 +65,7 @@ public interface DealsMapper {
 
     @Select(GET_POINTS_CAP_BY_ID)
     int pointsCap(int id);
+
+    @Select(GET_DEAL_INSTRUCTIONS_BY_ID)
+    String getDealInstructions(int id);
 }

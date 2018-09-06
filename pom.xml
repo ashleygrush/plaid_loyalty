@@ -97,8 +97,8 @@
             <artifactId>jedis</artifactId>
             <version>2.7.0</version>
         </dependency>
-
-        <!-- AWS JDK CORE -->
+        
+        <!-- AWS SDK CORE-->
         <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk-core</artifactId>

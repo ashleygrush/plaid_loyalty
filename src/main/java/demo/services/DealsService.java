@@ -32,7 +32,7 @@ public class DealsService {
 
         newDeal.setMerchant_id(data.getMerchant_id());
         newDeal.setDeal_description(data.getDeal_description());
-        newDeal.setDeal_points(data.getDeal_points());
+        newDeal.setDeal_points_cap(data.getDeal_points_cap());
         newDeal.setDeal_instructions(data.getDeal_instructions());
 
         try {
@@ -57,7 +57,7 @@ public class DealsService {
         updateDeal.setId(id);
         updateDeal.setMerchant_id(merchant_id);
         updateDeal.setDeal_description(data.getDeal_description());
-        updateDeal.setDeal_points(data.getDeal_points());
+        updateDeal.setDeal_points_cap(data.getDeal_points_cap());
         updateDeal.setDeal_instructions(data.getDeal_instructions());
 
         mapper.updateDealByID(updateDeal);
@@ -70,6 +70,12 @@ public class DealsService {
         return mapper.listAllDealsByMerchant(merchant_id);
     }
 
+    // RETURNS points cap
+    public int pointsCap(int id){
+        return mapper.pointsCap(id);
+    }
 
-
+    public String getDealInstructions(int id) {
+        return mapper.getDealInstructions(id);
+    }
 }

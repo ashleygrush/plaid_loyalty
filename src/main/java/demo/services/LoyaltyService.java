@@ -7,10 +7,17 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class LoyaltyService {
+public class LoyaltyService extends Exception {
 
     @Autowired
     LoyaltyMapper mapper;
+
+    @Autowired
+    DealsService dealsService;
+
+    @Autowired
+    EmailService email;
+
 
     // GET - points (all)
     public List<Loyalty> findAllPoints() {
@@ -24,48 +31,76 @@ public class LoyaltyService {
 
 
     // NEEDS Exception Handling FOR NULL ID NUMBER!!
-    // PUT - if 10 is hit, redeem points (switch to active) > email user notification
-    public String checkActive(int id) {
+    // compare points for reward status (switch to active) > email user notification
+    public String comparePoints(int user_id) {
 
-        // if points are maxed out, activate and send email.
-        if (mapper.loyaltyCount(id) >= 10) {
-            mapper.activateReward(id);
-            LoyaltyService.sendInstructionsEmail();
-            return "Please check your inbox for instructions on how to redeem your reward!";
-        }
+        // finds all points collected by user_id
+        int pointsCollected = mapper.getPointsCollected(user_id);
 
-        // otherwise, send estimated points email. "You're 1 point away from a free drink!"
-        else {
-            LoyaltyService.sendPointsCountEmail();
-            return "Please check your inbox for an update on your points!";
+        // finds point ID cap (Deals Services) - deals linked by user_id
+        int pointsCap = dealsService.pointsCap(mapper.getDealsIDByUser(user_id));
+
+        // gets point ID to use below:
+        int pointID = mapper.getPointsID(user_id);
+
+        // compares collected points to cap
+        if (pointsCollected % pointsCap == 0) {
+
+            // if cap is reached, activate reward, reset points and send email for redemption
+            mapper.activateReward(pointID);
+            mapper.resetPoints(pointID);
+            email.sendRewardEmail(pointID);
+            return "You have a reward! Please check your inbox for instructions on how to redeem!";
+
+        // otherwise update points status:
+        } else {
+
+            // using email.merchantName (converts point ID > Merchant ID > name)
+            String merchantName = email.merchantName(pointID);
+
+            if (pointsCollected == 0) {
+                return "You're at 0! Start shopping " +merchantName+ " to get more points! ";
+            } else if (pointsCollected < 2) {
+                return "A nice start! " +merchantName+ " would love to see you again! " +
+                        "Points collected : " + pointsCollected + "/" + pointsCap + ".";
+            } else if (pointsCap < 5) {
+                return "You're getting warmer! " +merchantName+ " is waiting! " +
+                        "Points collected : " + pointsCollected + "/" + pointsCap + ".";
+            } else if (pointsCap < 8) {
+                return "You're almost there!! Wouldn't you love that reward from " +merchantName+ "?! " +
+                        "Points collected : " + pointsCollected + "/" + pointsCap + ". Nice job!";
+            } else {
+                return "Total points collected from "  +merchantName+ " : " + pointsCollected + " / " + pointsCap + ". Keep it up!";
+            }
         }
     }
 
     // IN PROGRESS
     // PUT - if deal used; deactivate deal and confirm it's been redeemed
-    public String checkRedeemed(int id) {
+    public String checkRedeemed(int user_id) {
+
+        // find all active rewards per user ID
+        int pointID = mapper.getAllActiveRewards(user_id);
+
+        // check if redeemed - PLACEHOLDER FOR TESTING
+        boolean rewardUsed = true;
+
+        // compare in hash map - - - - - - - - - - -
 
         // if transaction is found, deactivate reward (activate redeemed)
-        if (true == true) {
-            mapper.deactivateAward(id);
-            mapper.activateRedeemed(id);
-            LoyaltyService.sendPointsCountEmail();
+        if (rewardUsed = true) {
+            mapper.deactivateAward(pointID);
+            mapper.activateRedeemed(pointID);
             return "Reward has been collected and your points have been reset.";
+
+        // if transaction is active and not and not yet redeemed, resend email.
         } else {
-            LoyaltyService.sendInstructionsEmail();
-            return "Reward is active and not yet collected.";
+            email.sendRewardEmail(pointID);
+            return "Reward is active and not yet collected. Redemption Email resent.";
         }
     }
 
-
-    // sends email that reward is active and instructions to redeem
-    private static void sendInstructionsEmail() {
-    }
-
-    // sends email with current points count
-    private static void sendPointsCountEmail() {
-    }
-
+}
 
 
 // MERGE WITH HASH MAP IF NEEDED - THEN DELETE
@@ -97,8 +132,5 @@ public class LoyaltyService {
 //        // otherwise, return ID.
 //        return "No new transactions found.";
 //    }
-
-}
-
 
 

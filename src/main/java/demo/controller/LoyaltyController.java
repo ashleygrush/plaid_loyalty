@@ -28,16 +28,18 @@ public class LoyaltyController {
     }
 
     // needs exception for null ID number - Checks for active rewards
-    @RequestMapping("/check_active_rewards/id={id}")
-    public String RedemptionActivity(@PathVariable("id") int id) {
-        return service.checkActive(id);
+    @RequestMapping("/user_id={user_id}/rewards")
+    public String getRewards(@PathVariable("user_id") int user_id) {
+        return service.comparePoints(user_id);
     }
 
-    // NOT WORKING - IN PROGRESS
-    @RequestMapping("/check_redeemed_rewards/id={id}")
-    public String checkRedeemed(@PathVariable("id") int id) {
-        return service.checkRedeemed(id);
+    //
+    @RequestMapping("/user_id={user_id}/available_rewards")
+    public String checkRedeemed(@PathVariable("user_id") int user_id) {
+        return service.checkRedeemed(user_id);
     }
+
+
 
 
 // SEE TRANSACTIONS UPDATE IN USER CONTROLLER/SERVICE/MAPPER - REMOVE THIS IF NO LONGER NEEDED

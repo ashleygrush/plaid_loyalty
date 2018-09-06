@@ -28,7 +28,7 @@ public class MerchantController {
     }
 
     // calls DB for merchant by ID number
-    @RequestMapping("/{id}")
+    @RequestMapping("/id={id}")
     public List<Merchants> findByID(@PathVariable("id") int id) {
         return merchantService.findMerchantByID(id);
     }
@@ -40,13 +40,13 @@ public class MerchantController {
     }
 
     //delete existing merchant by ID
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/id={id}")
     public String deleteByID(@PathVariable("id") int id) {
         return merchantService.deleteMerchantByID(id);
     }
 
     // update existing merchant by ID
-    @PutMapping("{id}")
+    @PutMapping("/id={id}")
     public Merchants updateMerchantByID(@PathVariable("id") int id,
                                 @RequestBody Merchants merchants) {
         return merchantService.updateMerchantByID(id, merchants);

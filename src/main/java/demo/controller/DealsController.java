@@ -22,7 +22,7 @@ public class DealsController {
     }
 
     // calls DB for deals by ID number
-    @RequestMapping("/{id}")
+    @RequestMapping("/id={id}")
     public List<Deals> findByID(@PathVariable("id") int id) {
         return service.findDealByID(id);
     }
@@ -34,7 +34,7 @@ public class DealsController {
     }
 
     //delete deal by ID
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/id={id}")
     public String deleteByID(@PathVariable("id") int id) {
         return service.deleteDealByID(id);
     }

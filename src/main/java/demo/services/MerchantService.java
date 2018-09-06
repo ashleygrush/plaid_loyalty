@@ -88,4 +88,9 @@ public class MerchantService {
         return updateMerch;
     }
 
+    // gets merchant name by ID
+    public String merchantNameById(int id) {
+        return mapper.getMerchantNameById(id);
+    }
+
 }

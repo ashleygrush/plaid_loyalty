@@ -18,11 +18,11 @@ public class EmailService {
 
         // Replace sender@example.com with your "From" address.
         // This address must be verified with Amazon SES.
-        static String FROM = "dgc18@live.co.uk";
+        static String FROM = "sender@example.com";
 
         // Replace recipient@example.com with a "To" address. If your account
         // is still in the sandbox, this address must be verified.
-        static String TO = "dgc18@live.co.uk";
+        static String TO = "recipient@example.com";
 
         // The configuration set to use for this email. If you do not want to use a
         // configuration set, comment the following variable and the
@@ -56,7 +56,7 @@ public class EmailService {
             send();
         }
 
-        // this is defaut override, will send and receive to Duncan by default
+        // this is default override, will send and receive to Duncan by default
         public static void sendMail(){
                 send();
         }

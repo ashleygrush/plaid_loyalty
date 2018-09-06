@@ -35,6 +35,9 @@ public interface UserMapper {
             "email = #{email} " +
             "WHERE id = #{id}";
 
+    // find email by user ID.
+    String USER_EMAIL_BY_ID = "Select email from plaid.users WHERE id = #{id}";
+
 
     // returns list of all Users from Users table
     @Select(LIST_ALL_USERS)
@@ -58,4 +61,8 @@ public interface UserMapper {
     // update existing user by ID
     @Insert(UPDATE_USER_BY_ID)
     int updateUserByID(Users users);
+
+    // USED IN LOYALTY SERVICE FOR EMAIL PURPOSES
+    @Select(USER_EMAIL_BY_ID)
+    String userEmailByID(int id);
 }

@@ -1,6 +1,7 @@
 package demo.services;
 
 import demo.mapper.LoyaltyMapper;
+import demo.model.database.Deals;
 import demo.model.database.Loyalty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,6 +12,9 @@ public class LoyaltyService {
 
     @Autowired
     LoyaltyMapper mapper;
+
+    @Autowired
+    DealsService dealsService;
 
     // GET - points (all)
     public List<Loyalty> findAllPoints() {
@@ -24,33 +28,63 @@ public class LoyaltyService {
 
 
     // NEEDS Exception Handling FOR NULL ID NUMBER!!
-    // PUT - if 10 is hit, redeem points (switch to active) > email user notification
-    public String checkActive(int id) {
+    // compare points for reward status (switch to active) > email user notification
+    public String comparePoints(int user_id) {
 
-        // if points are maxed out, activate and send email.
-        if (mapper.loyaltyCount(id) >= 10) {
-            mapper.activateReward(id);
-            sendInstructionsEmail(id);
-            return "Please check your inbox for instructions on how to redeem your reward!";
-        }
+        // finds all points collected
+        int pointsCollected = mapper.getPointsCollected(user_id);
 
-        // otherwise, send estimated points email. "You're 1 point away from a free drink!"
-        else {
-            sendPointsCountEmail(id);
-            return "Please check your inbox for an update on your points!";
+        // finds point ID cap (Deals Services)
+        int pointsCap = dealsService.pointsCap(mapper.getDealsID(user_id));
+
+        // compares collected points to cap
+        if (pointsCollected % pointsCap == 0) {
+
+            // if cap is reached, activate reward and send email for redemption
+            int activePoint = mapper.getPointsID(user_id);
+            mapper.activateReward(activePoint);
+            sendInstructionsEmail(activePoint);
+            return "You have a reward! Please check your inbox for instructions on how to redeem!";
+
+        // otherwise update points status:
+        } else {
+            if (pointsCollected == 0) {
+                return "You're at 0! Start shopping @Merchant to get more points! ";
+            } else if (pointsCollected < 2) {
+                return "A nice start! @Merchant would love to see you again! " +
+                        "Points collected : " + pointsCollected + "/" + pointsCap + ".";
+            } else if (pointsCap < 5) {
+                return "You're getting warmer! @Merchant is waiting! " +
+                        "Points collected : " + pointsCollected + "/" + pointsCap + ".";
+            } else if (pointsCap < 8) {
+                return "You're almost there!! Wouldn't you love that reward from @Merchant?! " +
+                        "Points collected : " + pointsCollected + "/" + pointsCap + ". Nice job!";
+            } else {
+                return "Total points collected : " + pointsCollected + "/" + pointsCap + ". Keep it up!";
+            }
         }
     }
 
     // IN PROGRESS
     // PUT - if deal used; deactivate deal and confirm it's been redeemed
-    public String checkRedeemed(int id) {
+    public String checkRedeemed(int user_id) {
+
+        // find all active rewards per user ID
+        int id = mapper.getAllActiveRewards(user_id);
+
+        // check if redeemed
+        boolean rewardUsed = true;
+
+        // compare in hash map - - - - - - - - - - -
 
         // if transaction is found, deactivate reward (activate redeemed)
-        if (true == true) {
+        if (rewardUsed = true) {
             mapper.deactivateAward(id);
             mapper.activateRedeemed(id);
             sendPointsCountEmail(id);
             return "Reward has been collected and your points have been reset.";
+
+        // if transaction is active and not and not yet redeemed, resend email.
         } else {
             sendInstructionsEmail(id);
             return "Reward is active and not yet collected. Redemption Email resent.";
@@ -81,6 +115,8 @@ public class LoyaltyService {
         int user_id = mapper.userIdByLoyaltyID(id);
         return mapper.userEmailByID(user_id);
     }
+
+}
 
 
 // MERGE WITH HASH MAP IF NEEDED - THEN DELETE
@@ -113,7 +149,7 @@ public class LoyaltyService {
 //        return "No new transactions found.";
 //    }
 
-}
+
 
 
 

@@ -10,7 +10,7 @@ public class Loyalty {
     private int deal_id;
     private boolean redeemed;
     private boolean active;
-    private int points;
+    private int points_collected;
 
     public int getId() {
         return id;
@@ -60,11 +60,11 @@ public class Loyalty {
         this.active = active;
     }
 
-    public int getPoints() {
-        return points;
+    public int getPoints_collected() {
+        return points_collected;
     }
 
-    public void setPoints(int points) {
-        this.points = points;
+    public void setPoints_collected(int points_collected) {
+        this.points_collected = points_collected;
     }
 }

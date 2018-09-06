@@ -7,7 +7,7 @@ public class Deals {
     private int id;
     private int merchant_id;
     private String deal_description;
-    private int deal_points;
+    private int deal_points_cap;
     private String deal_instructions;
 
     public int getId() {
@@ -34,12 +34,12 @@ public class Deals {
         this.deal_description = deal_description;
     }
 
-    public int getDeal_points() {
-        return deal_points;
+    public int getDeal_points_cap() {
+        return deal_points_cap;
     }
 
-    public void setDeal_points(int deal_points) {
-        this.deal_points = deal_points;
+    public void setDeal_points_cap(int deal_points_cap) {
+        this.deal_points_cap = deal_points_cap;
     }
 
     public String getDeal_instructions() {

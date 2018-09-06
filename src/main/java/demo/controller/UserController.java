@@ -29,7 +29,7 @@ public class UserController {
     }
 
     // calls DB for Users by ID number
-    @RequestMapping("/{id}")
+    @RequestMapping("/id={id}")
     public List<Users> findByID(@PathVariable("id") int id) {
         return userService.findUserByID(id);
     }
@@ -41,13 +41,13 @@ public class UserController {
     }
 
     //delete existing user by ID
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/id={id}")
     public String deleteByID(@PathVariable("id") int id) {
         return userService.deleteUserByID(id);
     }
 
     // update existing user by ID
-    @PutMapping("/{id}")
+    @PutMapping("/id={id}")
     public Users updateUserByID(@PathVariable("id") int id,
                                 @RequestBody Users users) {
         return userService.updateUserByID(id, users);

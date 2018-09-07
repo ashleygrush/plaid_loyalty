@@ -1,7 +1,11 @@
 package demo.controller;
 
+import demo.exceptions.DatabaseException;
+import demo.model.CustomResponseObject;
 import demo.model.database.Users;
 import demo.services.UserService;
+import org.apache.catalina.User;
+import org.apache.catalina.webresources.ClasspathURLStreamHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,6 +19,7 @@ public class UserController {
     @Autowired
     UserService userService;
 
+    // NEEDS EXCEPTION HANDLING!
     // calls DB for all users
     @GetMapping("/update/transactions")
     public String updateTransactions() {
@@ -24,33 +29,71 @@ public class UserController {
 
     // calls DB for all users
     @GetMapping("/all")
-    public List<Users> getAllUsers() {
-        return userService.findAllUsers();
+    public CustomResponseObject <Users> getAllUsers() {
+
+        List<Users> users = userService.findAllUsers();
+
+        CustomResponseObject obj = new CustomResponseObject();
+        obj.setData(users);
+        obj.setStatusCode(200);
+
+        return obj;
     }
 
     // calls DB for Users by ID number
     @RequestMapping("/id={id}")
-    public List<Users> findByID(@PathVariable("id") int id) {
-        return userService.findUserByID(id);
+    public CustomResponseObject <Users> findByID(@PathVariable("id") int id) throws Exception {
+
+        List users = userService.findUserByID(id);
+
+        CustomResponseObject obj = new CustomResponseObject();
+        obj.setData(users);
+        obj.setStatusCode(200);
+
+        return obj;
     }
 
     // creates new user
     @PostMapping()
-    public Users createUser(@RequestBody Users user) {
-        return userService.createUser(user);
+    public CustomResponseObject <Users> createUser(@RequestBody Users user) throws Exception {
+
+        userService.createUser(user);
+
+        CustomResponseObject obj = new CustomResponseObject();
+        obj.setData(user);
+        obj.setStatusCode(200);
+
+        return obj;
     }
 
     //delete existing user by ID
     @DeleteMapping("/id={id}")
-    public String deleteByID(@PathVariable("id") int id) {
-        return userService.deleteUserByID(id);
+    public CustomResponseObject deleteByID(@PathVariable("id") int id) throws Exception {
+
+        boolean success = userService.deleteUserByID(id);
+        CustomResponseObject obj = new CustomResponseObject();
+
+        if (success) {
+            obj.setData("user removed");
+            obj.setStatusCode(200);
+            return obj;
+        }
+        else throw new DatabaseException("Unable to remove user. Please try again later.");
+
     }
 
     // update existing user by ID
     @PutMapping("/id={id}")
-    public Users updateUserByID(@PathVariable("id") int id,
-                                @RequestBody Users users) {
-        return userService.updateUserByID(id, users);
+    public CustomResponseObject <Users> updateUserByID(@PathVariable("id") int id,
+                                @RequestBody Users users) throws Exception {
+
+        userService.updateUserByID(id, users);
+
+        CustomResponseObject obj = new CustomResponseObject();
+        obj.setData(users);
+        obj.setStatusCode(200);
+
+        return obj;
     }
 
 }

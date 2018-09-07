@@ -1,6 +1,7 @@
 package demo.services;
 
 import com.plaid.client.PlaidClient;
+import demo.exceptions.DatabaseException;
 import demo.mapper.AccessTokenMapper;
 import demo.mapper.MerchantMapper;
 import demo.mapper.UpdateUserPointsMapper;
@@ -9,9 +10,11 @@ import com.plaid.client.response.TransactionsGetResponse;
 import demo.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.*;
 
 import demo.model.database.Users;
+
 import java.util.List;
 
 @Service
@@ -93,7 +96,7 @@ public class UserService {
                 HashMap<String, Integer> merchantsHM = merchantService.merchantsList();
 
                 // arrayList of Merchants contains Name/ID in transaction:
-                if(merchantsHM.containsKey(transactionElement) == true){
+                if (merchantsHM.containsKey(transactionElement) == true) {
 
                     //update db for user loyalty for a specific merchant
 
@@ -120,48 +123,66 @@ public class UserService {
 
 
     // GET - find user by ID
-    public List<Users> findUserByID(int id) {
-        return mapper.findUserByID(id);
+    public List<Users> findUserByID(int id) throws Exception {
+        Users user;
+
+        try {
+            return mapper.findUserByID(id);
+        } catch (Exception e) {
+            throw e;
+        }
     }
 
 
     // POST - create new user
-    public Users createUser(Users data) {
-
+    public Users createUser(Users data) throws Exception {
+        try {
         Users newUser = new Users();
 
         newUser.setName(data.getName());
         newUser.setPassword(data.getPassword());
         newUser.setEmail(data.getEmail());
 
-        try {
-            mapper.createUser(newUser);
-        } catch (Exception e) {
-            System.out.println("User already exists. Please log in : " + data.getEmail());
-        }
+        mapper.createUser(newUser);
         return newUser;
+
+        } catch (Exception e) {
+            throw e;
+        }
     }
 
     // DELETE - delete existing user by ID
-    public String deleteUserByID(int id) {
-        mapper.deleteUserByID(id);
-        return "User successfully removed with ID : " + id + ".";
+    public boolean deleteUserByID(int id) throws Exception {
+        try {
+            mapper.deleteUserByID(id);
+            return true;
+        } catch (Exception e) {
+            throw e;
+        }
+
     }
 
     // PUT - update existing user by ID
-    public Users updateUserByID(int id, Users data) {
+    public Users updateUserByID(int id, Users data) throws Exception, DatabaseException {
+        try {
+            Users updateUser = new Users();
 
-        Users updateUser = new Users();
+            updateUser.setName(data.getName());
+            updateUser.setPassword(data.getPassword());
+            updateUser.setEmail(data.getEmail());
+            updateUser.setId(id);
 
-        updateUser.setName(data.getName());
-        updateUser.setPassword(data.getPassword());
-        updateUser.setEmail(data.getEmail());
-        updateUser.setId(id);
+            mapper.updateUserByID(updateUser);
 
-        mapper.updateUserByID(updateUser);
+            if (id < 1)
+                throw new DatabaseException("Unable to update user with ID : " + id);
+            return findUserByID(id).get(id);
 
-        return updateUser;
+        } catch (Exception e) {
+            throw new DatabaseException(e.getMessage());
+        }
     }
+
 
     // gets user email by ID
     public String userEmail(int id) {

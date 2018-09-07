@@ -35,7 +35,6 @@ public class UserService {
     @Autowired
     UpdateUserPointsMapper updateUserPointsMapper;
 
-
     private final Environment env;
     private PlaidClient plaidClient;  //this includes the configured info (secret, id and key)
     private final PlaidAuthService authService;
@@ -56,24 +55,31 @@ public class UserService {
     }
 
 
-    // GET all Users- call plaid API, iterate against hashmap, update database if required
+    // GET all Users- call plaid API, iterate against hash map, update database if required
     public String analyseAllUserTransaction() {
+
+        // fills list with all users
         List<Users> userList = mapper.listAllUsers();
         ArrayList<String> arrayListMerchants = new ArrayList<>();
+
         for (Users user : userList) {
             try {
 //                PlaidAuthService.PlaidAccessInfo plaidAccessInfo = null;
 //                plaidAccessInfo = new PlaidAuthService.PlaidAccessInfo(user.getAccessToken(), user.getItemId())
+
+                // get the id of each user in the list
                 int userID = user.getId();
+
+                // gets all transactions for each user ID
                 TransactionsGetResponse transactionList = (TransactionsGetResponse) plaidCallService.
                         getTransactionsLoop(userID).getBody();
 
-
+                // checks for new transactions: if new; add merchant name + ID??
                 for (TransactionsGetResponse.Transaction t : transactionList.getTransactions()) {
                     if (t != null) {
 
                         arrayListMerchants = new ArrayList<>();
-                        arrayListMerchants.add(t.getName());
+                        arrayListMerchants.add(t.getName());  // transaction's merchant name
                         arrayListMerchants.get(0);
                         System.out.println(arrayListMerchants);
                     }
@@ -82,27 +88,28 @@ public class UserService {
                 e.printStackTrace();
             }
 
-            //now need to iterate through the resulting array list for merchants within the hashmap
+            // now need to iterate through the resulting array list for merchants within the hash map
             for (String transactionElement : arrayListMerchants) {
                 HashMap<String, Integer> merchantsHM = merchantService.merchantsList();
 
+                // arrayList of Merchants contains Name/ID in transaction:
                 if(merchantsHM.containsKey(transactionElement) == true){
+
                     //update db for user loyalty for a specific merchant
 
-                    //get the database id for the merchant
-                    int merchantDatabaseId = merchantsHM.get(transactionElement);
+                    //get merchant ID from hash map
+                    int merchant_id = merchantsHM.get(transactionElement);
 
-                    // update the loyalty db for an additional point (on the basis the timestamp is not the same
-                    int userID = user.getId();
+                    // get user ID from hash map
+                    int user_id = user.getId();
 
                     //call the update loyalty point program method in mapper for DB passing the merchant and the user
-                    updateUserPointsMapper.UpdateUserPointsByMerchant(merchantDatabaseId, userID);
+                    updateUserPointsMapper.UpdateUserPointsByMerchant(merchant_id, user_id);
                 }
             }
         }
         return "Success";
     }
-
 
     //USER CRUD
 

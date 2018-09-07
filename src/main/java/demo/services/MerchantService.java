@@ -14,26 +14,26 @@ import java.util.List;
 @Service
 public class MerchantService {
 
-    //creation of the merchants hashmap
+    //creation of the merchants hash map
     @Autowired
     PlaidMapper plaidMapper;
 
     @Autowired
     MerchantMapper mapper;
 
-    //for each element in the array list, get the name and id and then put it into the hashmap
+    //for each element in the array list, get the name and id and then put it into the hash map
     public HashMap<String, Integer> merchantsList() {
 
         ArrayList<MerchantsForHashMap> list = plaidMapper.selectAllMerchants();
 
-        HashMap<String, Integer> codes = new HashMap<>();
+        HashMap<String, Integer> values = new HashMap<>();
 
         for (MerchantsForHashMap merchant: list) {
-            String a = merchant.getName();
-            int b = merchant.getId();
-            codes.put(a, b);
+            String name = merchant.getName();
+            int id = merchant.getId();
+            values.put(name, id);
         }
-        return codes;
+        return values;
     }
 
 

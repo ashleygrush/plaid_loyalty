@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface PlaidMapper {
 
-    String SELECT_ALL_MERCHANTS = "SELECT id, name FROM `plaid`.merchants";
+    String SELECT_ALL_MERCHANTS = "SELECT id, name FROM plaid.merchants";
 
     String LIST_ALL_USERS = "Select id, name, email from plaid.users";
 

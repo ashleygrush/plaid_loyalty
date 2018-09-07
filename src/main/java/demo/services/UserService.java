@@ -129,7 +129,7 @@ public class UserService {
         try {
             return mapper.findUserByID(id);
         } catch (Exception e) {
-            throw e;
+            throw new DatabaseException("User does not exist. Please create a new user or search again.");
         }
     }
 
@@ -137,14 +137,14 @@ public class UserService {
     // POST - create new user
     public Users createUser(Users data) throws Exception {
         try {
-        Users newUser = new Users();
+            Users newUser = new Users();
 
-        newUser.setName(data.getName());
-        newUser.setPassword(data.getPassword());
-        newUser.setEmail(data.getEmail());
+            newUser.setName(data.getName());
+            newUser.setPassword(data.getPassword());
+            newUser.setEmail(data.getEmail());
 
-        mapper.createUser(newUser);
-        return newUser;
+            mapper.createUser(newUser);
+            return newUser;
 
         } catch (Exception e) {
             throw e;
@@ -164,23 +164,24 @@ public class UserService {
 
     // PUT - update existing user by ID
     public Users updateUserByID(int id, Users data) throws Exception, DatabaseException {
+
+        Users updateUser = new Users();
+
+        updateUser.setName(data.getName());
+        updateUser.setPassword(data.getPassword());
+        updateUser.setEmail(data.getEmail());
+        updateUser.setId(id);
         try {
-            Users updateUser = new Users();
-
-            updateUser.setName(data.getName());
-            updateUser.setPassword(data.getPassword());
-            updateUser.setEmail(data.getEmail());
-            updateUser.setId(id);
-
             mapper.updateUserByID(updateUser);
 
-            if (id < 1)
+            if (id < 1) {
                 throw new DatabaseException("Unable to update user with ID : " + id);
-            return findUserByID(id).get(id);
+            }
 
         } catch (Exception e) {
             throw new DatabaseException(e.getMessage());
         }
+        return updateUser;
     }
 
 

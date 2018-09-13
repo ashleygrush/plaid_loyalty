@@ -125,7 +125,6 @@ public class UserService {
 
         try {
             user = mapper.findUserByID(id);
-
         } catch (Exception e) {
             throw e;
         }

@@ -56,7 +56,7 @@ public class UserController {
 
             return obj;
 
-        } throw new DatabaseException("User ID doesn't exist.");
+        } throw new DatabaseException("User ID doesn't exist. Please enter correct ID number or create new account.");
     }
 
     // creates new user

@@ -25,14 +25,22 @@ public class LoyaltyService extends Exception {
     }
 
     // GET - points by user ID.
-    public List<Loyalty> findByUserID(int user_id) {
-        return mapper.findPointsByUserID(user_id);
+    public List<Loyalty> findByUserID(int user_id) throws Exception {
+
+        List<Loyalty> userPoints;
+
+        try {
+            userPoints = mapper.findPointsByUserID(user_id);
+        } catch (Exception e) {
+            throw e;
+        }
+        return userPoints;
     }
 
 
-    // NEEDS Exception Handling FOR NULL ID NUMBER!!
+    // needs exception for User_ID
     // compare points for reward status (switch to active) > email user notification
-    public String comparePoints(int user_id) {
+    public String comparePoints(int user_id) throws Exception {
 
         // finds all points collected by user_id
         int pointsCollected = mapper.getPointsCollected(user_id);
@@ -102,35 +110,5 @@ public class LoyaltyService extends Exception {
 
 }
 
-
-// MERGE WITH HASH MAP IF NEEDED - THEN DELETE
-//    // check customer ID Loyalty points % for new point value (how many stars)
-//    public String updatePoints(int id){
-//
-//        //create number generator (1 - 10)
-//        Random random = new Random();
-//
-//        // import loyalty class
-//        Loyalty updatePoints = new Loyalty();
-//
-////      once hash map is connected - set transactions counter
-////      > if new transactions exist; generate new number
-////        if (counter <= 0){
-//
-//            if (counter > 0) {
-//            int points = random.nextInt((10) + 1); // add counter here!
-//
-//            updatePoints.setPoints(points);
-//            updatePoints.setId(id);
-//
-//            mapper.updatePoints(updatePoints);
-//
-//            // check if points have hit cap...
-//            checkRedeemed(id);
-//            return "points successfully updated.";
-//        }
-//        // otherwise, return ID.
-//        return "No new transactions found.";
-//    }
 
 

@@ -3,7 +3,6 @@ package demo.services;
 import com.plaid.client.PlaidClient;
 import demo.exceptions.DatabaseException;
 import demo.mapper.AccessTokenMapper;
-import demo.mapper.MerchantMapper;
 import demo.mapper.UpdateUserPointsMapper;
 import org.springframework.core.env.Environment;
 import com.plaid.client.response.TransactionsGetResponse;
@@ -22,9 +21,6 @@ public class UserService {
 
     @Autowired
     UserMapper mapper;
-
-    @Autowired
-    MerchantMapper merchantMapper;
 
     @Autowired
     MerchantService merchantService;
@@ -123,14 +119,17 @@ public class UserService {
 
 
     // GET - find user by ID
-    public List<Users> findUserByID(int id) throws Exception {
+    public Users findUserByID(int id) throws Exception {
+
         Users user;
 
         try {
-            return mapper.findUserByID(id);
+            user = mapper.findUserByID(id);
+
         } catch (Exception e) {
-            throw new DatabaseException("User does not exist. Please create a new user or search again.");
+            throw e;
         }
+        return user;
     }
 
 

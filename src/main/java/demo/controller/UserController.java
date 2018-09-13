@@ -1,6 +1,7 @@
 package demo.controller;
 
 import demo.exceptions.DatabaseException;
+import demo.exceptions.GlobalExceptionHandler;
 import demo.model.CustomResponseObject;
 import demo.model.database.Users;
 import demo.services.UserService;
@@ -29,12 +30,13 @@ public class UserController {
 
     // calls DB for all users
     @GetMapping("/all")
-    public CustomResponseObject <Users> getAllUsers() {
+    public CustomResponseObject<Users> getAllUsers() {
 
         List<Users> users = userService.findAllUsers();
 
         CustomResponseObject obj = new CustomResponseObject();
         obj.setData(users);
+        obj.setError("success.");
         obj.setStatusCode(200);
 
         return obj;
@@ -42,25 +44,32 @@ public class UserController {
 
     // calls DB for Users by ID number
     @RequestMapping("/id={id}")
-    public CustomResponseObject <Users> findByID(@PathVariable("id") int id) throws Exception {
+    public CustomResponseObject<Users> findByID(@PathVariable("id") int id) throws Exception {
 
-        List users = userService.findUserByID(id);
+        Users user = userService.findUserByID(id);
 
-        CustomResponseObject obj = new CustomResponseObject();
-        obj.setData(users);
-        obj.setStatusCode(200);
+        if (user != null) {
+            CustomResponseObject obj = new CustomResponseObject();
+            obj.setData(user);
+            obj.setError("success.");
+            obj.setStatusCode(200);
 
-        return obj;
+            return obj;
+
+        } throw new DatabaseException("User ID doesn't exist.");
     }
 
     // creates new user
     @PostMapping()
-    public CustomResponseObject <Users> createUser(@RequestBody Users user) throws Exception {
+    public CustomResponseObject<Users> createUser(@RequestBody Users user) throws Exception {
 
         userService.createUser(user);
 
+        if (user == null) throw new DatabaseException("Does not exist.");
+
         CustomResponseObject obj = new CustomResponseObject();
         obj.setData(user);
+        obj.setError("success. user created");
         obj.setStatusCode(200);
 
         return obj;
@@ -77,20 +86,20 @@ public class UserController {
             obj.setData("user removed");
             obj.setStatusCode(200);
             return obj;
-        }
-        else throw new DatabaseException("Unable to remove user. Please try again later.");
+        } else throw new DatabaseException("Unable to remove user. Please try again later.");
 
     }
 
     // update existing user by ID
     @PutMapping("/id={id}")
-    public CustomResponseObject <Users> updateUserByID(@PathVariable("id") int id,
-                                @RequestBody Users users) throws Exception {
+    public CustomResponseObject<Users> updateUserByID(@PathVariable("id") int id,
+                                                      @RequestBody Users users) throws Exception {
 
         userService.updateUserByID(id, users);
 
         CustomResponseObject obj = new CustomResponseObject();
         obj.setData(users);
+        obj.setError("successfully updated.");
         obj.setStatusCode(200);
 
         return obj;

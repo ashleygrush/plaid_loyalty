@@ -48,7 +48,7 @@ public interface UserMapper {
 
     // finds user by ID number
     @Select(FIND_USER_BY_ID)
-    List<Users> findUserByID(int id);
+    Users findUserByID(int id);
 
     // creates new user
     @Insert(CREATE_USER)

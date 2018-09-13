@@ -1,5 +1,6 @@
 package demo.services;
 
+import demo.exceptions.DatabaseException;
 import demo.mapper.DealsMapper;
 import demo.model.database.Deals;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,14 +21,23 @@ public class DealsService {
 
 
     // GET - find deal by ID
-    public List<Deals> findDealByID(int id) {
-        return mapper.findDealByID(id);
+    public Deals findDealByID(int id) throws Exception {
+
+        Deals deal;
+
+        try {
+           deal = mapper.findDealByID(id);
+        } catch (Exception e) {
+            throw e;
+        }
+        return deal;
     }
 
 
     // POST - create new deal
-    public Deals createDeal(Deals data) {
+    public Deals createDeal(Deals data) throws Exception {
 
+        try {
         Deals newDeal = new Deals();
 
         newDeal.setMerchant_id(data.getMerchant_id());
@@ -35,22 +45,26 @@ public class DealsService {
         newDeal.setDeal_points_cap(data.getDeal_points_cap());
         newDeal.setDeal_instructions(data.getDeal_instructions());
 
-        try {
-            mapper.createDeal(newDeal);
-        } catch (Exception e) {
-            System.out.println("Deal already exists." + data.getDeal_description());
-        }
+        mapper.createDeal(newDeal);
         return newDeal;
+
+        } catch (Exception e) {
+            throw e;
+        }
     }
 
     // DELETE - delete existing deal by ID
-    public String deleteDealByID(int id) {
-        mapper.deleteDealByID(id);
-        return "Deal successfully removed with ID : " + id + ".";
+    public Boolean deleteDealByID(int id) throws Exception {
+        try {
+            mapper.deleteDealByID(id);
+            return true;
+        } catch (Exception e) {
+            throw e;
+        }
     }
 
     // PUT - update existing deal by ID
-    public Deals updateDealByID(int merchant_id, int id, Deals data) {
+    public Deals updateDealByID(int merchant_id, int id, Deals data) throws Exception, DatabaseException {
 
         Deals updateDeal = new Deals();
 
@@ -59,13 +73,18 @@ public class DealsService {
         updateDeal.setDeal_description(data.getDeal_description());
         updateDeal.setDeal_points_cap(data.getDeal_points_cap());
         updateDeal.setDeal_instructions(data.getDeal_instructions());
-
-        mapper.updateDealByID(updateDeal);
-
+        try {
+            mapper.updateDealByID(updateDeal);
+            if (id < 1) {
+                throw new DatabaseException("Unable to update deal with ID : " + id);
+            }
+        } catch (Exception e) {
+            throw new DatabaseException(e.getMessage());
+        }
         return updateDeal;
     }
 
-    // GET - all Deals
+    // GET - all Deals by Merchant ID
     public List<Deals> findAllDealsByMerchant(int merchant_id) {
         return mapper.listAllDealsByMerchant(merchant_id);
     }

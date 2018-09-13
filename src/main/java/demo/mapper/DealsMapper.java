@@ -45,7 +45,7 @@ public interface DealsMapper {
 
     // finds deal by ID number
     @Select(FIND_DEAL_BY_ID)
-    List<Deals> findDealByID(int id);
+    Deals findDealByID(int id);
 
     // creates new deal
     @Insert(CREATE_DEAL)

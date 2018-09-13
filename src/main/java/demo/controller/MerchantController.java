@@ -1,5 +1,6 @@
 package demo.controller;
 
+import com.amazonaws.util.CollectionUtils;
 import demo.exceptions.DatabaseException;
 import demo.model.CustomResponseObject;
 import demo.services.MerchantService;
@@ -25,17 +26,22 @@ public class MerchantController {
 
     // calls DB for all Merchants
     @GetMapping("/all")
-    public CustomResponseObject <Merchants> getMerchants() {
+    public CustomResponseObject <Merchants> getMerchants() throws Exception {
 
-        List <Merchants> merchants = merchantService.findAllMerchants();
+        List<Merchants> merchants = merchantService.findAllMerchants();
 
-        CustomResponseObject obj = new CustomResponseObject();
-        obj.setData(merchants);
-        obj.setMessage("success.");
-        obj.setStatusCode(200);
+        if (!(CollectionUtils.isNullOrEmpty(merchants))) {
 
-        return obj;
+            CustomResponseObject obj = new CustomResponseObject();
+            obj.setData(merchants);
+            obj.setMessage("success.");
+            obj.setStatusCode(200);
+
+            return obj;
+
+        } else throw new DatabaseException("No merchants to show.");
     }
+
 
     // calls DB for merchant by ID number
     @RequestMapping("/id={id}")

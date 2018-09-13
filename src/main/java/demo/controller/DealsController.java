@@ -1,10 +1,12 @@
 package demo.controller;
 
 
+import com.amazonaws.util.CollectionUtils;
 import demo.exceptions.DatabaseException;
 import demo.model.CustomResponseObject;
 import demo.model.database.Deals;
 import demo.services.DealsService;
+import org.bouncycastle.jcajce.provider.asymmetric.ec.KeyFactorySpi;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,15 +21,20 @@ public class DealsController {
 
     // calls DB for all deals
     @GetMapping("/all")
-    public CustomResponseObject<Deals> getAllDeals() {
-        List <Deals> deals = service.findAllDeals();
+    public CustomResponseObject<Deals> getAllDeals() throws Exception {
 
-        CustomResponseObject obj = new CustomResponseObject();
-        obj.setData(deals);
-        obj.setMessage("success.");
-        obj.setStatusCode(200);
+        List<Deals> deals = service.findAllDeals();
 
-        return obj;
+        if (!(CollectionUtils.isNullOrEmpty(deals))) {
+
+            CustomResponseObject obj = new CustomResponseObject();
+            obj.setData(deals);
+            obj.setMessage("success.");
+            obj.setStatusCode(200);
+
+            return obj;
+
+        } else throw new DatabaseException("No deals to show.");
     }
 
     // calls DB for deals by ID number

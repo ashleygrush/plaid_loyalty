@@ -1,5 +1,6 @@
 package demo.controller;
 
+import com.amazonaws.util.CollectionUtils;
 import demo.exceptions.DatabaseException;
 import demo.exceptions.GlobalExceptionHandler;
 import demo.model.CustomResponseObject;
@@ -30,9 +31,11 @@ public class UserController {
 
     // calls DB for all users
     @GetMapping("/all")
-    public CustomResponseObject<Users> getAllUsers() {
+    public CustomResponseObject<Users> getAllUsers() throws Exception {
 
         List<Users> users = userService.findAllUsers();
+
+        if (!(CollectionUtils.isNullOrEmpty(users))) {
 
         CustomResponseObject obj = new CustomResponseObject();
         obj.setData(users);
@@ -40,6 +43,8 @@ public class UserController {
         obj.setStatusCode(200);
 
         return obj;
+
+        } else throw new DatabaseException("No users to show.");
     }
 
     // calls DB for Users by ID number

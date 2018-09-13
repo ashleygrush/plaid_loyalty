@@ -17,7 +17,6 @@ public class GlobalExceptionHandler {
             return defaultErrorMessage(ex);
     }
 
-
     // Default Exception Handling Message
     protected CustomResponseObject defaultErrorMessage(Exception ex) {
 

@@ -25,8 +25,16 @@ public class MerchantController {
 
     // calls DB for all Merchants
     @GetMapping("/all")
-    public List<Merchants> getMerchants() {
-        return merchantService.findAllMerchants();
+    public CustomResponseObject <Merchants> getMerchants() {
+
+        List <Merchants> merchants = merchantService.findAllMerchants();
+
+        CustomResponseObject obj = new CustomResponseObject();
+        obj.setData(merchants);
+        obj.setError("success.");
+        obj.setStatusCode(200);
+
+        return obj;
     }
 
     // calls DB for merchant by ID number
@@ -44,25 +52,51 @@ public class MerchantController {
             return obj;
         }
 
-        else throw new DatabaseException("ID does not exist.");
+        else throw new DatabaseException("Merchant ID doesn't exist. Please enter correct ID number or create new account.");
     }
 
     // creates new merchant
     @PostMapping()
-    public Merchants createMerchant(@RequestBody Merchants merchants) {
-        return merchantService.createMerchant(merchants);
+    public CustomResponseObject <Merchants> createMerchant(@RequestBody Merchants merchants) throws Exception {
+
+       merchantService.createMerchant(merchants);
+
+       if (merchants == null) throw new DatabaseException("Does not exist.");
+
+        CustomResponseObject obj = new CustomResponseObject();
+        obj.setData(merchants);
+        obj.setError("success.");
+        obj.setStatusCode(200);
+
+        return obj;
     }
 
     //delete existing merchant by ID
     @DeleteMapping("/id={id}")
-    public String deleteByID(@PathVariable("id") int id) {
-        return merchantService.deleteMerchantByID(id);
+    public CustomResponseObject deleteByID(@PathVariable("id") int id) throws Exception {
+        boolean success = merchantService.deleteMerchantByID(id);
+        CustomResponseObject obj = new CustomResponseObject();
+
+        if (success) {
+            obj.setData("merchant removed");
+            obj.setStatusCode(200);
+            return obj;
+        } else throw new DatabaseException("Unable to remove merchant. Please try again later.");
+
     }
+
 
     // update existing merchant by ID
     @PutMapping("/id={id}")
-    public Merchants updateMerchantByID(@PathVariable("id") int id,
-                                @RequestBody Merchants merchants) {
-        return merchantService.updateMerchantByID(id, merchants);
+    public CustomResponseObject<Merchants> updateMerchantByID(@PathVariable("id") int id,
+                                                                @RequestBody Merchants merchants) throws Exception {
+        merchantService.updateMerchantByID(id, merchants);
+
+        CustomResponseObject obj = new CustomResponseObject();
+        obj.setData(merchants);
+        obj.setError("successfully updated.");
+        obj.setStatusCode(200);
+
+        return obj;
     }
 }

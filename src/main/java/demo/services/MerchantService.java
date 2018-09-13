@@ -1,11 +1,14 @@
 package demo.services;
 
+import demo.exceptions.DatabaseException;
 import demo.mapper.PlaidMapper;
 import demo.model.MerchantsForHashMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.HashMap;
+
 import demo.mapper.MerchantMapper;
 import demo.model.database.Merchants;
 
@@ -28,7 +31,7 @@ public class MerchantService {
 
         HashMap<String, Integer> values = new HashMap<>();
 
-        for (MerchantsForHashMap merchant: list) {
+        for (MerchantsForHashMap merchant : list) {
             String name = merchant.getName();
             int id = merchant.getId();
             values.put(name, id);
@@ -43,38 +46,49 @@ public class MerchantService {
     }
 
     // GET - find merchant by ID
-    public Merchants findMerchantByID(int id) {
-        return mapper.findMerchantByID(id);
+    public Merchants findMerchantByID(int id) throws Exception {
+
+        Merchants merchants;
+
+        try {
+            merchants = mapper.findMerchantByID(id);
+        } catch (Exception e) {
+            throw e;
+        }
+        return merchants;
     }
 
 
     // POST - create new merchant
-    public Merchants createMerchant(Merchants data) {
-
-        Merchants newMerch = new Merchants();
-
-        newMerch.setName(data.getName());
-        newMerch.setPassword(data.getPassword());
-        newMerch.setEmail(data.getEmail());
+    public Merchants createMerchant(Merchants data) throws Exception {
 
         try {
-            mapper.createMerchant(newMerch);
-        } catch (Exception e) {
-            System.out.println("Merchant already exists. Please log in : " + data.getEmail());
-        }
+            Merchants newMerch = new Merchants();
 
-        return newMerch;
+            newMerch.setName(data.getName());
+            newMerch.setPassword(data.getPassword());
+            newMerch.setEmail(data.getEmail());
+
+            mapper.createMerchant(newMerch);
+            return newMerch;
+
+        } catch (Exception e) {
+            throw e;
+        }
     }
 
     // DELETE - delete existing merchant by ID
-    public String deleteMerchantByID(int id) {
-        mapper.deleteMerchantByID(id);
-
-        return "Merchant successfully removed with ID : " + id + ".";
+    public boolean deleteMerchantByID(int id) throws Exception {
+        try {
+            mapper.deleteMerchantByID(id);
+            return true;
+        } catch (Exception e) {
+            throw e;
+        }
     }
 
     // PUT - update existing merchant by ID
-    public Merchants updateMerchantByID(int id, Merchants data) {
+    public Merchants updateMerchantByID(int id, Merchants data) throws Exception, DatabaseException {
 
         Merchants updateMerch = new Merchants();
 
@@ -82,9 +96,16 @@ public class MerchantService {
         updateMerch.setPassword(data.getPassword());
         updateMerch.setEmail(data.getEmail());
         updateMerch.setId(id);
+        try {
+            mapper.updateMerchantByID(updateMerch);
 
-        mapper.updateMerchantByID(updateMerch);
+            if (id < 1) {
+                throw new DatabaseException("Unable to update merchant with ID : " + id);
+            }
 
+        } catch (Exception e) {
+            throw new DatabaseException(e.getMessage());
+        }
         return updateMerch;
     }
 

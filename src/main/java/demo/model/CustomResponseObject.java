@@ -3,7 +3,7 @@ package demo.model;
 public class CustomResponseObject <T> {
 
         T data;
-        Object error;
+        Object message;
         int statusCode;
 
     public T getData() {
@@ -14,12 +14,12 @@ public class CustomResponseObject <T> {
         this.data = data;
     }
 
-    public Object getError() {
-        return error;
+    public Object getMessage() {
+        return message;
     }
 
-    public void setError(Object error) {
-        this.error = error;
+    public void setMessage(Object message) {
+        this.message = message;
     }
 
     public int getStatusCode() {

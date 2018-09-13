@@ -31,7 +31,7 @@ public class MerchantController {
 
         CustomResponseObject obj = new CustomResponseObject();
         obj.setData(merchants);
-        obj.setError("success.");
+        obj.setMessage("success.");
         obj.setStatusCode(200);
 
         return obj;
@@ -46,7 +46,7 @@ public class MerchantController {
             CustomResponseObject obj = new CustomResponseObject();
 
             obj.setData(merchant);
-            obj.setError("success.");
+            obj.setMessage("success.");
             obj.setStatusCode(200);
 
             return obj;
@@ -65,7 +65,7 @@ public class MerchantController {
 
         CustomResponseObject obj = new CustomResponseObject();
         obj.setData(merchants);
-        obj.setError("success.");
+        obj.setMessage("success.");
         obj.setStatusCode(200);
 
         return obj;
@@ -94,7 +94,7 @@ public class MerchantController {
 
         CustomResponseObject obj = new CustomResponseObject();
         obj.setData(merchants);
-        obj.setError("successfully updated.");
+        obj.setMessage("successfully updated.");
         obj.setStatusCode(200);
 
         return obj;

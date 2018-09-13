@@ -36,7 +36,7 @@ public class UserController {
 
         CustomResponseObject obj = new CustomResponseObject();
         obj.setData(users);
-        obj.setError("success.");
+        obj.setMessage("success.");
         obj.setStatusCode(200);
 
         return obj;
@@ -51,7 +51,7 @@ public class UserController {
         if (user != null) {
             CustomResponseObject obj = new CustomResponseObject();
             obj.setData(user);
-            obj.setError("success.");
+            obj.setMessage("success.");
             obj.setStatusCode(200);
 
             return obj;
@@ -69,7 +69,7 @@ public class UserController {
 
         CustomResponseObject obj = new CustomResponseObject();
         obj.setData(user);
-        obj.setError("success. user created");
+        obj.setMessage("success. user created");
         obj.setStatusCode(200);
 
         return obj;
@@ -99,7 +99,7 @@ public class UserController {
 
         CustomResponseObject obj = new CustomResponseObject();
         obj.setData(users);
-        obj.setError("successfully updated.");
+        obj.setMessage("successfully updated.");
         obj.setStatusCode(200);
 
         return obj;

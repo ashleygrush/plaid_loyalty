@@ -22,16 +22,14 @@ public class GlobalExceptionHandler {
     protected CustomResponseObject defaultErrorMessage(Exception ex) {
 
         CustomResponseObject response = new CustomResponseObject();
-        ExceptionsPojo error = new ExceptionsPojo(ex.getMessage());
 
         response.setData("Default Error Message.");
-        response.setError("Message: " +ex);
+        response.setMessage(ex.getLocalizedMessage());
         response.setStatusCode(500);
 
         System.out.println(" - - - - - - - - - - - - ");
-        System.out.println("Print Exception: " +ex);
-        System.out.println(error);
-
+        System.out.println("Print Exception: ");
+        System.out.println(ex.getMessage());
 
         return response;
     }

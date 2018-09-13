@@ -49,7 +49,7 @@ public interface MerchantMapper {
 
     // finds user by ID number
     @Select(FIND_MERCHANT_BY_ID)
-    List<Merchants> findMerchantByID(int id);
+    Merchants findMerchantByID(int id);
 
     // creates new user
     @Insert(CREATE_MERCHANT)

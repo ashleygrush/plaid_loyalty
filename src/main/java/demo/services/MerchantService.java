@@ -43,7 +43,7 @@ public class MerchantService {
     }
 
     // GET - find merchant by ID
-    public List<Merchants> findMerchantByID(int id) {
+    public Merchants findMerchantByID(int id) {
         return mapper.findMerchantByID(id);
     }
 

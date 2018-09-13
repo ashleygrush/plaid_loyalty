@@ -1,5 +1,7 @@
 package demo.controller;
 
+import demo.exceptions.DatabaseException;
+import demo.model.CustomResponseObject;
 import demo.services.MerchantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,8 +31,20 @@ public class MerchantController {
 
     // calls DB for merchant by ID number
     @RequestMapping("/id={id}")
-    public List<Merchants> findByID(@PathVariable("id") int id) {
-        return merchantService.findMerchantByID(id);
+    public CustomResponseObject<Merchants> findByID(@PathVariable("id") int id) throws Exception {
+        Merchants merchant = merchantService.findMerchantByID(id);
+
+        if (merchant != null) {
+            CustomResponseObject obj = new CustomResponseObject();
+
+            obj.setData(merchant);
+            obj.setError("success.");
+            obj.setStatusCode(200);
+
+            return obj;
+        }
+
+        else throw new DatabaseException("ID does not exist.");
     }
 
     // creates new merchant

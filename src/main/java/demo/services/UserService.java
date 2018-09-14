@@ -150,7 +150,7 @@ public class UserService {
      * Service finds and retrieves all user information from database by unique ID
      *
      * @param id unique ID assigned to user
-     * @return   
+     * @return all information about user
      * @throws Exception
      */
     public Users findUserByID(int id) throws Exception {
@@ -166,7 +166,13 @@ public class UserService {
     }
 
 
-    // POST - create new user
+    /**
+     * Service adds new user information into database - name, email, password.
+     *
+     * @param data enters name, email, password into database
+     * @return returns the newly submitted information back for confirmation
+     * @throws Exception
+     */
     public Users createUser(Users data) throws Exception {
         try {
             Users newUser = new Users();
@@ -183,7 +189,13 @@ public class UserService {
         }
     }
 
-    // DELETE - delete existing user by ID
+    /**
+     * Service removes user from the database by unique ID
+     *
+     * @param id unique ID to remove user
+     * @return boolean to confirm success of removing user
+     * @throws Exception
+     */
     public boolean deleteUserByID(int id) throws Exception {
         try {
             mapper.deleteUserByID(id);
@@ -194,7 +206,15 @@ public class UserService {
 
     }
 
-    // PUT - update existing user by ID
+    /**
+     * Service updates user information in database by unique ID
+     *
+     * @param id unique ID to update user parameters
+     * @param data new information to update in database
+     * @return returns updated information to the user for confirmation
+     * @throws Exception
+     * @throws DatabaseException custom exception handling if ID doesn't exist.
+     */
     public Users updateUserByID(int id, Users data) throws Exception, DatabaseException {
 
         Users updateUser = new Users();
@@ -217,7 +237,13 @@ public class UserService {
     }
 
 
-    // gets user email by ID
+    /**
+     * Service used for pull email by user ID. Used for email services
+     * and for loyalty updates/new reward information.
+     *
+     * @param id uses user ID to retrieve email address from database
+     * @return returns email address to email services
+     */
     public String userEmail(int id) {
         return mapper.userEmailByID(id);
     }

@@ -13,14 +13,14 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/merchants/")
+@RequestMapping("/merchants")
 public class DealsController {
 
     @Autowired
     DealsService service;
 
     // calls DB for all deals
-    @GetMapping("{merchant_id}/deals/")
+    @GetMapping("/{merchant_id}/deals")
     public CustomResponseObject<Deals> getAllDealsByMerchant(@PathVariable("merchant_id") int merchant_id) throws Exception {
 
         List<Deals> deals = service.findAllDealsByMerchant(merchant_id);
@@ -38,7 +38,7 @@ public class DealsController {
     }
 
     // calls DB for deals by ID number
-    @RequestMapping("{merchant_id}/deals/{id}")
+    @RequestMapping("/{merchant_id}/deals/{id}")
     public CustomResponseObject <Deals> findByID(@PathVariable("merchant_id") int merchant_id,
                                                  @PathVariable("id") int id) throws Exception {
 
@@ -72,7 +72,7 @@ public class DealsController {
     }
 
     //delete deal by ID
-    @DeleteMapping("{merchant_id}/deals/id={id}")
+    @DeleteMapping("/{merchant_id}/deals/id={id}")
     public CustomResponseObject deleteByID(@PathVariable("merchant_id") int merchant_id,
             @PathVariable("id") int id) throws Exception {
 

@@ -16,7 +16,7 @@ import java.util.Collections;
 import java.util.List;
 
 @RestController
-@RequestMapping("/users/")
+@RequestMapping("/users")
 public class LoyaltyController {
 
     @Autowired
@@ -24,7 +24,7 @@ public class LoyaltyController {
 
     // calls DB for all loyalty points
     // look into why it's not refreshing data? activating in DB< but not refreshing to main page
-    @GetMapping("loyalty_points/all")
+    @GetMapping("/loyalty_points/all")
     public CustomResponseObject<Loyalty> getAllPoints() throws Exception {
 
         List<Loyalty> points = service.findAllPoints();
@@ -43,7 +43,7 @@ public class LoyaltyController {
     }
 
     // needs exception for User_ID
-    @RequestMapping("{user_id}/loyalty_points")
+    @RequestMapping("/{user_id}/loyalty_points")
     public CustomResponseObject<Loyalty> findByUserID(@PathVariable("user_id") int user_id) throws Exception {
 
         List<Loyalty> userPoints = service.findByUserID(user_id);
@@ -63,7 +63,7 @@ public class LoyaltyController {
 
     // needs exception for User_ID
     // Checks for active rewards
-    @RequestMapping("{user_id}/loyalty_points/rewards")
+    @RequestMapping("/{user_id}/loyalty_points/rewards")
     public CustomResponseObject<String> getRewards(@PathVariable("user_id") int user_id) throws Exception {
 
         ArrayList<String> messages = service.comparePoints(user_id);
@@ -79,7 +79,7 @@ public class LoyaltyController {
 
 
     // IN PROGRESS!!
-    @RequestMapping("{user_id}/loyalty_points/available_rewards")
+    @RequestMapping("/{user_id}/loyalty_points/available_rewards")
     public String checkRedeemed(@PathVariable("user_id") int user_id) {
         return service.checkRedeemed(user_id);
     }

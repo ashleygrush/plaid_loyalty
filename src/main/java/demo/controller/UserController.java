@@ -13,6 +13,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ *
+ *
+ */
 //calls the User service method to update the db
 @RestController
 @RequestMapping("/users")
@@ -21,14 +25,23 @@ public class UserController {
     @Autowired
     UserService userService;
 
-    // NEEDS EXCEPTION HANDLING!
-    // calls DB for all users
+    /**
+     *
+     * @return updates database with transactions.
+     *
+     * Needs exception handing
+     */
     @GetMapping("/update/transactions")
     public String updateTransactions() {
         // searches for database link in services
         return userService.analyseAllUserTransaction();
     }
 
+    /**
+     *
+     * @return list of all users in database.
+     * @throws Exception
+     */
     // calls DB for all users
     @GetMapping("/all")
     public CustomResponseObject<Users> getAllUsers() throws Exception {

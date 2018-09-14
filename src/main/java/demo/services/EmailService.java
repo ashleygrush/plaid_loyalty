@@ -116,30 +116,59 @@ public class EmailService {
 //          Builds Email Structure - uses Loyalty ID
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-    // sends email using loyalty ID only
+    /**
+     * Service sends email using loyalty ID only.
+     * Finds user email address based on loyalty points ID and sends an email from default
+     * "FROM" above.  Also uses loyalty points ID to pull deal instructions from the
+     * database and populates the email body with the instructions message.
+     *
+     * sendMail: Email structure: TO, FROM (default), SUBJECT, BODY
+     *
+     * @param id loyalty_points id from database
+     */
     public void sendRewardEmail(int id) {
-            // To, From, Subject, Body
         EmailService.sendMail(
-                userEmailAddress(id), // To:
-                FROM, // From: Default
-                "You have a Reward from " +merchantName(id)+ "!! ", // Subject:
-                dealInstructions(id)); // HTML Body:
+                userEmailAddress(id),
+                FROM,
+                "You have a Reward from " +merchantName(id)+ "!! ",
+                dealInstructions(id));
     }
 
 
-    // Finds email < User ID < Loyalty ID
+    /**
+     * Service finds user email using Loyalty ID
+     * Loyalty points ID > User ID > User email
+     *
+     * @param id loyalty points ID > finds User ID
+     * @return String, email address
+     */
     public String userEmailAddress(int id){
         int user_id = mapper.userIdByLoyaltyID(id);
         return userService.userEmail(user_id);
     }
 
-    // Finds deal instructions < Deal ID < Loyalty ID
+    /**
+     * Service finds deal instructions using Loyalty ID
+     * Loyalty points ID > Deal ID > Deal Instructions
+     *
+     * @param id loyalty points ID > finds Deals ID
+     * @return String, deal_instructions
+     */
     public String dealInstructions(int id) {
         int dealID = mapper.getDealsID(id);
         return dealsService.getDealInstructions(dealID);
     }
 
-    // Finds Merchant Name < Merchant ID < Loyalty ID
+    /**
+     * Service finds Merchant Name using Loyalty ID
+     * Loyalty points ID > Merchant ID > Merchant Name
+     *
+     * Used to populate email header with merchant name or
+     * when returning message to user regarding points standing.
+     *
+     * @param id loyalty points ID > finds merchant ID
+     * @return string, merchant name
+     */
     public String merchantName(int id) {
         int merchantID = mapper.merchantIDbyLoyaltyID(id);
         return merchantService.merchantNameById(merchantID);

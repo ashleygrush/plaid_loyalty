@@ -13,17 +13,17 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/deals")
+@RequestMapping("/merchants/")
 public class DealsController {
 
     @Autowired
     DealsService service;
 
     // calls DB for all deals
-    @GetMapping("/all")
-    public CustomResponseObject<Deals> getAllDeals() throws Exception {
+    @GetMapping("{merchant_id}/deals/")
+    public CustomResponseObject<Deals> getAllDealsByMerchant(@PathVariable("merchant_id") int merchant_id) throws Exception {
 
-        List<Deals> deals = service.findAllDeals();
+        List<Deals> deals = service.findAllDealsByMerchant(merchant_id);
 
         if (!(CollectionUtils.isNullOrEmpty(deals))) {
 
@@ -38,10 +38,11 @@ public class DealsController {
     }
 
     // calls DB for deals by ID number
-    @RequestMapping("/id={id}")
-    public CustomResponseObject <Deals> findByID(@PathVariable("id") int id) throws Exception {
+    @RequestMapping("{merchant_id}/deals/{id}")
+    public CustomResponseObject <Deals> findByID(@PathVariable("merchant_id") int merchant_id,
+                                                 @PathVariable("id") int id) throws Exception {
 
-        Deals deal = service.findDealByID(id);
+        Deals deal = service.findDealByID(merchant_id, id);
 
         if (deal != null) {
             CustomResponseObject obj = new CustomResponseObject();
@@ -55,7 +56,7 @@ public class DealsController {
     }
 
     // creates new deal
-    @PostMapping
+    @PostMapping("/deals")
     public CustomResponseObject <Deals> createDeal(@RequestBody Deals deals) throws Exception {
 
         Deals deal = service.createDeal(deals);
@@ -71,10 +72,11 @@ public class DealsController {
     }
 
     //delete deal by ID
-    @DeleteMapping("/id={id}")
-    public CustomResponseObject deleteByID(@PathVariable("id") int id) throws Exception {
+    @DeleteMapping("{merchant_id}/deals/id={id}")
+    public CustomResponseObject deleteByID(@PathVariable("merchant_id") int merchant_id,
+            @PathVariable("id") int id) throws Exception {
 
-        boolean success = service.deleteDealByID(id);
+        boolean success = service.deleteDealByID(merchant_id, id);
 
         CustomResponseObject obj = new CustomResponseObject();
 
@@ -86,7 +88,7 @@ public class DealsController {
     }
 
     // update existing deal by ID
-    @PutMapping("/merchant_id={merchant_id}/id={id}")
+    @PutMapping("/{merchant_id}/deals/{id}")
     public CustomResponseObject <Deals> updateDealByID(@PathVariable("merchant_id") int merchant_id,
                                 @PathVariable("id") int id,
                                 @RequestBody Deals deals) throws Exception {
@@ -101,10 +103,10 @@ public class DealsController {
         return obj;
     }
 
-    // use merchant ID to find deals
-    @GetMapping("/merchant_id={merchant_id}")
-    public List<Deals> getAllDealsByMerchant(@PathVariable("merchant_id") int merchant_id) {
-        return service.findAllDealsByMerchant(merchant_id);
-    }
+//    // use merchant ID to find deals
+//    @GetMapping("/merchant_id={merchant_id}")
+//    public List<Deals> getAllDealsByMerchant(@PathVariable("merchant_id") int merchant_id) {
+//        return service.findAllDealsByMerchant(merchant_id);
+//    }
 
 }

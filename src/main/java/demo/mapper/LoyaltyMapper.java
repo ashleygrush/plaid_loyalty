@@ -3,10 +3,9 @@ package demo.mapper;
 import demo.model.PointsHashMap;
 import demo.model.database.Loyalty;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
-
-import javax.websocket.server.ServerEndpoint;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -113,7 +112,7 @@ public interface LoyaltyMapper {
 
     // returns all active rewards by user ID
     @Select(GET_ALL_ACTIVE_REWARDS)
-    int getAllActiveRewards(int user_id);
+    int getAllActiveRewards(@Param("user_id") int user_id);
 
     // Resets all collected_points to 0 if Point is Active
     // this is separated due to only being used at time of activation

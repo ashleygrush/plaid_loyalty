@@ -12,7 +12,7 @@ public interface DealsMapper {
     String LIST_ALL_DEALS = "Select id, merchant_id, deal_description, deal_points_cap, deal_instructions from plaid.deals";
 
     // find deal by ID
-    String FIND_DEAL_BY_ID = "Select * from plaid.deals where id = #{id}";
+    String FIND_DEAL_BY_ID = "Select * from plaid.deals where merchant_id = #{merchant_id} and id = #{id}";
 
     // create new deal
     String CREATE_DEAL = "Insert into plaid.deals " +
@@ -20,7 +20,7 @@ public interface DealsMapper {
             " VALUES (#{merchant_id}, #{deal_description}, #{deal_points_cap}, #{deal_instructions})";
 
     // delete's existing deal from database
-    String DELETE_DEAL= "Delete from plaid.deals where id = #{id}";
+    String DELETE_DEAL= "Delete from plaid.deals where merchant_id = #{merchant_id} and id = #{id}";
 
     // update existing deal by merchant_id and ID.
     String UPDATE_DEAL_BY_ID = "UPDATE plaid.deals "+
@@ -45,7 +45,8 @@ public interface DealsMapper {
 
     // finds deal by ID number
     @Select(FIND_DEAL_BY_ID)
-    Deals findDealByID(int id);
+    Deals findDealByID(@Param("merchant_id") int merchant_id,
+                       @Param("id") int id);
 
     // creates new deal
     @Insert(CREATE_DEAL)
@@ -53,7 +54,8 @@ public interface DealsMapper {
 
     // delete existing deal
     @Delete(DELETE_DEAL)
-    int deleteDealByID(int id);
+    int deleteDealByID(@Param("merchant_id") int merchant_id,
+                       @Param("id") int id);
 
     // update existing deal by ID
     @Insert(UPDATE_DEAL_BY_ID)

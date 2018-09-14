@@ -48,7 +48,7 @@ public class UserController {
     }
 
     // calls DB for Users by ID number
-    @RequestMapping("/id={id}")
+    @RequestMapping("/{id}")
     public CustomResponseObject<Users> findByID(@PathVariable("id") int id) throws Exception {
 
         Users user = userService.findUserByID(id);
@@ -81,7 +81,7 @@ public class UserController {
     }
 
     //delete existing user by ID
-    @DeleteMapping("/id={id}")
+    @DeleteMapping("/{id}")
     public CustomResponseObject deleteByID(@PathVariable("id") int id) throws Exception {
 
         boolean success = userService.deleteUserByID(id);
@@ -96,7 +96,7 @@ public class UserController {
     }
 
     // update existing user by ID
-    @PutMapping("/id={id}")
+    @PutMapping("/{id}")
     public CustomResponseObject<Users> updateUserByID(@PathVariable("id") int id,
                                                       @RequestBody Users users) throws Exception {
 

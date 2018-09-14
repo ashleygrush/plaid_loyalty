@@ -15,18 +15,18 @@ public class DealsService {
     DealsMapper mapper;
 
     // GET - all Deals
-    public List<Deals> findAllDeals() {
-        return mapper.listAllDeals();
+    public List<Deals> findAllDealsByMerchant(int merchant_id) {
+        return mapper.listAllDealsByMerchant(merchant_id);
     }
 
 
     // GET - find deal by ID
-    public Deals findDealByID(int id) throws Exception {
+    public Deals findDealByID(int merchant_id, int id) throws Exception {
 
         Deals deal;
 
         try {
-           deal = mapper.findDealByID(id);
+           deal = mapper.findDealByID(merchant_id, id);
         } catch (Exception e) {
             throw e;
         }
@@ -54,9 +54,9 @@ public class DealsService {
     }
 
     // DELETE - delete existing deal by ID
-    public Boolean deleteDealByID(int id) throws Exception {
+    public Boolean deleteDealByID(int merchant_id, int id) throws Exception {
         try {
-            mapper.deleteDealByID(id);
+            mapper.deleteDealByID(merchant_id, id);
             return true;
         } catch (Exception e) {
             throw e;
@@ -84,10 +84,10 @@ public class DealsService {
         return updateDeal;
     }
 
-    // GET - all Deals by Merchant ID
-    public List<Deals> findAllDealsByMerchant(int merchant_id) {
-        return mapper.listAllDealsByMerchant(merchant_id);
-    }
+//    // GET - all Deals by Merchant ID
+//    public List<Deals> findAllDealsByMerchant(int merchant_id) {
+//        return mapper.listAllDealsByMerchant(merchant_id);
+//    }
 
     // RETURNS points cap
     public int pointsCap(int id){

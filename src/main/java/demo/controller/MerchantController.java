@@ -44,7 +44,7 @@ public class MerchantController {
 
 
     // calls DB for merchant by ID number
-    @RequestMapping("/id={id}")
+    @RequestMapping("/{id}")
     public CustomResponseObject<Merchants> findByID(@PathVariable("id") int id) throws Exception {
         Merchants merchant = merchantService.findMerchantByID(id);
 
@@ -78,7 +78,7 @@ public class MerchantController {
     }
 
     //delete existing merchant by ID
-    @DeleteMapping("/id={id}")
+    @DeleteMapping("/{id}")
     public CustomResponseObject deleteByID(@PathVariable("id") int id) throws Exception {
         boolean success = merchantService.deleteMerchantByID(id);
         CustomResponseObject obj = new CustomResponseObject();
@@ -93,7 +93,7 @@ public class MerchantController {
 
 
     // update existing merchant by ID
-    @PutMapping("/id={id}")
+    @PutMapping("/{id}")
     public CustomResponseObject<Merchants> updateMerchantByID(@PathVariable("id") int id,
                                                                 @RequestBody Merchants merchants) throws Exception {
         merchantService.updateMerchantByID(id, merchants);

@@ -13,11 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/**
- *
- *
- */
-//calls the User service method to update the db
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -26,10 +21,13 @@ public class UserController {
     UserService userService;
 
     /**
+     * GET - fetches and populates transactions into hash-map.
+     * it then iterates against hash map with a list of users
+     * and matching participating merchants.
+     * Once a match is found; the database is updated under
+     * user ID and merchant ID.
      *
      * @return updates database with transactions.
-     *
-     * Needs exception handing
      */
     @GetMapping("/update/transactions")
     public String updateTransactions() {
@@ -38,11 +36,11 @@ public class UserController {
     }
 
     /**
+     * GET - all users from database with ID number, email, and password.
      *
      * @return list of all users in database.
      * @throws Exception
      */
-    // calls DB for all users
     @GetMapping("/all")
     public CustomResponseObject<Users> getAllUsers() throws Exception {
 
@@ -60,7 +58,13 @@ public class UserController {
         } else throw new DatabaseException("No users to show.");
     }
 
-    // calls DB for Users by ID number
+    /**
+     * GET - retrieves user by unique ID
+     *
+     * @param id unique id assigned to users
+     * @return all user information in database
+     * @throws Exception
+     */
     @RequestMapping("/{id}")
     public CustomResponseObject<Users> findByID(@PathVariable("id") int id) throws Exception {
 
@@ -77,7 +81,13 @@ public class UserController {
         } throw new DatabaseException("User ID doesn't exist. Please enter correct ID number or create new account.");
     }
 
-    // creates new user
+    /**
+     * POST - create new user in database
+     *
+     * @param user RequestBody - name, email and password
+     * @return user creation confirmation
+     * @throws Exception
+     */
     @PostMapping()
     public CustomResponseObject<Users> createUser(@RequestBody Users user) throws Exception {
 
@@ -93,7 +103,13 @@ public class UserController {
         return obj;
     }
 
-    //delete existing user by ID
+    /**
+     * DELETE - removes user from database by unique ID
+     *
+     * @param id unique ID removes user from database
+     * @return boolean of successful removal of user
+     * @throws Exception
+     */
     @DeleteMapping("/{id}")
     public CustomResponseObject deleteByID(@PathVariable("id") int id) throws Exception {
 
@@ -108,7 +124,14 @@ public class UserController {
 
     }
 
-    // update existing user by ID
+    /**
+     * PUT - updates user in database by unique ID
+     *
+     * @param id unique ID to update user in database
+     * @param users RequestBody to fill out new information for user
+     * @return returns information submitted for confirmation
+     * @throws Exception
+     */
     @PutMapping("/{id}")
     public CustomResponseObject<Users> updateUserByID(@PathVariable("id") int id,
                                                       @RequestBody Users users) throws Exception {

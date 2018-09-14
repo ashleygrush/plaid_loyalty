@@ -16,6 +16,17 @@ import demo.model.database.Users;
 
 import java.util.List;
 
+/**
+ * Duncan,
+ *
+ * Please confirm and add commentary to the following:
+ * - UserService generic constructor involving Plaid Client
+ * - ErrorResponseData Map and it's use
+ * - AnalyseAllUserTransactions
+ * - clean up hash map commentary / structure
+ *
+ */
+
 @Service
 public class UserService {
 
@@ -34,8 +45,12 @@ public class UserService {
     @Autowired
     UpdateUserPointsMapper updateUserPointsMapper;
 
+    /**
+     * Imports Plaid Authentication Service
+     * Plaid Client - this includes the configured info (secret, id and key)
+     */
     private final Environment env;
-    private PlaidClient plaidClient;  //this includes the configured info (secret, id and key)
+    private PlaidClient plaidClient;
     private final PlaidAuthService authService;
 
     @Autowired
@@ -46,6 +61,11 @@ public class UserService {
 
     }
 
+    /**
+     * Map's error ??
+     * @param message
+     * @return
+     */
     private Map<String, Object> getErrorResponseData(String message) {
         Map<String, Object> data = new HashMap<>();
         data.put("error", false);
@@ -54,7 +74,12 @@ public class UserService {
     }
 
 
-    // GET all Users- call plaid API, iterate against hash map, update database if required
+    /**
+     * GET all User s-
+     * calls plaid API, iterate against hash map, update database if match is found.
+     *
+     * @return String success on filling database with new information
+     */
     public String analyseAllUserTransaction() {
 
         // fills list with all users
@@ -110,15 +135,24 @@ public class UserService {
         return "Success";
     }
 
-    //USER CRUD
 
-    // GET - all Users
+    /**
+     * Service finds and retrieves information from database on all users.
+     *
+     * @return list of information on all users.
+     */
     public List<Users> findAllUsers() {
         return mapper.listAllUsers();
     }
 
 
-    // GET - find user by ID
+    /**
+     * Service finds and retrieves all user information from database by unique ID
+     *
+     * @param id unique ID assigned to user
+     * @return   
+     * @throws Exception
+     */
     public Users findUserByID(int id) throws Exception {
 
         Users user;

@@ -103,10 +103,5 @@ public class DealsController {
         return obj;
     }
 
-//    // use merchant ID to find deals
-//    @GetMapping("/merchant_id={merchant_id}")
-//    public List<Deals> getAllDealsByMerchant(@PathVariable("merchant_id") int merchant_id) {
-//        return service.findAllDealsByMerchant(merchant_id);
-//    }
 
 }

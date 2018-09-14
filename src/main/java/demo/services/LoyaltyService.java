@@ -58,7 +58,7 @@ public class LoyaltyService extends Exception {
 
         for (int pointID : pointIDList) {
             // find value (points_collected) by point ID
-            if (pointsMap.containsKey(pointID) == true) {
+            if (pointsMap.containsKey(pointID)) {
 
                 // get points collected
                 int pointsCollected = pointsMap.get(pointID);

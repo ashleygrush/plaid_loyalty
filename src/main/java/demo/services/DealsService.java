@@ -84,16 +84,13 @@ public class DealsService {
         return updateDeal;
     }
 
-//    // GET - all Deals by Merchant ID
-//    public List<Deals> findAllDealsByMerchant(int merchant_id) {
-//        return mapper.listAllDealsByMerchant(merchant_id);
-//    }
 
-    // RETURNS points cap
+    // RETURNS points cap - for loyalty
     public int pointsCap(int id){
         return mapper.pointsCap(id);
     }
 
+    // get deal instructions > for email messages
     public String getDealInstructions(int id) {
         return mapper.getDealInstructions(id);
     }

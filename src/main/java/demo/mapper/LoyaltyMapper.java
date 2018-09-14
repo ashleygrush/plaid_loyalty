@@ -25,22 +25,22 @@ public interface LoyaltyMapper {
 
     // switch redeem to active/true by ID
     String ACTIVATE_REWARD = "Update plaid.loyalty " +
-            "SET active = #{true} " +
+            "SET active = 1 " +
             "WHERE id = #{id}";
 
     // deactivate redeem - switch to false
     String DEACTIVATE_REWARD  = "Update plaid.loyalty " +
-            "SET activate = #{false}" +
+            "SET activate = 0" +
             "WHERE id = #{id}";
 
     // switch redeem to active/true
     String ACTIVATE_REDEEMED = "Update plaid.loyalty " +
-            "SET redeemed = #{true} " +
+            "SET redeemed = 1 " +
             "WHERE id = #{id}";
 
     // deactivate redeem - switch to false
     String DEACTIVATE_REDEEMED = "Update plaid.loyalty " +
-            "SET redeemed = #{false}" +
+            "SET redeemed = 0 " +
             "WHERE id = #{id}";
 
     // get points_collected by user_id
@@ -56,7 +56,7 @@ public interface LoyaltyMapper {
     String GET_POINTS_ID = "Select id from plaid.loyalty where user_id = #{user_id}";
 
     // get id by user_id AND if active
-    String GET_ALL_ACTIVE_REWARDS = "Select id from plaid.loyalty where user_id = #{user_id} and active = true";
+    String GET_ALL_ACTIVE_REWARDS = "Select id from plaid.loyalty where user_id = #{user_id} and active = 1";
 
     // reset points - only used when point is activated first time.
     String RESET_POINTS = "Update plaid.loyalty " +

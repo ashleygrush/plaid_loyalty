@@ -43,7 +43,7 @@ public class LoyaltyController {
     }
 
     // needs exception for User_ID
-    @RequestMapping("{user_id}/loyalty_points/")
+    @RequestMapping("{user_id}/loyalty_points")
     public CustomResponseObject<Loyalty> findByUserID(@PathVariable("user_id") int user_id) throws Exception {
 
         List<Loyalty> userPoints = service.findByUserID(user_id);

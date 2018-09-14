@@ -90,10 +90,10 @@ public class LoyaltyService extends Exception {
                     } else if (pointsCollected < 2) {
                         messages.add("A nice start! " + merchantName + " would love to see you again! " +
                                 "Points collected : " + pointsCollected + "/" + pointsCap + ".");
-                    } else if (pointsCap < 5) {
+                    } else if (pointsCollected < 5) {
                         messages.add("You're getting warmer! " + merchantName + " is waiting! " +
                                 "Points collected : " + pointsCollected + "/" + pointsCap + ".");
-                    } else if (pointsCap < 8) {
+                    } else if (pointsCollected < 8) {
                         messages.add("You're almost there!! Wouldn't you love that reward from " + merchantName + "?! " +
                                 "Points collected : " + pointsCollected + "/" + pointsCap + ". Nice job!");
                     } else {

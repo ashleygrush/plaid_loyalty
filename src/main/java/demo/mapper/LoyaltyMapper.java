@@ -1,11 +1,13 @@
 package demo.mapper;
 
+import demo.model.PointsHashMap;
 import demo.model.database.Loyalty;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
 import javax.websocket.server.ServerEndpoint;
+import java.util.ArrayList;
 import java.util.List;
 
 @Mapper
@@ -43,9 +45,9 @@ public interface LoyaltyMapper {
             "WHERE id = #{id}";
 
     // get points_collected by user_id
-    String GET_POINTS_COLLECTED = "Select points_collected from plaid.loyalty where user_id = #{user_id}";
+    String GET_POINTS_COLLECTED = "Select id, points_collected from plaid.loyalty where user_id = #{user_id}";
 
-    // get deal_id by user_id
+    // get deal_id by user_id - for Reward Comparison
     String GET_DEALS_ID_BY_USER = "Select deal_id from plaid.loyalty where user_id = #{user_id}";
 
     // get deal_id by id
@@ -95,7 +97,7 @@ public interface LoyaltyMapper {
 
     // gets points_collected by user ID
     @Select(GET_POINTS_COLLECTED)
-    int getPointsCollected(int user_id);
+    ArrayList<PointsHashMap> getPointsCollected(int user_id);
 
     // gets Deal ID by user ID
     @Select(GET_DEALS_ID_BY_USER)
@@ -107,7 +109,7 @@ public interface LoyaltyMapper {
 
     // gets Loyalty_ID by user ID
     @Select(GET_POINTS_ID)
-    int getPointsID(int user_id);
+    List<Integer> getPointsID(int user_id);
 
     // returns all active rewards by user ID
     @Select(GET_ALL_ACTIVE_REWARDS)

@@ -11,6 +11,7 @@ import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -63,9 +64,19 @@ public class LoyaltyController {
     // needs exception for User_ID
     // Checks for active rewards
     @RequestMapping("/user_id={user_id}/rewards")
-    public String getRewards(@PathVariable("user_id") int user_id) throws Exception {
-        return service.comparePoints(user_id);
+    public CustomResponseObject<String> getRewards(@PathVariable("user_id") int user_id) throws Exception {
+
+        ArrayList<String> messages = service.comparePoints(user_id);
+
+        CustomResponseObject obj = new CustomResponseObject();
+
+        obj.setData(messages);
+        obj.setMessage("success.");
+        obj.setStatusCode(200);
+
+        return obj;
     }
+
 
     // IN PROGRESS!!
     @RequestMapping("/user_id={user_id}/available_rewards")

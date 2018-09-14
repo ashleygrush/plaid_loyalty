@@ -22,8 +22,12 @@ public class LoyaltyController {
     @Autowired
     LoyaltyService service;
 
-    // calls DB for all loyalty points
-    // look into why it's not refreshing data? activating in DB< but not refreshing to main page
+    /**
+     * GET all loyalty points information from the database
+     *
+     * @return list of all loyalty points and information
+     * @throws Exception
+     */
     @GetMapping("/loyalty_points/all")
     public CustomResponseObject<Loyalty> getAllPoints() throws Exception {
 
@@ -42,7 +46,14 @@ public class LoyaltyController {
 
     }
 
-    // needs exception for User_ID
+    /**
+     * GET all loyalty points information by user ID.
+     *
+     * @param user_id used to retrieve all loyalty point information
+     *                from database
+     * @return list of all loyalty points information by user ID
+     * @throws Exception
+     */
     @RequestMapping("/{user_id}/loyalty_points")
     public CustomResponseObject<Loyalty> findByUserID(@PathVariable("user_id") int user_id) throws Exception {
 
@@ -61,8 +72,20 @@ public class LoyaltyController {
     }
 
 
-    // needs exception for User_ID
-    // Checks for active rewards
+    /**
+     * GET active rewards from database by user ID
+     * This method compares points from the database and checks
+     * the status of points_collected / points_cap.
+     * It will then return messages based on points_collection
+     * percentage and/or activate rewards, reset points_collected to
+     * 0 and send an email with redemption instructions if the
+     * points_collected has reached the points_cap.
+     *
+     * @param user_id used to find points ID and points_collected information.
+     * @return a message with instructions for redemption or a status update
+     *          per points ID.
+     * @throws Exception
+     */
     @RequestMapping("/{user_id}/loyalty_points/rewards")
     public CustomResponseObject<String> getRewards(@PathVariable("user_id") int user_id) throws Exception {
 
@@ -78,7 +101,19 @@ public class LoyaltyController {
     }
 
 
-    // IN PROGRESS!!
+    /**
+     * IN PROGRESS!!
+     *
+     * GET checks for activated rewards.
+     * If a reward has already been redeemed; the reward is deactivated
+     * and a message is sent to the user on it's status.
+     * If a reward has not yet been redeemed and is active, a message is
+     * returned to user with status and redemption email with instructions
+     * is re-sent to user email address.
+     *
+     * @param user_id used to check database for active rewards
+     * @return message to user on reward status
+     */
     @RequestMapping("/{user_id}/loyalty_points/available_rewards")
     public String checkRedeemed(@PathVariable("user_id") int user_id) {
         return service.checkRedeemed(user_id);

@@ -24,12 +24,23 @@ public class LoyaltyService extends Exception {
     EmailService email;
 
 
-    // GET - points (all)
+    /**
+     * Service that lists all points in database
+     *
+     * @return List all points in the database
+     */
     public List<Loyalty> findAllPoints() {
         return mapper.listAllPoints();
     }
 
-    // GET - points by user ID.
+
+    /**
+     * Service finds all loyalty points by User ID
+     *
+     * @param user_id used to find all loyalty points
+     * @return list of loyalty points and information
+     * @throws Exception
+     */
     public List<Loyalty> findByUserID(int user_id) throws Exception {
 
         List<Loyalty> userPoints;
@@ -43,8 +54,33 @@ public class LoyaltyService extends Exception {
     }
 
 
-    // needs exception for null User_ID
-    // compare points for reward status (switch to active) > email user notification
+    /**
+     * Service that compares points for reward status information.
+     *
+     * Service retrieves loyalty points ID and points_collected from the database
+     * and adds them into a hash map.  The hash map is then compared against a
+     * list of points ID's (keys) to get the results of all points_collected for that
+     * user.  (This is needed if a user has more that one loyalty program).
+     * Once the key is found, it is then used to retrieve the points_cap from the
+     * database and compare points_collected / points_cap to see the result.
+     *
+     * If cap is reached: the loyalty point ID is then switched to active, the
+     * collected_points are reset to 0, and an email is sent to the user with
+     * instructions on how to redeem (QR code for redemption).
+     * A short message is then returned to check user's inbox.
+     *
+     * If cap is NOT reached, the points_collected then goes through the if/else
+     * ladder for a message relating to points percentage of completion. This message is
+     * then also returned to the user for a status update.
+     *
+     * @param user_id used to populate a hash map of collected_points and points ID
+     *                with User ID. Then used to put all points ID into a list.
+     * @return message to user with information on points_collected status or redemption
+     *                instructions.
+     * @throws Exception
+     *
+     *  needs exception for null User_ID
+     */
     public ArrayList<String> comparePoints(int user_id) throws Exception {
 
         // returns responses (multiple points)
@@ -103,11 +139,16 @@ public class LoyaltyService extends Exception {
             }
 
         }
-
         return messages;
     }
 
-    //for each element in the array list, get the name and id and then put it into the hash map
+
+    /**
+     * HashMap for points - Key: points ID / value: points_collected.
+     *
+     * @param user_id used to pull points ID and points_collected per user ID
+     * @return hash map with points ID / points_collected
+     */
     public HashMap<Integer, Integer> pointsHashMap(int user_id) {
 
         ArrayList<PointsHashMap> hashMap = mapper.getPointsCollected(user_id);
@@ -123,8 +164,17 @@ public class LoyaltyService extends Exception {
     }
 
 
-    // IN PROGRESS
-    // PUT - if deal used; deactivate deal and confirm it's been redeemed
+    /**
+     * IN PROGRESS!!
+     *
+     * Service checks for active rewards; if redeemed the reward is deactivated
+     * and returns a status message. If reward is active and not redeemed; a status
+     * message is returned and redemption email with instructions is re-sent to user
+     * email address.
+     *
+     * @param user_id needed to find all rewards then have been activated
+     * @return message to user if reward is active or not.
+     */
     public String checkRedeemed(int user_id) {
 
         // find all active rewards per user ID

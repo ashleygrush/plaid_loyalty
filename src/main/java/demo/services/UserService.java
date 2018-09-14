@@ -75,7 +75,7 @@ public class UserService {
 
 
     /**
-     * GET all User s-
+     * GET list of Users and a List of Merchants.
      * calls plaid API, iterate against hash map, update database if match is found.
      *
      * @return String success on filling database with new information

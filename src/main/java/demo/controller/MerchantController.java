@@ -25,7 +25,7 @@ public class MerchantController {
 
     /**
      * DUNCAN - ???
-     * Used to populate hash map
+     * GET - all merchants to populate hash map
      *
      * @return returns list of merchants for hash map
      */
@@ -35,9 +35,9 @@ public class MerchantController {
     }
 
     /**
-     * calls DB for all Merchants
+     * GET - all merchants from database with ID number, name, email, and password.
      *
-     * @return
+     * @return list of all merchants in database
      * @throws Exception
      */
     @GetMapping("/all")
@@ -58,7 +58,13 @@ public class MerchantController {
     }
 
 
-    // calls DB for merchant by ID number
+    /**
+     * GET - retrieves merchant by unique ID
+     *
+     * @param id unique id assigned to merchant
+     * @return all merchant information in database
+     * @throws Exception
+     */
     @RequestMapping("/{id}")
     public CustomResponseObject<Merchants> findByID(@PathVariable("id") int id) throws Exception {
         Merchants merchant = merchantService.findMerchantByID(id);
@@ -76,7 +82,13 @@ public class MerchantController {
         else throw new DatabaseException("Merchant ID doesn't exist. Please enter correct ID number or create new account.");
     }
 
-    // creates new merchant
+    /**
+     * POST - create new merchant in database
+     *
+     * @param merchants RequestBody - name, email and password
+     * @return merchant creation confirmation
+     * @throws Exception
+     */
     @PostMapping()
     public CustomResponseObject <Merchants> createMerchant(@RequestBody Merchants merchants) throws Exception {
 
@@ -92,7 +104,13 @@ public class MerchantController {
         return obj;
     }
 
-    //delete existing merchant by ID
+    /**
+     * DELETE - removes merchant from database by unique ID
+     *
+     * @param id unique ID removes merchant from database
+     * @return boolean of successful removal of merchant
+     * @throws Exception
+     */
     @DeleteMapping("/{id}")
     public CustomResponseObject deleteByID(@PathVariable("id") int id) throws Exception {
         boolean success = merchantService.deleteMerchantByID(id);
@@ -107,7 +125,14 @@ public class MerchantController {
     }
 
 
-    // update existing merchant by ID
+    /**
+     * PUT - updates merchant in database by unique ID
+     *
+     * @param id unique ID to update merchant in database
+     * @param merchants RequestBody to fill out new information for merchant
+     * @return returns information submitted for confirmation
+     * @throws Exception
+     */
     @PutMapping("/{id}")
     public CustomResponseObject<Merchants> updateMerchantByID(@PathVariable("id") int id,
                                                                 @RequestBody Merchants merchants) throws Exception {

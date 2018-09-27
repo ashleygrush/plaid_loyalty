@@ -1,5 +1,9 @@
 package demo.services;
 
+/**
+ * Created by ashleyalmeida
+ */
+
 
 import demo.mapper.LoyaltyMapper;
 import demo.model.database.Loyalty;

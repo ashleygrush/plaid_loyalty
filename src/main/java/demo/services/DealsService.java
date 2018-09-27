@@ -1,5 +1,9 @@
 package demo.services;
 
+/**
+ * Created by ashleyalmeida
+ */
+
 import demo.exceptions.DatabaseException;
 import demo.mapper.DealsMapper;
 import demo.model.database.Deals;
@@ -14,13 +18,25 @@ public class DealsService {
     @Autowired
     DealsMapper mapper;
 
-    // GET - all Deals
+    /**
+     * Service finds and retrieves information from database on all deals by Merchant ID.
+     *
+     * @param merchant_id used to retrieve all deal information from database by merchant ID
+     * @return list of information on all deals.
+     */
     public List<Deals> findAllDealsByMerchant(int merchant_id) {
         return mapper.listAllDealsByMerchant(merchant_id);
     }
 
 
-    // GET - find deal by ID
+    /**
+     * Service gets all deal information by merchant ID and user ID
+     *
+     * @param merchant_id used to retrieve all deal information from database by merchant ID
+     * @param id used to return information for this Deal ID
+     * @return all information about deal
+     * @throws Exception
+     */
     public Deals findDealByID(int merchant_id, int id) throws Exception {
 
         Deals deal;
@@ -34,7 +50,13 @@ public class DealsService {
     }
 
 
-    // POST - create new deal
+    /**
+     * Service posts new deal to database
+     *
+     * @param data enters merchant ID, deal description, deal points cap, deal instructions into database
+     * @return returns the newly submitted information back for confirmation
+     * @throws Exception
+     */
     public Deals createDeal(Deals data) throws Exception {
 
         try {
@@ -53,7 +75,14 @@ public class DealsService {
         }
     }
 
-    // DELETE - delete existing deal by ID
+    /**
+     * Service removes deal from database by merchant ID and deal ID
+     *
+     * @param merchant_id used to retrieve deal information from database by merchant ID
+     * @param id used to remove information for this Deal ID
+     * @return boolean to confirm success of removing deal
+     * @throws Exception
+     */
     public Boolean deleteDealByID(int merchant_id, int id) throws Exception {
         try {
             mapper.deleteDealByID(merchant_id, id);
@@ -63,7 +92,16 @@ public class DealsService {
         }
     }
 
-    // PUT - update existing deal by ID
+    /**
+     * Service updates deal in database by merchant ID and deal ID
+     *
+     * @param merchant_id used to retrieve all deal information from database by merchant ID
+     * @param id used to update information for this Deal ID
+     * @param data updates deal description, deal points cap, deal instructions in database
+     * @return returns the newly submitted information back for confirmation
+     * @throws Exception
+     * @throws DatabaseException custom exception handling if ID can't be updated.
+     */
     public Deals updateDealByID(int merchant_id, int id, Deals data) throws Exception, DatabaseException {
 
         Deals updateDeal = new Deals();
@@ -85,12 +123,22 @@ public class DealsService {
     }
 
 
-    // RETURNS points cap - for loyalty
+    /**
+     * Service returns points cap for loyalty points update method (Loyalty Services)
+     *
+     * @param id Deal ID to get points cap
+     * @return int points_cap
+     */
     public int pointsCap(int id){
         return mapper.pointsCap(id);
     }
 
-    // get deal instructions > for email messages
+    /**
+     * Service gets deal instructions for email messages method (Email Services)
+     *
+     * @param id Deal ID to get deal instructions
+     * @return string deal_instructions to populate email body.
+     */
     public String getDealInstructions(int id) {
         return mapper.getDealInstructions(id);
     }

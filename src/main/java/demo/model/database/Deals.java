@@ -1,5 +1,9 @@
 package demo.model.database;
 
+/**
+ * Created by ashleyalmeida
+ */
+
 
 // links to database: links deals to merchant ID.
 public class Deals {

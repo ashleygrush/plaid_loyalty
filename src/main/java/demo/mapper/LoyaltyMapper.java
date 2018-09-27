@@ -1,5 +1,9 @@
 package demo.mapper;
 
+/**
+ * Created by ashleyalmeida
+ */
+
 import demo.model.PointsHashMap;
 import demo.model.database.Loyalty;
 import org.apache.ibatis.annotations.Mapper;

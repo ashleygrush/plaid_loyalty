@@ -1,5 +1,9 @@
 package demo.model.database;
 
+/**
+ * Created by ashleyalmeida
+ */
+
 // links to database; contains business name, password and email.
 public class Merchants {
 

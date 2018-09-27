@@ -1,5 +1,9 @@
 package demo.mapper;
 
+/**
+ * Created by ashleyalmeida
+ */
+
 import demo.model.database.Deals;
 import org.apache.ibatis.annotations.*;
 

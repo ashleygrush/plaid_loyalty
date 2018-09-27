@@ -1,5 +1,9 @@
 package demo.model.database;
 
+/**
+ * Created by ashleyalmeida
+ */
+
 // links to database; holds user name, password and email.
 public class Users {
 

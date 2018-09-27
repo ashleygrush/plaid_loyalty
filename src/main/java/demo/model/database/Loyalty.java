@@ -1,5 +1,9 @@
 package demo.model.database;
 
+/**
+ * Created by ashleyalmeida
+ */
+
 
 // links to database; links Users, Merchants and deals by ID. "lookup table"
 public class Loyalty {

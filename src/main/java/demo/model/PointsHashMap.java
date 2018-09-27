@@ -1,5 +1,9 @@
 package demo.model;
 
+/**
+ * Created by ashleyalmeida
+ */
+
 public class PointsHashMap {
 
     private int id;

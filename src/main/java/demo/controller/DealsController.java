@@ -1,5 +1,8 @@
 package demo.controller;
 
+/**
+ * Created by ashleyalmeida
+ */
 
 import com.amazonaws.util.CollectionUtils;
 import demo.exceptions.DatabaseException;
@@ -19,7 +22,14 @@ public class DealsController {
     @Autowired
     DealsService service;
 
-    // calls DB for all deals
+
+    /**
+     * GET all deal information by merchant ID.
+     *
+     * @param merchant_id used to retrieve all deal information from database by merchant ID
+     * @return list of all deals by merchant ID
+     * @throws Exception
+     */
     @GetMapping("/{merchant_id}/deals")
     public CustomResponseObject<Deals> getAllDealsByMerchant(@PathVariable("merchant_id") int merchant_id) throws Exception {
 
@@ -37,7 +47,14 @@ public class DealsController {
         } else throw new DatabaseException("No deals to show.");
     }
 
-    // calls DB for deals by ID number
+    /**
+     * GET deal information my merchant ID and by deal ID
+     *
+     * @param merchant_id used to retrieve all deal information from database by merchant ID
+     * @param id used to return information for this Deal ID
+     * @return list of all deal information by merchant ID and deal ID
+     * @throws Exception
+     */
     @RequestMapping("/{merchant_id}/deals/{id}")
     public CustomResponseObject <Deals> findByID(@PathVariable("merchant_id") int merchant_id,
                                                  @PathVariable("id") int id) throws Exception {
@@ -55,7 +72,13 @@ public class DealsController {
         } throw new DatabaseException("Deal ID doesn't exist. Please enter correct ID number.");
     }
 
-    // creates new deal
+    /**
+     * POST - creates new deal in database
+     *
+     * @param deals RequestBody - merchant ID, deal description, deal points cap, deal instructions
+     * @return deal creation confirmation
+     * @throws Exception
+     */
     @PostMapping("/deals")
     public CustomResponseObject <Deals> createDeal(@RequestBody Deals deals) throws Exception {
 
@@ -71,7 +94,14 @@ public class DealsController {
         return obj;
     }
 
-    //delete deal by ID
+    /**
+     * DELETE deal from database by Merchant ID and Deal ID
+     *
+     * @param merchant_id used to retrieve all deal information from database by merchant ID
+     * @param id used to return information for this Deal ID
+     * @return boolean of successful removal of deal
+     * @throws Exception
+     */
     @DeleteMapping("/{merchant_id}/deals/id={id}")
     public CustomResponseObject deleteByID(@PathVariable("merchant_id") int merchant_id,
             @PathVariable("id") int id) throws Exception {
@@ -87,7 +117,15 @@ public class DealsController {
         } else throw new DatabaseException("Unable to remove deal. Please try again later.");
     }
 
-    // update existing deal by ID
+    /**
+     * PUT - update deal information my merchant ID and by deal ID
+     *
+     * @param merchant_id used to retrieve all deal information from database by merchant ID
+     * @param id used to return information for this Deal ID
+     * @param deals RequestBody - deal description, deal points cap, deal instructions
+     * @return returns information submitted for confirmation
+     * @throws Exception
+     */
     @PutMapping("/{merchant_id}/deals/{id}")
     public CustomResponseObject <Deals> updateDealByID(@PathVariable("merchant_id") int merchant_id,
                                 @PathVariable("id") int id,

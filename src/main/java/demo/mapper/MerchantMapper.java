@@ -1,5 +1,9 @@
 package demo.mapper;
 
+/**
+ * Created by ashleyalmeida
+ */
+
 import demo.model.MerchantsForHashMap;
 import demo.model.database.Merchants;
 import demo.model.database.Users;

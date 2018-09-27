@@ -1,5 +1,9 @@
 package demo.controller;
 
+/**
+ * Created by ashleyalmeida
+ */
+
 import com.amazonaws.util.CollectionUtils;
 import demo.exceptions.DatabaseException;
 import demo.model.CustomResponseObject;
@@ -19,12 +23,23 @@ public class MerchantController {
     @Autowired
     MerchantService merchantService;
 
+    /**
+     * DUNCAN - ???
+     * Used to populate hash map
+     *
+     * @return returns list of merchants for hash map
+     */
     @RequestMapping ("/testHashMap")
     public HashMap<String, Integer> testHashMap(){
         return merchantService.merchantsList();
     }
 
-    // calls DB for all Merchants
+    /**
+     * calls DB for all Merchants
+     *
+     * @return
+     * @throws Exception
+     */
     @GetMapping("/all")
     public CustomResponseObject <Merchants> getMerchants() throws Exception {
 

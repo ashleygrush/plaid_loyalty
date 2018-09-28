@@ -112,6 +112,22 @@
             <version>1.11.359</version>
         </dependency>
 
+        <!-- jUnit Testing API - TEST -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>RELEASE</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- jUnit Testing API - COMPILE -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>RELEASE</version>
+            <scope>compile</scope>
+        </dependency>
+
         <!-- SpringBoot Thymeleaf 2.0 -->
         <!--<dependency>-->
             <!--<groupId>org.springframework.boot</groupId>-->
